@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:personal_reviews/core/database/app_database.dart';
+import 'package:personal_reviews/database/app_database.dart';
 import 'style/theme/app_theme.dart';
 
 void main() async {

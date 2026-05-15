@@ -1,5 +1,5 @@
 import 'package:personal_reviews/core/data/models/folder.dart';
-import 'package:personal_reviews/core/database/app_database.dart';
+import 'package:personal_reviews/database/app_database.dart';
 import 'package:personal_reviews/core/datasources/category.dart';
 import 'package:personal_reviews/core/interfaces/datasource.dart';
 

@@ -1,4 +1,4 @@
-import 'package:personal_reviews/core/database/app_database.dart';
+import 'package:personal_reviews/database/app_database.dart';
 import 'package:personal_reviews/core/interfaces/datasource.dart';
 import 'package:personal_reviews/core/data/models/category.dart';
 
