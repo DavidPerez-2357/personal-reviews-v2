@@ -4,11 +4,9 @@ import 'style/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // TODO: Show a loading screen while the database is initializing and migrations are running
-
+  
   // Initialize the database and run migrations before running the app
-  await AppDatabase.instance.database;
+  AppDatabase();
 
   runApp(const MainApp());
 }
