@@ -6,5 +6,5 @@ class ReviewImages extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get imagePath => text()();
 
-  IntColumn get reviewId => integer().nullable().references(Reviews, #id, onDelete: KeyAction.setNull)();
+  IntColumn get reviewId => integer().references(Reviews, #id, onDelete: KeyAction.setNull)();
 }
