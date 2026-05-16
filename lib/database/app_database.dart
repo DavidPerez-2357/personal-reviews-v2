@@ -11,11 +11,11 @@ import 'package:personal_reviews/database/daos/items_dao.dart';
 import 'package:personal_reviews/database/daos/review_images_dao.dart';
 import 'package:personal_reviews/database/daos/reviews_dao.dart';
 
-import 'package:personal_reviews/database/tables/category.dart';
-import 'package:personal_reviews/database/tables/folder.dart';
-import 'package:personal_reviews/database/tables/item.dart';
-import 'package:personal_reviews/database/tables/review.dart';
-import 'package:personal_reviews/database/tables/review_image.dart';
+import 'package:personal_reviews/database/tables/categories_table.dart';
+import 'package:personal_reviews/database/tables/folders_table.dart';
+import 'package:personal_reviews/database/tables/items_table.dart';
+import 'package:personal_reviews/database/tables/reviews_table.dart';
+import 'package:personal_reviews/database/tables/review_images_table.dart';
 
 part 'app_database.g.dart';
 

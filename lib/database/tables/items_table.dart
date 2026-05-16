@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:personal_reviews/database/tables/category.dart';
-import 'package:personal_reviews/database/tables/folder.dart';
+import 'package:personal_reviews/database/tables/categories_table.dart';
+import 'package:personal_reviews/database/tables/folders_table.dart';
 
 @TableIndex(name: 'items_index', columns: {#categoryId, #folderId, #isDeleted})
 class Items extends Table {

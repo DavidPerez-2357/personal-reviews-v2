@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:personal_reviews/database/app_database.dart';
-import 'package:personal_reviews/database/tables/review.dart';
+import 'package:personal_reviews/database/tables/reviews_table.dart';
 part 'reviews_dao.g.dart';
 
 @DriftAccessor(tables: [Reviews])

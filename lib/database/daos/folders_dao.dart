@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:personal_reviews/database/app_database.dart';
-import 'package:personal_reviews/database/tables/folder.dart';
+import 'package:personal_reviews/database/tables/folders_table.dart';
 part 'folders_dao.g.dart';
 
 @DriftAccessor(tables: [Folders])

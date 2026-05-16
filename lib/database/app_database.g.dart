@@ -49,8 +49,54 @@ class $CategoriesTable extends Categories
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
   @override
-  List<GeneratedColumn> get $columns => [id, name, color, icon];
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _isDeletedMeta = const VerificationMeta(
+    'isDeleted',
+  );
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+    'is_deleted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    color,
+    icon,
+    createdAt,
+    isDeleted,
+    deletedAt,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -90,6 +136,24 @@ class $CategoriesTable extends Categories
     } else if (isInserting) {
       context.missing(_iconMeta);
     }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(
+        _isDeletedMeta,
+        isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta),
+      );
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
     return context;
   }
 
@@ -115,6 +179,18 @@ class $CategoriesTable extends Categories
         DriftSqlType.string,
         data['${effectivePrefix}icon'],
       )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      isDeleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_deleted'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
     );
   }
 
@@ -129,11 +205,17 @@ class Category extends DataClass implements Insertable<Category> {
   final String name;
   final String color;
   final String icon;
+  final DateTime createdAt;
+  final bool isDeleted;
+  final DateTime? deletedAt;
   const Category({
     required this.id,
     required this.name,
     required this.color,
     required this.icon,
+    required this.createdAt,
+    required this.isDeleted,
+    this.deletedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -142,6 +224,11 @@ class Category extends DataClass implements Insertable<Category> {
     map['name'] = Variable<String>(name);
     map['color'] = Variable<String>(color);
     map['icon'] = Variable<String>(icon);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
     return map;
   }
 
@@ -151,6 +238,11 @@ class Category extends DataClass implements Insertable<Category> {
       name: Value(name),
       color: Value(color),
       icon: Value(icon),
+      createdAt: Value(createdAt),
+      isDeleted: Value(isDeleted),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
     );
   }
 
@@ -164,6 +256,9 @@ class Category extends DataClass implements Insertable<Category> {
       name: serializer.fromJson<String>(json['name']),
       color: serializer.fromJson<String>(json['color']),
       icon: serializer.fromJson<String>(json['icon']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
     );
   }
   @override
@@ -174,22 +269,38 @@ class Category extends DataClass implements Insertable<Category> {
       'name': serializer.toJson<String>(name),
       'color': serializer.toJson<String>(color),
       'icon': serializer.toJson<String>(icon),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
     };
   }
 
-  Category copyWith({int? id, String? name, String? color, String? icon}) =>
-      Category(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        color: color ?? this.color,
-        icon: icon ?? this.icon,
-      );
+  Category copyWith({
+    int? id,
+    String? name,
+    String? color,
+    String? icon,
+    DateTime? createdAt,
+    bool? isDeleted,
+    Value<DateTime?> deletedAt = const Value.absent(),
+  }) => Category(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    color: color ?? this.color,
+    icon: icon ?? this.icon,
+    createdAt: createdAt ?? this.createdAt,
+    isDeleted: isDeleted ?? this.isDeleted,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
   Category copyWithCompanion(CategoriesCompanion data) {
     return Category(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       color: data.color.present ? data.color.value : this.color,
       icon: data.icon.present ? data.icon.value : this.icon,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
     );
   }
 
@@ -199,13 +310,17 @@ class Category extends DataClass implements Insertable<Category> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('color: $color, ')
-          ..write('icon: $icon')
+          ..write('icon: $icon, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('deletedAt: $deletedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, color, icon);
+  int get hashCode =>
+      Object.hash(id, name, color, icon, createdAt, isDeleted, deletedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -213,7 +328,10 @@ class Category extends DataClass implements Insertable<Category> {
           other.id == this.id &&
           other.name == this.name &&
           other.color == this.color &&
-          other.icon == this.icon);
+          other.icon == this.icon &&
+          other.createdAt == this.createdAt &&
+          other.isDeleted == this.isDeleted &&
+          other.deletedAt == this.deletedAt);
 }
 
 class CategoriesCompanion extends UpdateCompanion<Category> {
@@ -221,17 +339,26 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   final Value<String> name;
   final Value<String> color;
   final Value<String> icon;
+  final Value<DateTime> createdAt;
+  final Value<bool> isDeleted;
+  final Value<DateTime?> deletedAt;
   const CategoriesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.color = const Value.absent(),
     this.icon = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.deletedAt = const Value.absent(),
   });
   CategoriesCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required String color,
     required String icon,
+    this.createdAt = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.deletedAt = const Value.absent(),
   }) : name = Value(name),
        color = Value(color),
        icon = Value(icon);
@@ -240,12 +367,18 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     Expression<String>? name,
     Expression<String>? color,
     Expression<String>? icon,
+    Expression<DateTime>? createdAt,
+    Expression<bool>? isDeleted,
+    Expression<DateTime>? deletedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (color != null) 'color': color,
       if (icon != null) 'icon': icon,
+      if (createdAt != null) 'created_at': createdAt,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (deletedAt != null) 'deleted_at': deletedAt,
     });
   }
 
@@ -254,12 +387,18 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     Value<String>? name,
     Value<String>? color,
     Value<String>? icon,
+    Value<DateTime>? createdAt,
+    Value<bool>? isDeleted,
+    Value<DateTime?>? deletedAt,
   }) {
     return CategoriesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       color: color ?? this.color,
       icon: icon ?? this.icon,
+      createdAt: createdAt ?? this.createdAt,
+      isDeleted: isDeleted ?? this.isDeleted,
+      deletedAt: deletedAt ?? this.deletedAt,
     );
   }
 
@@ -278,6 +417,15 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     if (icon.present) {
       map['icon'] = Variable<String>(icon.value);
     }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
     return map;
   }
 
@@ -287,7 +435,10 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('color: $color, ')
-          ..write('icon: $icon')
+          ..write('icon: $icon, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('deletedAt: $deletedAt')
           ..write(')'))
         .toString();
   }
@@ -2213,6 +2364,9 @@ typedef $$CategoriesTableCreateCompanionBuilder =
       required String name,
       required String color,
       required String icon,
+      Value<DateTime> createdAt,
+      Value<bool> isDeleted,
+      Value<DateTime?> deletedAt,
     });
 typedef $$CategoriesTableUpdateCompanionBuilder =
     CategoriesCompanion Function({
@@ -2220,6 +2374,9 @@ typedef $$CategoriesTableUpdateCompanionBuilder =
       Value<String> name,
       Value<String> color,
       Value<String> icon,
+      Value<DateTime> createdAt,
+      Value<bool> isDeleted,
+      Value<DateTime?> deletedAt,
     });
 
 final class $$CategoriesTableReferences
@@ -2291,6 +2448,21 @@ class $$CategoriesTableFilterComposer
 
   ColumnFilters<String> get icon => $composableBuilder(
     column: $table.icon,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2373,6 +2545,21 @@ class $$CategoriesTableOrderingComposer
     column: $table.icon,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$CategoriesTableAnnotationComposer
@@ -2395,6 +2582,15 @@ class $$CategoriesTableAnnotationComposer
 
   GeneratedColumn<String> get icon =>
       $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
 
   Expression<T> foldersRefs<T extends Object>(
     Expression<T> Function($$FoldersTableAnnotationComposer a) f,
@@ -2479,11 +2675,17 @@ class $$CategoriesTableTableManager
                 Value<String> name = const Value.absent(),
                 Value<String> color = const Value.absent(),
                 Value<String> icon = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
               }) => CategoriesCompanion(
                 id: id,
                 name: name,
                 color: color,
                 icon: icon,
+                createdAt: createdAt,
+                isDeleted: isDeleted,
+                deletedAt: deletedAt,
               ),
           createCompanionCallback:
               ({
@@ -2491,11 +2693,17 @@ class $$CategoriesTableTableManager
                 required String name,
                 required String color,
                 required String icon,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
               }) => CategoriesCompanion.insert(
                 id: id,
                 name: name,
                 color: color,
                 icon: icon,
+                createdAt: createdAt,
+                isDeleted: isDeleted,
+                deletedAt: deletedAt,
               ),
           withReferenceMapper: (p0) => p0
               .map(

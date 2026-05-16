@@ -1,7 +1,7 @@
 // ignore_for_file: recursive_getters
 
 import 'package:drift/drift.dart';
-import 'package:personal_reviews/database/tables/item.dart';
+import 'package:personal_reviews/database/tables/items_table.dart';
 
 @TableIndex(name: 'reviews_index', columns: {#itemId, #isDeleted})
 class Reviews extends Table {
