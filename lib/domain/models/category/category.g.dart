@@ -8,7 +8,7 @@ part of 'category.dart';
 
 _CategoryDomain _$CategoryDomainFromJson(Map<String, dynamic> json) =>
     _CategoryDomain(
-      id: json['id'] as String,
+      id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       color: json['color'] as String,
       icon: json['icon'] as String,

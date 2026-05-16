@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CategoryDomain {
 
- String get id; String get name; String get color; String get icon; DateTime get createdAt; bool get isDeleted; DateTime? get deletedAt;
+ int get id; String get name; String get color; String get icon; DateTime get createdAt; bool get isDeleted; DateTime? get deletedAt;
 /// Create a copy of CategoryDomain
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $CategoryDomainCopyWith<$Res>  {
   factory $CategoryDomainCopyWith(CategoryDomain value, $Res Function(CategoryDomain) _then) = _$CategoryDomainCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String color, String icon, DateTime createdAt, bool isDeleted, DateTime? deletedAt
+ int id, String name, String color, String icon, DateTime createdAt, bool isDeleted, DateTime? deletedAt
 });
 
 
@@ -68,7 +68,7 @@ class _$CategoryDomainCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? color = null,Object? icon = null,Object? createdAt = null,Object? isDeleted = null,Object? deletedAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,color: null == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
@@ -159,7 +159,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CategoryDomain() when $default != null:
 return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that.isDeleted,_that.deletedAt);case _:
@@ -180,7 +180,7 @@ return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt)  $default,) {final _that = this;
 switch (_that) {
 case _CategoryDomain():
 return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that.isDeleted,_that.deletedAt);case _:
@@ -200,7 +200,7 @@ return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _CategoryDomain() when $default != null:
 return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that.isDeleted,_that.deletedAt);case _:
@@ -218,7 +218,7 @@ class _CategoryDomain implements CategoryDomain {
   const _CategoryDomain({required this.id, required this.name, required this.color, required this.icon, required this.createdAt, this.isDeleted = false, this.deletedAt});
   factory _CategoryDomain.fromJson(Map<String, dynamic> json) => _$CategoryDomainFromJson(json);
 
-@override final  String id;
+@override final  int id;
 @override final  String name;
 @override final  String color;
 @override final  String icon;
@@ -259,7 +259,7 @@ abstract mixin class _$CategoryDomainCopyWith<$Res> implements $CategoryDomainCo
   factory _$CategoryDomainCopyWith(_CategoryDomain value, $Res Function(_CategoryDomain) _then) = __$CategoryDomainCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String color, String icon, DateTime createdAt, bool isDeleted, DateTime? deletedAt
+ int id, String name, String color, String icon, DateTime createdAt, bool isDeleted, DateTime? deletedAt
 });
 
 
@@ -279,7 +279,7 @@ class __$CategoryDomainCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? color = null,Object? icon = null,Object? createdAt = null,Object? isDeleted = null,Object? deletedAt = freezed,}) {
   return _then(_CategoryDomain(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,color: null == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable

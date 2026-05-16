@@ -6,7 +6,7 @@ part 'category.g.dart';
 @freezed
 abstract class CategoryDomain with _$CategoryDomain {
   const factory CategoryDomain({
-    required String id,
+    required int id,
     required String name,
     required String color,
     required String icon,
