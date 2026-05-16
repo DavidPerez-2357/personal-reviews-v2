@@ -1,203 +1,156 @@
-import 'package:flutter/services.dart';
-import 'package:personal_reviews/core/data/models/database.dart';
-import 'package:sqflite/sqflite.dart';
+import 'dart:io';
 
-class AppDatabase {
-  AppDatabase._();
+import 'package:drift/native.dart';
+import 'package:drift/drift.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
-  static final AppDatabase instance = AppDatabase._();
+import 'package:personal_reviews/database/tables/category.dart';
+import 'package:personal_reviews/database/tables/folder.dart';
+import 'package:personal_reviews/database/tables/item.dart';
+import 'package:personal_reviews/database/tables/review.dart';
+import 'package:personal_reviews/database/tables/review_image.dart';
 
-  static Database? _database;
+part 'app_database.g.dart';
 
-  static const _databaseName = 'personal_reviews_v2.db';
-  static const _databaseVersion = 2;
+/// Base de datos principal.
+///
+/// Arquitectura recomendada:
+/// - Drift como ORM/query builder
+/// - SQLite nativo
+/// - Migraciones gestionadas por Drift
+/// - DAOs para acceso a datos
+/// - Modelos de dominio separados de las rows Drift
+///
+/// NO usar:
+/// - rawQuery()
+/// - strings SQL repartidos por la app
+/// - singleton global estático
+///
+/// Recomendado:
+/// - Inyectar esta clase con Riverpod/GetIt
+/// - Mantener lógica SQL dentro de DAOs
+@DriftDatabase(
+  tables: [Categories, Folders, Items, Reviews, ReviewImages],
+)
+class AppDatabase extends _$AppDatabase {
+  AppDatabase() : super(_openConnection());
+  static final isInDebugMode = false;
 
-  static const String _migrationTable = 'database_migrations';
-  static const String _seedsTable = 'database_seeds';
+  /// Incrementar cada vez que cambie el schema.
+  @override
+  int get schemaVersion => 1;
 
-  static const String _databaseAssetsPath = 'assets/database';
-  static const String _migrationsAssetsPath = '$_databaseAssetsPath/migrations';
-  static const String _seedsAssetsPath = '$_databaseAssetsPath/seeds';
+  // TODO: DAOs
 
-  static const migrations = <DatabaseMigration>[
-    DatabaseMigration(
-      version: 1,
-      description: 'Add config tables',
-      assetPath:
-          '$_migrationsAssetsPath/001_config_tables.sql',
-    ),
-    DatabaseMigration(
-      version: 2,
-      description: 'Initial database schema',
-      assetPath:
-          '$_migrationsAssetsPath/002_init_database.sql',
-    ),
-  ];
+  /// Apertura lazy.
+  ///
+  /// Ventajas:
+  /// - no bloquea startup
+  /// - inicialización async limpia
+  /// - permite setup SQLite antes de abrir
+  static LazyDatabase _openConnection() {
+    return LazyDatabase(() async {
+      final documentsDirectory = await getApplicationDocumentsDirectory();
 
-  static const seeds = <DatabaseSeed>[
-    DatabaseSeed(
-      id: 1,
-      description: 'Seed default categories',
-      assetPath:
-          '$_seedsAssetsPath/001_seed_categories.sql',
-    ),
-  ];
-
-  Future<Database> get database async {
-    if (_database != null) {
-      return _database!;
-    }
-
-    _database = await _initDatabase();
-
-    return _database!;
-  }
-
-  Future<Database> _initDatabase() async {
-    final databasePath = await getDatabasesPath();
-
-    final path = '$databasePath/$_databaseName';
-
-    return openDatabase(
-      path,
-      version: _databaseVersion,
-      onCreate: _onCreate,
-      onUpgrade: _onUpgrade,
-      onConfigure: _onConfigure,
-    );
-  }
-
-  Future<void> _onConfigure(Database db) async {
-    // Activa foreign keys en SQLite
-    await db.execute('PRAGMA foreign_keys = ON');
-  }
-
-  Future<void> _onCreate(Database db, int version) async {
-    await _runMigrations(
-      db,
-      fromVersion: 0,
-      toVersion: version,
-    );
-
-    await _runSeeds(db);
-  }
-
-  Future<void> _onUpgrade(
-    Database db,
-    int oldVersion,
-    int newVersion,
-  ) async {
-    await _runMigrations(
-      db,
-      fromVersion: oldVersion,
-      toVersion: newVersion,
-    );
-
-    await _runSeeds(db);
-  }
-
-  Future<void> executeAllStatementsInFile(
-    Transaction txn,
-    String sql,
-  ) async {
-    // Separar statements por ';'
-    final statements = sql
-        .split(';')
-        .map((s) => s.trim())
-        .where((s) => s.isNotEmpty);
-
-    for (final statement in statements) {
-      await txn.execute(statement);
-    }
-  }
-
-  Future<void> _runMigrations(
-    Database db, {
-    required int fromVersion,
-    required int toVersion,
-  }) async {
-    final pendingMigrations = migrations.where(
-      (migration) =>
-          migration.version > fromVersion &&
-          migration.version <= toVersion,
-    );
-
-    for (final migration in pendingMigrations) {
-      // Check if the migration has already been executed to avoid running it multiple times
-      if (migration.version != 1) {
-        final alreadyExecuted = await db.query(
-          _migrationTable,
-          where: 'from_version = ? AND to_version = ?',
-          whereArgs: [fromVersion, migration.version],
-          limit: 1,
-        );
-
-        if (alreadyExecuted.isNotEmpty) {
-          continue;
-        }
-      }
-
-      final sql = await rootBundle.loadString(
-        migration.assetPath,
+      final file = File(
+        path.join(documentsDirectory.path, 'personal_reviews.db'),
       );
 
+      return NativeDatabase.createInBackground(
+        file,
+        setup: (database) {
+          // Obligatory foreign keys ON.
+          database.execute('PRAGMA foreign_keys = ON;');
 
-      await db.transaction((txn) async {
-        await executeAllStatementsInFile(txn, sql);
+          // WAL improves concurrency and performance, especially for mobile apps.
+          database.execute('PRAGMA journal_mode = WAL;');
 
-        await txn.insert(
-          _migrationTable,
-          {
-            'from_version': fromVersion,
-            'to_version': migration.version,
-            'executed_at': DateTime.now()
-                .millisecondsSinceEpoch,
-          },
-        );
+          // Recommended for mobile apps: balance between durability and performance. 
+          database.execute('PRAGMA synchronous = NORMAL;');
 
-        fromVersion = migration.version; // Update fromVersion for the next migration
-      });
-    }
+          // SQLitle cache
+          database.execute('PRAGMA cache_size = -20000;');
+
+          // Memory temp store for faster temp tables and indices.
+          database.execute('PRAGMA temp_store = MEMORY;');
+        },
+      );
+    });
   }
 
   
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+        await _seedInitialData();
+      },
 
-  Future<void> _runSeeds(Database db) async {
-    for (final seed in seeds) {
-      // Check if the seed has already been executed to avoid running it multiple times
-      final alreadyExecuted = await db.query(
-        _seedsTable,
-        where: 'id = ?',
-        whereArgs: [seed.id],
-        limit: 1,
-      );
+      onUpgrade: (Migrator m, int from, int to) async {
+        // Aquí se gestionan las migraciones entre versiones.
+        // Ejemplo:
+        // if (from < 2) {
+        //   await m.addColumn(items, items.newColumn);
+        // }
+      },
 
-      if (alreadyExecuted.isNotEmpty) {
-        continue;
-      }
-
-      final sql = await rootBundle.loadString(
-        seed.assetPath,
-      );
-
-      await db.transaction((txn) async {
-        await txn.execute(sql);
-
-        await txn.insert(
-          _seedsTable,
-          {
-            'id': seed.id,
-            'executed_at': DateTime.now()
-                .millisecondsSinceEpoch,
-          },
-        );
-      });
-    }
+      beforeOpen: (openingDetails) async {
+        if (isInDebugMode) {
+          final m = createMigrator();
+          for (final table in allTables) {
+            await m.deleteTable(table.actualTableName);
+            await m.createTable(table);
+          }
+        }
+      },
+    );
   }
 
-  Future<void> close() async {
-    final db = await database;
+  Future<void> _seedInitialData() async {
+    await batch((batch) {
+      batch.insertAll(categories, [
+        CategoriesCompanion.insert(
+          name: 'Libros',
+          color: '#1EA500',
+          icon: '--',
+        ),
 
-    await db.close();
+        CategoriesCompanion.insert(
+          name: 'Comida',
+          color: '#F05000',
+          icon: '--',
+        ),
+
+        CategoriesCompanion.insert(
+          name: 'Paises',
+          color: '#0062FF',
+          icon: '--',
+        ),
+
+        CategoriesCompanion.insert(
+          name: 'Videojuegos',
+          color: '#C000FF',
+          icon: '--',
+        ),
+      ]);
+    });
+  }
+
+  /// REMOVE THIS IN PRODUCTION. Only for development to reset the database.
+  Future<void> deleteDatabase() async {
+    // Importante: cerrar conexiones antes de borrar
+    await close();
+
+    final dbFolder = await getApplicationDocumentsDirectory();
+
+    final file = File(
+      path.join(dbFolder.path, 'personal_reviews.db'),
+    );
+
+    if (await file.exists()) {
+      await file.delete();
+    }
   }
 }
