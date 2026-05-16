@@ -1400,17 +1400,31 @@ class $ReviewsTable extends Reviews with TableInfo<$ReviewsTable, Review> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _deletedMeta = const VerificationMeta(
-    'deleted',
+  static const VerificationMeta _isDeletedMeta = const VerificationMeta(
+    'isDeleted',
   );
   @override
-  late final GeneratedColumn<int> deleted = GeneratedColumn<int>(
-    'deleted',
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+    'is_deleted',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.bool,
     requiredDuringInsert: false,
-    defaultValue: const Constant(0),
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_deleted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
@@ -1452,7 +1466,8 @@ class $ReviewsTable extends Reviews with TableInfo<$ReviewsTable, Review> {
     id,
     rating,
     comment,
-    deleted,
+    isDeleted,
+    deletedAt,
     createdAt,
     updatedAt,
     itemId,
@@ -1486,10 +1501,16 @@ class $ReviewsTable extends Reviews with TableInfo<$ReviewsTable, Review> {
     } else if (isInserting) {
       context.missing(_commentMeta);
     }
-    if (data.containsKey('deleted')) {
+    if (data.containsKey('is_deleted')) {
       context.handle(
-        _deletedMeta,
-        deleted.isAcceptableOrUnknown(data['deleted']!, _deletedMeta),
+        _isDeletedMeta,
+        isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta),
+      );
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
       );
     }
     if (data.containsKey('created_at')) {
@@ -1533,10 +1554,14 @@ class $ReviewsTable extends Reviews with TableInfo<$ReviewsTable, Review> {
         DriftSqlType.string,
         data['${effectivePrefix}comment'],
       )!,
-      deleted: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}deleted'],
+      isDeleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_deleted'],
       )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -1562,7 +1587,8 @@ class Review extends DataClass implements Insertable<Review> {
   final int id;
   final int rating;
   final String comment;
-  final int deleted;
+  final bool isDeleted;
+  final DateTime? deletedAt;
   final DateTime createdAt;
   final DateTime? updatedAt;
   final int itemId;
@@ -1570,7 +1596,8 @@ class Review extends DataClass implements Insertable<Review> {
     required this.id,
     required this.rating,
     required this.comment,
-    required this.deleted,
+    required this.isDeleted,
+    this.deletedAt,
     required this.createdAt,
     this.updatedAt,
     required this.itemId,
@@ -1581,7 +1608,10 @@ class Review extends DataClass implements Insertable<Review> {
     map['id'] = Variable<int>(id);
     map['rating'] = Variable<int>(rating);
     map['comment'] = Variable<String>(comment);
-    map['deleted'] = Variable<int>(deleted);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
     map['created_at'] = Variable<DateTime>(createdAt);
     if (!nullToAbsent || updatedAt != null) {
       map['updated_at'] = Variable<DateTime>(updatedAt);
@@ -1595,7 +1625,10 @@ class Review extends DataClass implements Insertable<Review> {
       id: Value(id),
       rating: Value(rating),
       comment: Value(comment),
-      deleted: Value(deleted),
+      isDeleted: Value(isDeleted),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
       createdAt: Value(createdAt),
       updatedAt: updatedAt == null && nullToAbsent
           ? const Value.absent()
@@ -1613,7 +1646,8 @@ class Review extends DataClass implements Insertable<Review> {
       id: serializer.fromJson<int>(json['id']),
       rating: serializer.fromJson<int>(json['rating']),
       comment: serializer.fromJson<String>(json['comment']),
-      deleted: serializer.fromJson<int>(json['deleted']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
       itemId: serializer.fromJson<int>(json['itemId']),
@@ -1626,7 +1660,8 @@ class Review extends DataClass implements Insertable<Review> {
       'id': serializer.toJson<int>(id),
       'rating': serializer.toJson<int>(rating),
       'comment': serializer.toJson<String>(comment),
-      'deleted': serializer.toJson<int>(deleted),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime?>(updatedAt),
       'itemId': serializer.toJson<int>(itemId),
@@ -1637,7 +1672,8 @@ class Review extends DataClass implements Insertable<Review> {
     int? id,
     int? rating,
     String? comment,
-    int? deleted,
+    bool? isDeleted,
+    Value<DateTime?> deletedAt = const Value.absent(),
     DateTime? createdAt,
     Value<DateTime?> updatedAt = const Value.absent(),
     int? itemId,
@@ -1645,7 +1681,8 @@ class Review extends DataClass implements Insertable<Review> {
     id: id ?? this.id,
     rating: rating ?? this.rating,
     comment: comment ?? this.comment,
-    deleted: deleted ?? this.deleted,
+    isDeleted: isDeleted ?? this.isDeleted,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
     itemId: itemId ?? this.itemId,
@@ -1655,7 +1692,8 @@ class Review extends DataClass implements Insertable<Review> {
       id: data.id.present ? data.id.value : this.id,
       rating: data.rating.present ? data.rating.value : this.rating,
       comment: data.comment.present ? data.comment.value : this.comment,
-      deleted: data.deleted.present ? data.deleted.value : this.deleted,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       itemId: data.itemId.present ? data.itemId.value : this.itemId,
@@ -1668,7 +1706,8 @@ class Review extends DataClass implements Insertable<Review> {
           ..write('id: $id, ')
           ..write('rating: $rating, ')
           ..write('comment: $comment, ')
-          ..write('deleted: $deleted, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('deletedAt: $deletedAt, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('itemId: $itemId')
@@ -1677,8 +1716,16 @@ class Review extends DataClass implements Insertable<Review> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, rating, comment, deleted, createdAt, updatedAt, itemId);
+  int get hashCode => Object.hash(
+    id,
+    rating,
+    comment,
+    isDeleted,
+    deletedAt,
+    createdAt,
+    updatedAt,
+    itemId,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1686,7 +1733,8 @@ class Review extends DataClass implements Insertable<Review> {
           other.id == this.id &&
           other.rating == this.rating &&
           other.comment == this.comment &&
-          other.deleted == this.deleted &&
+          other.isDeleted == this.isDeleted &&
+          other.deletedAt == this.deletedAt &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.itemId == this.itemId);
@@ -1696,7 +1744,8 @@ class ReviewsCompanion extends UpdateCompanion<Review> {
   final Value<int> id;
   final Value<int> rating;
   final Value<String> comment;
-  final Value<int> deleted;
+  final Value<bool> isDeleted;
+  final Value<DateTime?> deletedAt;
   final Value<DateTime> createdAt;
   final Value<DateTime?> updatedAt;
   final Value<int> itemId;
@@ -1704,7 +1753,8 @@ class ReviewsCompanion extends UpdateCompanion<Review> {
     this.id = const Value.absent(),
     this.rating = const Value.absent(),
     this.comment = const Value.absent(),
-    this.deleted = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.deletedAt = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.itemId = const Value.absent(),
@@ -1713,7 +1763,8 @@ class ReviewsCompanion extends UpdateCompanion<Review> {
     this.id = const Value.absent(),
     this.rating = const Value.absent(),
     required String comment,
-    this.deleted = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.deletedAt = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     required int itemId,
@@ -1723,7 +1774,8 @@ class ReviewsCompanion extends UpdateCompanion<Review> {
     Expression<int>? id,
     Expression<int>? rating,
     Expression<String>? comment,
-    Expression<int>? deleted,
+    Expression<bool>? isDeleted,
+    Expression<DateTime>? deletedAt,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<int>? itemId,
@@ -1732,7 +1784,8 @@ class ReviewsCompanion extends UpdateCompanion<Review> {
       if (id != null) 'id': id,
       if (rating != null) 'rating': rating,
       if (comment != null) 'comment': comment,
-      if (deleted != null) 'deleted': deleted,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (deletedAt != null) 'deleted_at': deletedAt,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (itemId != null) 'item_id': itemId,
@@ -1743,7 +1796,8 @@ class ReviewsCompanion extends UpdateCompanion<Review> {
     Value<int>? id,
     Value<int>? rating,
     Value<String>? comment,
-    Value<int>? deleted,
+    Value<bool>? isDeleted,
+    Value<DateTime?>? deletedAt,
     Value<DateTime>? createdAt,
     Value<DateTime?>? updatedAt,
     Value<int>? itemId,
@@ -1752,7 +1806,8 @@ class ReviewsCompanion extends UpdateCompanion<Review> {
       id: id ?? this.id,
       rating: rating ?? this.rating,
       comment: comment ?? this.comment,
-      deleted: deleted ?? this.deleted,
+      isDeleted: isDeleted ?? this.isDeleted,
+      deletedAt: deletedAt ?? this.deletedAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       itemId: itemId ?? this.itemId,
@@ -1771,8 +1826,11 @@ class ReviewsCompanion extends UpdateCompanion<Review> {
     if (comment.present) {
       map['comment'] = Variable<String>(comment.value);
     }
-    if (deleted.present) {
-      map['deleted'] = Variable<int>(deleted.value);
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -1792,7 +1850,8 @@ class ReviewsCompanion extends UpdateCompanion<Review> {
           ..write('id: $id, ')
           ..write('rating: $rating, ')
           ..write('comment: $comment, ')
-          ..write('deleted: $deleted, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('deletedAt: $deletedAt, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('itemId: $itemId')
@@ -1838,9 +1897,9 @@ class $ReviewImagesTable extends ReviewImages
   late final GeneratedColumn<int> reviewId = GeneratedColumn<int>(
     'review_id',
     aliasedName,
-    true,
+    false,
     type: DriftSqlType.int,
-    requiredDuringInsert: false,
+    requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'REFERENCES reviews (id) ON DELETE SET NULL',
     ),
@@ -1875,6 +1934,8 @@ class $ReviewImagesTable extends ReviewImages
         _reviewIdMeta,
         reviewId.isAcceptableOrUnknown(data['review_id']!, _reviewIdMeta),
       );
+    } else if (isInserting) {
+      context.missing(_reviewIdMeta);
     }
     return context;
   }
@@ -1896,7 +1957,7 @@ class $ReviewImagesTable extends ReviewImages
       reviewId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}review_id'],
-      ),
+      )!,
     );
   }
 
@@ -1909,16 +1970,18 @@ class $ReviewImagesTable extends ReviewImages
 class ReviewImage extends DataClass implements Insertable<ReviewImage> {
   final int id;
   final String imagePath;
-  final int? reviewId;
-  const ReviewImage({required this.id, required this.imagePath, this.reviewId});
+  final int reviewId;
+  const ReviewImage({
+    required this.id,
+    required this.imagePath,
+    required this.reviewId,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['image_path'] = Variable<String>(imagePath);
-    if (!nullToAbsent || reviewId != null) {
-      map['review_id'] = Variable<int>(reviewId);
-    }
+    map['review_id'] = Variable<int>(reviewId);
     return map;
   }
 
@@ -1926,9 +1989,7 @@ class ReviewImage extends DataClass implements Insertable<ReviewImage> {
     return ReviewImagesCompanion(
       id: Value(id),
       imagePath: Value(imagePath),
-      reviewId: reviewId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(reviewId),
+      reviewId: Value(reviewId),
     );
   }
 
@@ -1940,7 +2001,7 @@ class ReviewImage extends DataClass implements Insertable<ReviewImage> {
     return ReviewImage(
       id: serializer.fromJson<int>(json['id']),
       imagePath: serializer.fromJson<String>(json['imagePath']),
-      reviewId: serializer.fromJson<int?>(json['reviewId']),
+      reviewId: serializer.fromJson<int>(json['reviewId']),
     );
   }
   @override
@@ -1949,19 +2010,16 @@ class ReviewImage extends DataClass implements Insertable<ReviewImage> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'imagePath': serializer.toJson<String>(imagePath),
-      'reviewId': serializer.toJson<int?>(reviewId),
+      'reviewId': serializer.toJson<int>(reviewId),
     };
   }
 
-  ReviewImage copyWith({
-    int? id,
-    String? imagePath,
-    Value<int?> reviewId = const Value.absent(),
-  }) => ReviewImage(
-    id: id ?? this.id,
-    imagePath: imagePath ?? this.imagePath,
-    reviewId: reviewId.present ? reviewId.value : this.reviewId,
-  );
+  ReviewImage copyWith({int? id, String? imagePath, int? reviewId}) =>
+      ReviewImage(
+        id: id ?? this.id,
+        imagePath: imagePath ?? this.imagePath,
+        reviewId: reviewId ?? this.reviewId,
+      );
   ReviewImage copyWithCompanion(ReviewImagesCompanion data) {
     return ReviewImage(
       id: data.id.present ? data.id.value : this.id,
@@ -1994,7 +2052,7 @@ class ReviewImage extends DataClass implements Insertable<ReviewImage> {
 class ReviewImagesCompanion extends UpdateCompanion<ReviewImage> {
   final Value<int> id;
   final Value<String> imagePath;
-  final Value<int?> reviewId;
+  final Value<int> reviewId;
   const ReviewImagesCompanion({
     this.id = const Value.absent(),
     this.imagePath = const Value.absent(),
@@ -2003,8 +2061,9 @@ class ReviewImagesCompanion extends UpdateCompanion<ReviewImage> {
   ReviewImagesCompanion.insert({
     this.id = const Value.absent(),
     required String imagePath,
-    this.reviewId = const Value.absent(),
-  }) : imagePath = Value(imagePath);
+    required int reviewId,
+  }) : imagePath = Value(imagePath),
+       reviewId = Value(reviewId);
   static Insertable<ReviewImage> custom({
     Expression<int>? id,
     Expression<String>? imagePath,
@@ -2020,7 +2079,7 @@ class ReviewImagesCompanion extends UpdateCompanion<ReviewImage> {
   ReviewImagesCompanion copyWith({
     Value<int>? id,
     Value<String>? imagePath,
-    Value<int?>? reviewId,
+    Value<int>? reviewId,
   }) {
     return ReviewImagesCompanion(
       id: id ?? this.id,
@@ -2071,10 +2130,21 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'items_index',
     'CREATE INDEX items_index ON items (category_id, folder_id, is_deleted)',
   );
+  late final Index reviewsIndex = Index(
+    'reviews_index',
+    'CREATE INDEX reviews_index ON reviews (item_id, is_deleted)',
+  );
   late final Index reviewImagesIndex = Index(
     'review_images_index',
     'CREATE INDEX review_images_index ON review_images (review_id)',
   );
+  late final CategoriesDao categoriesDao = CategoriesDao(this as AppDatabase);
+  late final ReviewImagesDao reviewImagesDao = ReviewImagesDao(
+    this as AppDatabase,
+  );
+  late final ItemsDao itemsDao = ItemsDao(this as AppDatabase);
+  late final FoldersDao foldersDao = FoldersDao(this as AppDatabase);
+  late final ReviewsDao reviewsDao = ReviewsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2087,6 +2157,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     reviewImages,
     foldersIndex,
     itemsIndex,
+    reviewsIndex,
     reviewImagesIndex,
   ];
   @override
@@ -3603,7 +3674,8 @@ typedef $$ReviewsTableCreateCompanionBuilder =
       Value<int> id,
       Value<int> rating,
       required String comment,
-      Value<int> deleted,
+      Value<bool> isDeleted,
+      Value<DateTime?> deletedAt,
       Value<DateTime> createdAt,
       Value<DateTime?> updatedAt,
       required int itemId,
@@ -3613,7 +3685,8 @@ typedef $$ReviewsTableUpdateCompanionBuilder =
       Value<int> id,
       Value<int> rating,
       Value<String> comment,
-      Value<int> deleted,
+      Value<bool> isDeleted,
+      Value<DateTime?> deletedAt,
       Value<DateTime> createdAt,
       Value<DateTime?> updatedAt,
       Value<int> itemId,
@@ -3684,8 +3757,13 @@ class $$ReviewsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get deleted => $composableBuilder(
-    column: $table.deleted,
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3772,8 +3850,13 @@ class $$ReviewsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get deleted => $composableBuilder(
-    column: $table.deleted,
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+    column: $table.isDeleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3829,8 +3912,11 @@ class $$ReviewsTableAnnotationComposer
   GeneratedColumn<String> get comment =>
       $composableBuilder(column: $table.comment, builder: (column) => column);
 
-  GeneratedColumn<int> get deleted =>
-      $composableBuilder(column: $table.deleted, builder: (column) => column);
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -3918,7 +4004,8 @@ class $$ReviewsTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<int> rating = const Value.absent(),
                 Value<String> comment = const Value.absent(),
-                Value<int> deleted = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
                 Value<int> itemId = const Value.absent(),
@@ -3926,7 +4013,8 @@ class $$ReviewsTableTableManager
                 id: id,
                 rating: rating,
                 comment: comment,
-                deleted: deleted,
+                isDeleted: isDeleted,
+                deletedAt: deletedAt,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 itemId: itemId,
@@ -3936,7 +4024,8 @@ class $$ReviewsTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<int> rating = const Value.absent(),
                 required String comment,
-                Value<int> deleted = const Value.absent(),
+                Value<bool> isDeleted = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime?> updatedAt = const Value.absent(),
                 required int itemId,
@@ -3944,7 +4033,8 @@ class $$ReviewsTableTableManager
                 id: id,
                 rating: rating,
                 comment: comment,
-                deleted: deleted,
+                isDeleted: isDeleted,
+                deletedAt: deletedAt,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 itemId: itemId,
@@ -4039,13 +4129,13 @@ typedef $$ReviewImagesTableCreateCompanionBuilder =
     ReviewImagesCompanion Function({
       Value<int> id,
       required String imagePath,
-      Value<int?> reviewId,
+      required int reviewId,
     });
 typedef $$ReviewImagesTableUpdateCompanionBuilder =
     ReviewImagesCompanion Function({
       Value<int> id,
       Value<String> imagePath,
-      Value<int?> reviewId,
+      Value<int> reviewId,
     });
 
 final class $$ReviewImagesTableReferences
@@ -4057,9 +4147,9 @@ final class $$ReviewImagesTableReferences
         $_aliasNameGenerator(db.reviewImages.reviewId, db.reviews.id),
       );
 
-  $$ReviewsTableProcessedTableManager? get reviewId {
-    final $_column = $_itemColumn<int>('review_id');
-    if ($_column == null) return null;
+  $$ReviewsTableProcessedTableManager get reviewId {
+    final $_column = $_itemColumn<int>('review_id')!;
+
     final manager = $$ReviewsTableTableManager(
       $_db,
       $_db.reviews,
@@ -4227,7 +4317,7 @@ class $$ReviewImagesTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<String> imagePath = const Value.absent(),
-                Value<int?> reviewId = const Value.absent(),
+                Value<int> reviewId = const Value.absent(),
               }) => ReviewImagesCompanion(
                 id: id,
                 imagePath: imagePath,
@@ -4237,7 +4327,7 @@ class $$ReviewImagesTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required String imagePath,
-                Value<int?> reviewId = const Value.absent(),
+                required int reviewId,
               }) => ReviewImagesCompanion.insert(
                 id: id,
                 imagePath: imagePath,

@@ -5,6 +5,12 @@ import 'package:drift/drift.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
+import 'package:personal_reviews/database/daos/categories_dao.dart';
+import 'package:personal_reviews/database/daos/folders_dao.dart';
+import 'package:personal_reviews/database/daos/items_dao.dart';
+import 'package:personal_reviews/database/daos/review_images_dao.dart';
+import 'package:personal_reviews/database/daos/reviews_dao.dart';
+
 import 'package:personal_reviews/database/tables/category.dart';
 import 'package:personal_reviews/database/tables/folder.dart';
 import 'package:personal_reviews/database/tables/item.dart';
@@ -32,6 +38,7 @@ part 'app_database.g.dart';
 /// - Mantener lógica SQL dentro de DAOs
 @DriftDatabase(
   tables: [Categories, Folders, Items, Reviews, ReviewImages],
+  daos: [CategoriesDao, ReviewImagesDao, ItemsDao, FoldersDao, ReviewsDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -66,7 +73,7 @@ class AppDatabase extends _$AppDatabase {
           // WAL improves concurrency and performance, especially for mobile apps.
           database.execute('PRAGMA journal_mode = WAL;');
 
-          // Recommended for mobile apps: balance between durability and performance. 
+          // Recommended for mobile apps: balance between durability and performance.
           database.execute('PRAGMA synchronous = NORMAL;');
 
           // SQLitle cache
@@ -79,7 +86,6 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
-  
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
@@ -145,9 +151,7 @@ class AppDatabase extends _$AppDatabase {
 
     final dbFolder = await getApplicationDocumentsDirectory();
 
-    final file = File(
-      path.join(dbFolder.path, 'personal_reviews.db'),
-    );
+    final file = File(path.join(dbFolder.path, 'personal_reviews.db'));
 
     if (await file.exists()) {
       await file.delete();
