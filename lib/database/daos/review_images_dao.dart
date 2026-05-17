@@ -24,6 +24,12 @@ class ReviewImagesDao extends DatabaseAccessor<AppDatabase>
     )..where((t) => t.reviewId.equals(reviewId))).get();
   }
 
+  Future<List<ReviewImage>> getByReviewIds(List<int> reviewIds) async {
+    return await (select(
+      reviewImages,
+    )..where((t) => t.reviewId.isIn(reviewIds))).get();
+  }
+
   Stream<List<ReviewImage>> watchAll() {
     return select(reviewImages).watch();
   }
@@ -53,5 +59,11 @@ class ReviewImagesDao extends DatabaseAccessor<AppDatabase>
     return (delete(reviewImages)..where((t) => t.id.equals(id))).go().then(
       (rowsAffected) => rowsAffected > 0,
     );
+  }
+
+  Future<bool> deleteByReviewId(int reviewId) {
+    return (delete(reviewImages)..where((t) => t.reviewId.equals(reviewId)))
+        .go()
+        .then((rowsAffected) => rowsAffected > 0);
   }
 }

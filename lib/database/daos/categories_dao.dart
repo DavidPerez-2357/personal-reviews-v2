@@ -8,8 +8,10 @@ class CategoriesDao extends DatabaseAccessor<AppDatabase>
     with _$CategoriesDaoMixin {
   CategoriesDao(super.attachedDatabase);
 
-  Future<List<Category>> getAll() {
-    return select(categories).get();
+  Future<List<Category>> getAll(bool isDeleted) {
+    return (select(
+      categories,
+    )..where((t) => t.isDeleted.equals(isDeleted))).get();
   }
 
   Future<Category?> getById(int id) {
@@ -18,8 +20,10 @@ class CategoriesDao extends DatabaseAccessor<AppDatabase>
     )..where((t) => t.id.equals(id))).getSingleOrNull();
   }
 
-  Stream<List<Category>> watchAll() {
-    return select(categories).watch();
+  Stream<List<Category>> watchAll(bool isDeleted) {
+    return (select(
+      categories,
+    )..where((t) => t.isDeleted.equals(isDeleted))).watch();
   }
 
   Future<int> create({
@@ -49,9 +53,14 @@ class CategoriesDao extends DatabaseAccessor<AppDatabase>
         .then((rowsAffected) => rowsAffected > 0);
   }
 
-  Future<bool> deleteById(int id) {
-    return (delete(categories)..where((t) => t.id.equals(id))).go().then(
-      (rowsAffected) => rowsAffected > 0,
-    );
+  Future<bool> setDeletedById(int id, bool isDeleted) {
+    return (update(categories)..where((t) => t.id.equals(id)))
+        .write(
+          CategoriesCompanion(
+            isDeleted: Value(isDeleted),
+            deletedAt: isDeleted ? Value(DateTime.now()) : Value.absent(),
+          ),
+        )
+        .then((rowsAffected) => rowsAffected > 0);
   }
 }

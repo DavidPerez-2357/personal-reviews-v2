@@ -7,16 +7,16 @@ part 'items_dao.g.dart';
 class ItemsDao extends DatabaseAccessor<AppDatabase> with _$ItemsDaoMixin {
   ItemsDao(super.attachedDatabase);
 
-  Future<List<Item>> getAll() {
-    return select(items).get();
+  Future<List<Item>> getAll(bool isDeleted) {
+    return (select(items)..where((t) => t.isDeleted.equals(isDeleted))).get();
   }
 
   Future<Item?> getById(int id) {
     return (select(items)..where((t) => t.id.equals(id))).getSingleOrNull();
   }
 
-  Stream<List<Item>> watchAll() {
-    return select(items).watch();
+  Stream<List<Item>> watchAll(bool isDeleted) {
+    return (select(items)..where((t) => t.isDeleted.equals(isDeleted))).watch();
   }
 
   Future<int> create({
@@ -55,9 +55,14 @@ class ItemsDao extends DatabaseAccessor<AppDatabase> with _$ItemsDaoMixin {
         .then((rowsAffected) => rowsAffected > 0);
   }
 
-  Future<bool> deleteById(int id) {
-    return (delete(items)..where((t) => t.id.equals(id))).go().then(
-      (rowsAffected) => rowsAffected > 0,
-    );
+  Future<bool> setDeletedById(int id, bool isDeleted) {
+    return (update(items)..where((t) => t.id.equals(id)))
+        .write(
+          ItemsCompanion(
+            isDeleted: Value(isDeleted),
+            deletedAt: isDeleted ? Value(DateTime.now()) : Value.absent(),
+          ),
+        )
+        .then((rowsAffected) => rowsAffected > 0);
   }
 }

@@ -7,8 +7,8 @@ part 'reviews_dao.g.dart';
 class ReviewsDao extends DatabaseAccessor<AppDatabase> with _$ReviewsDaoMixin {
   ReviewsDao(super.attachedDatabase);
 
-  Future<List<Review>> getAll() {
-    return select(reviews).get();
+  Future<List<Review>> getAll(bool isDeleted) {
+    return (select(reviews)..where((t) => t.isDeleted.equals(isDeleted))).get();
   }
 
   Future<Review?> getById(int id) {
@@ -16,11 +16,21 @@ class ReviewsDao extends DatabaseAccessor<AppDatabase> with _$ReviewsDaoMixin {
   }
 
   Future<List<Review>> getByItemId(int itemId) {
-    return (select(reviews)..where((t) => t.itemId.equals(itemId))).get();
+    return (select(
+      reviews,
+    )..where((t) => t.itemId.equals(itemId) & t.isDeleted.equals(false))).get();
   }
 
-  Stream<List<Review>> watchAll() {
-    return select(reviews).watch();
+  Future<List<Review>> getByItemIds(List<int> itemIds) {
+    return (select(
+      reviews,
+    )..where((t) => t.itemId.isIn(itemIds) & t.isDeleted.equals(false))).get();
+  }
+
+  Stream<List<Review>> watchAll(bool isDeleted) {
+    return (select(
+      reviews,
+    )..where((t) => t.isDeleted.equals(isDeleted))).watch();
   }
 
   Future<int> create({
@@ -55,9 +65,14 @@ class ReviewsDao extends DatabaseAccessor<AppDatabase> with _$ReviewsDaoMixin {
         .then((rowsAffected) => rowsAffected > 0);
   }
 
-  Future<bool> deleteById(int id) {
-    return (delete(reviews)..where((t) => t.id.equals(id))).go().then(
-      (rowsAffected) => rowsAffected > 0,
-    );
+  Future<bool> setDeletedById(int id, bool isDeleted) {
+    return (update(reviews)..where((t) => t.id.equals(id)))
+        .write(
+          ReviewsCompanion(
+            isDeleted: Value(isDeleted),
+            deletedAt: isDeleted ? Value(DateTime.now()) : Value.absent(),
+          ),
+        )
+        .then((rowsAffected) => rowsAffected > 0);
   }
 }
