@@ -1,6 +1,7 @@
 import 'package:personal_reviews/data/mappers/folder_mapper.dart';
 import 'package:personal_reviews/database/daos/folders_dao.dart';
 import 'package:personal_reviews/domain/models/folder/folder.dart';
+import 'package:personal_reviews/domain/models/folder_tree/folder_tree.dart';
 
 class FolderRepository {
   final FoldersDao _foldersDao;
@@ -17,6 +18,44 @@ class FolderRepository {
     return _foldersDao
         .getById(id)
         .then((folder) => folder != null ? FolderMapper.fromRow(folder) : null);
+  }
+
+  Future<List<FolderDomain>> getByCategoryId(int categoryId, bool isDeleted) {
+    return _foldersDao
+        .getByCategoryId(categoryId, isDeleted)
+        .then((folders) => FolderMapper.fromRows(folders));
+  }
+
+  /* FOLDER TREE METHODS */
+  Future<List<FolderNode>> getAllAsTree() {
+    return _foldersDao
+        .getAll(false)
+        .then((folders) => FolderMapper.fromRows(folders))
+        .then((folderDomains) => FolderNode.buildFolderTree(folderDomains));
+  }
+
+  Future<List<FolderNode>> getTreeByCategoryId(int categoryId) {
+    return _foldersDao
+        .getByCategoryId(categoryId, false)
+        .then((folders) => FolderMapper.fromRows(folders))
+        .then((folderDomains) => FolderNode.buildFolderTree(folderDomains));
+  }
+
+  // This is useful for when we want to display a folder and all its subfolders (and not parents)
+  Future<FolderNode?> getFolderWithTreeById(int id) async {
+    final folder = await _foldersDao.getById(id);
+    if (folder == null) return null;
+
+    final folderMap = await getTreeByCategoryId(folder.categoryId);
+
+    for (var root in folderMap) {
+      final found = root.findNodeById(id);
+      if (found != null) {
+        return found;
+      }
+    }
+
+    return null;
   }
 
   Stream<List<FolderDomain>> watchAll(bool isDeleted) {

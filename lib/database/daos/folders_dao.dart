@@ -22,6 +22,14 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
     )).get().then((rows) => rows.map((row) => row.readTable(folders)).toList());
   }
 
+  Future<List<Folder>> getByCategoryId(int categoryId, bool isDeleted) {
+    return (select(folders)..where(
+          (t) =>
+              t.categoryId.equals(categoryId) & t.isDeleted.equals(isDeleted),
+        ))
+        .get();
+  }
+
   Stream<List<Folder>> watchAll(bool isDeleted) {
     return (select(
       folders,
