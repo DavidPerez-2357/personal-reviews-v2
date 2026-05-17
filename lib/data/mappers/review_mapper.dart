@@ -22,4 +22,19 @@ class ReviewMapper {
       images: imagesById,
     );
   }
+
+  static List<ReviewDomain> fromRows(
+    List<Review> rows,
+    List<ReviewImage>? images,
+  ) {
+    Map<int, List<ReviewImage>> imagesByReviewId = {};
+
+    if (images != null) {
+      for (var image in images) {
+        imagesByReviewId.putIfAbsent(image.reviewId, () => []).add(image);
+      }
+    }
+
+    return rows.map((row) => fromRow(row, imagesByReviewId[row.id])).toList();
+  }
 }

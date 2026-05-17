@@ -15,28 +15,16 @@ class ItemMapper {
     List<Review>? reviews,
     List<ReviewImage>? reviewImages,
   ) {
-    Map<int, List<ReviewImage>> imagesByReviewId = {};
-
-    if (reviewImages != null) {
-      for (var image in reviewImages) {
-        imagesByReviewId.putIfAbsent(image.reviewId, () => []).add(image);
-      }
-    }
-
     CategoryDomain categoryDomain = CategoryMapper.fromRow(category);
 
     FolderDomain? folderDomain = folder != null
         ? FolderMapper.fromRow(folder)
         : null;
 
-    List<ReviewDomain> reviewsDomain = reviews != null
-        ? reviews
-              .map(
-                (review) =>
-                    ReviewMapper.fromRow(review, imagesByReviewId[review.id]),
-              )
-              .toList()
-        : [];
+    List<ReviewDomain> reviewsDomain = ReviewMapper.fromRows(
+      reviews ?? [],
+      reviewImages,
+    );
 
     return ItemDomain(
       id: row.id,
@@ -50,5 +38,36 @@ class ItemMapper {
       isDeleted: row.isDeleted,
       deletedAt: row.deletedAt,
     );
+  }
+
+  static List<ItemDomain> fromRows(
+    List<Item> rows,
+    List<Category> categories,
+    List<Folder>? folders,
+    List<Review>? reviews,
+    List<ReviewImage>? reviewImages,
+  ) {
+    Map<int, Category> categoryById = {
+      for (var category in categories) category.id: category,
+    };
+
+    Map<int, Folder> folderById = {};
+    if (folders != null) {
+      folderById = {for (var folder in folders) folder.id: folder};
+    }
+
+    Map<int, List<Review>> reviewsByItemId = {};
+    if (reviews != null) {
+      for (var review in reviews) {
+        reviewsByItemId.putIfAbsent(review.itemId, () => []).add(review);
+      }
+    }
+
+    return rows.map((row) {
+      final category = categoryById[row.categoryId]!;
+      final folder = row.folderId != null ? folderById[row.folderId!] : null;
+      final itemReviews = reviewsByItemId[row.id] ?? [];
+      return fromRow(row, category, folder, itemReviews, reviewImages);
+    }).toList();
   }
 }

@@ -13,4 +13,8 @@ class CategoryMapper {
       deletedAt: row.deletedAt,
     );
   }
+
+  static List<CategoryDomain> fromRows(List<Category> rows) {
+    return rows.map((row) => fromRow(row)).toList();
+  }
 }

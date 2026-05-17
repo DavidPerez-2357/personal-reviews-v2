@@ -14,4 +14,8 @@ class FolderMapper {
       deletedAt: row.deletedAt,
     );
   }
+
+  static List<FolderDomain> fromRows(List<Folder> rows) {
+    return rows.map((row) => fromRow(row)).toList();
+  }
 }
