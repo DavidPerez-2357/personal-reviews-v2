@@ -119,25 +119,25 @@ class AppDatabase extends _$AppDatabase {
       batch.insertAll(categories, [
         CategoriesCompanion.insert(
           name: 'Libros',
-          color: '#1EA500',
+          color: 'preset:green',
           icon: '--',
         ),
 
         CategoriesCompanion.insert(
           name: 'Comida',
-          color: '#F05000',
+          color: 'preset:orange',
           icon: '--',
         ),
 
         CategoriesCompanion.insert(
           name: 'Paises',
-          color: '#0062FF',
+          color: 'preset:blue',
           icon: '--',
         ),
 
         CategoriesCompanion.insert(
           name: 'Videojuegos',
-          color: '#C000FF',
+          color: 'preset:purple',
           icon: '--',
         ),
       ]);
