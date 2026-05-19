@@ -2,8 +2,8 @@ enum CategoryColorType { preset, custom }
 
 // Preset colors defined before the class so the factory can reference them
 CategoryColor green = CategoryColor._internal(name: 'green', hex: '#1EA500');
-CategoryColor orange = CategoryColor._internal(name: 'orange', hex: '#0062FF');
-CategoryColor blue = CategoryColor._internal(name: 'blue', hex: '#F05000');
+CategoryColor orange = CategoryColor._internal(name: 'orange', hex: '#F05000');
+CategoryColor blue = CategoryColor._internal(name: 'blue', hex: '#0062FF');
 CategoryColor purple = CategoryColor._internal(name: 'purple', hex: '#C000FF');
 
 final Map<String, CategoryColor> categoryColors = {
