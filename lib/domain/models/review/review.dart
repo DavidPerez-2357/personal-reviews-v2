@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'review.freezed.dart';
-part 'review.g.dart';
 
 @freezed
 abstract class ReviewDomain with _$ReviewDomain {
@@ -19,7 +18,4 @@ abstract class ReviewDomain with _$ReviewDomain {
     @Default(false) bool isDeleted,
     DateTime? deletedAt,
   }) = _ReviewDomain;
-
-  factory ReviewDomain.fromJson(Map<String, Object?> json) =>
-      _$ReviewDomainFromJson(json);
 }

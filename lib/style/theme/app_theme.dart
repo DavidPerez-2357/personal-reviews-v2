@@ -10,15 +10,22 @@ final appTheme = ThemeData(
   fontFamily: GoogleFonts.inter().fontFamily,
 
   colorScheme: const ColorScheme.dark(
+    brightness: Brightness.dark,
+
+    surface: AppColors.surface,
+    surfaceContainer: AppColors.surfaceContainer,
+    surfaceContainerHigh: AppColors.surfaceContainerHigh,
+
     primary: AppColors.primary,
     secondary: AppColors.secondary,
     tertiary: AppColors.tertiary,
-    surface: AppColors.surface,
+
     error: AppColors.error,
+
+    onSurface: AppColors.onSurface,
     onPrimary: AppColors.onPrimary,
     onSecondary: AppColors.onSecondary,
     onTertiary: AppColors.onTertiary,
-    onSurface: AppColors.onSurface,
   ),
 
   scaffoldBackgroundColor: AppColors.surface,

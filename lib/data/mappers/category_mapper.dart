@@ -1,4 +1,3 @@
-import 'package:personal_reviews/core/constants/category_colors.dart';
 import 'package:personal_reviews/database/app_database.dart';
 import 'package:personal_reviews/domain/models/category/category.dart';
 
@@ -7,7 +6,7 @@ class CategoryMapper {
     return CategoryDomain(
       id: row.id,
       name: row.name,
-      color: CategoryColor.fromDBFormat(row.color).hex,
+      color: CategoryColor.fromDBFormat(row.color),
       icon: row.icon,
       createdAt: row.createdAt,
       isDeleted: row.isDeleted,

@@ -1,4 +1,3 @@
-import 'package:personal_reviews/core/constants/category_colors.dart';
 import 'package:personal_reviews/data/mappers/category_mapper.dart';
 import 'package:personal_reviews/database/daos/categories_dao.dart';
 import 'package:personal_reviews/domain/models/category/category.dart';

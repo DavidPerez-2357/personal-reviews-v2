@@ -4,7 +4,6 @@ import 'package:personal_reviews/domain/models/folder/folder.dart';
 import 'package:personal_reviews/domain/models/review/review.dart';
 
 part 'item.freezed.dart';
-part 'item.g.dart';
 
 @freezed
 abstract class ItemDomain with _$ItemDomain {
@@ -24,7 +23,4 @@ abstract class ItemDomain with _$ItemDomain {
     @Default(false) bool isDeleted,
     DateTime? deletedAt,
   }) = _ItemDomain;
-
-  factory ItemDomain.fromJson(Map<String, dynamic> json) =>
-      _$ItemDomainFromJson(json);
 }
