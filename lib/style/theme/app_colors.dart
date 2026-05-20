@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 abstract final class AppColors {
-  static const surface = Color(0xFF20262F);
+  static const surface = Color(0xFF20262F); // background
+  static const surfaceContainer = Color(0xFF20262F); // inputs/cards
+  static const surfaceContainerHigh = Color(0xFF20262F); // dialogs
 
   static const primary = Color(0xFF1E8E93);
   static const secondary = Color(0xFF056244);
@@ -16,10 +18,4 @@ abstract final class AppColors {
   static const onPrimary = onSurface;
   static const onSecondary = onSurface;
   static const onTertiary = onSurface;
-
-  /* Category colors */
-  static const categoryGreen = Color(0xFF1EA500);
-  static const categoryOrange = Color(0xFFF05000);
-  static const categoryBlue = Color(0xFF0062FF);
-  static const categoryPurple = Color(0xFFC000FF);
 }
