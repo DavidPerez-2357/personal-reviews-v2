@@ -11,7 +11,6 @@ part of 'item.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$ItemDomain {
 
@@ -22,8 +21,6 @@ mixin _$ItemDomain {
 @pragma('vm:prefer-inline')
 $ItemDomainCopyWith<ItemDomain> get copyWith => _$ItemDomainCopyWithImpl<ItemDomain>(this as ItemDomain, _$identity);
 
-  /// Serializes this ItemDomain to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -31,7 +28,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.category, category) || other.category == category)&&(identical(other.folder, folder) || other.folder == folder)&&const DeepCollectionEquality().equals(other.reviews, reviews)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,name,imagePath,createdAt,updatedAt,category,folder,const DeepCollectionEquality().hash(reviews),isDeleted,deletedAt);
 
@@ -236,11 +233,11 @@ return $default(_that.id,_that.name,_that.imagePath,_that.createdAt,_that.update
 }
 
 /// @nodoc
-@JsonSerializable()
+
 
 class _ItemDomain implements ItemDomain {
   const _ItemDomain({required this.id, required this.name, this.imagePath, required this.createdAt, this.updatedAt, required this.category, this.folder, final  List<ReviewDomain> reviews = const [], this.isDeleted = false, this.deletedAt}): _reviews = reviews;
-  factory _ItemDomain.fromJson(Map<String, dynamic> json) => _$ItemDomainFromJson(json);
+  
 
 @override final  int id;
 @override final  String name;
@@ -265,17 +262,14 @@ class _ItemDomain implements ItemDomain {
 @pragma('vm:prefer-inline')
 _$ItemDomainCopyWith<_ItemDomain> get copyWith => __$ItemDomainCopyWithImpl<_ItemDomain>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$ItemDomainToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.category, category) || other.category == category)&&(identical(other.folder, folder) || other.folder == folder)&&const DeepCollectionEquality().equals(other._reviews, _reviews)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,name,imagePath,createdAt,updatedAt,category,folder,const DeepCollectionEquality().hash(_reviews),isDeleted,deletedAt);
 

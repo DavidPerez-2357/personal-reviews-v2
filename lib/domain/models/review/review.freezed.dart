@@ -11,7 +11,6 @@ part of 'review.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$ReviewDomain {
 
@@ -24,8 +23,6 @@ mixin _$ReviewDomain {
 @pragma('vm:prefer-inline')
 $ReviewDomainCopyWith<ReviewDomain> get copyWith => _$ReviewDomainCopyWithImpl<ReviewDomain>(this as ReviewDomain, _$identity);
 
-  /// Serializes this ReviewDomain to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -33,7 +30,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is ReviewDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.itemId, itemId) || other.itemId == itemId)&&const DeepCollectionEquality().equals(other.images, images)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,comment,rating,createdAt,updatedAt,itemId,const DeepCollectionEquality().hash(images),isDeleted,deletedAt);
 
@@ -216,11 +213,11 @@ return $default(_that.id,_that.comment,_that.rating,_that.createdAt,_that.update
 }
 
 /// @nodoc
-@JsonSerializable()
+
 
 class _ReviewDomain implements ReviewDomain {
   const _ReviewDomain({required this.id, required this.comment, required this.rating, required this.createdAt, this.updatedAt, required this.itemId, final  Map<int, String>? images, this.isDeleted = false, this.deletedAt}): _images = images;
-  factory _ReviewDomain.fromJson(Map<String, dynamic> json) => _$ReviewDomainFromJson(json);
+  
 
 @override final  int id;
 @override final  String comment;
@@ -248,17 +245,14 @@ class _ReviewDomain implements ReviewDomain {
 @pragma('vm:prefer-inline')
 _$ReviewDomainCopyWith<_ReviewDomain> get copyWith => __$ReviewDomainCopyWithImpl<_ReviewDomain>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$ReviewDomainToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReviewDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.itemId, itemId) || other.itemId == itemId)&&const DeepCollectionEquality().equals(other._images, _images)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,comment,rating,createdAt,updatedAt,itemId,const DeepCollectionEquality().hash(_images),isDeleted,deletedAt);
 

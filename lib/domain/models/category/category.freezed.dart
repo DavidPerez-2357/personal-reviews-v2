@@ -11,7 +11,6 @@ part of 'category.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$CategoryDomain {
 
@@ -22,8 +21,6 @@ mixin _$CategoryDomain {
 @pragma('vm:prefer-inline')
 $CategoryDomainCopyWith<CategoryDomain> get copyWith => _$CategoryDomainCopyWithImpl<CategoryDomain>(this as CategoryDomain, _$identity);
 
-  /// Serializes this CategoryDomain to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -31,7 +28,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.color, color) || other.color == color)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,name,color,icon,createdAt,isDeleted,deletedAt);
 
@@ -221,11 +218,11 @@ return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that
 }
 
 /// @nodoc
-@JsonSerializable()
+
 
 class _CategoryDomain implements CategoryDomain {
   const _CategoryDomain({required this.id, required this.name, required this.color, required this.icon, required this.createdAt, this.isDeleted = false, this.deletedAt});
-  factory _CategoryDomain.fromJson(Map<String, dynamic> json) => _$CategoryDomainFromJson(json);
+  
 
 @override final  int id;
 @override final  String name;
@@ -241,17 +238,14 @@ class _CategoryDomain implements CategoryDomain {
 @pragma('vm:prefer-inline')
 _$CategoryDomainCopyWith<_CategoryDomain> get copyWith => __$CategoryDomainCopyWithImpl<_CategoryDomain>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$CategoryDomainToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _CategoryDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.color, color) || other.color == color)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,name,color,icon,createdAt,isDeleted,deletedAt);
 
@@ -310,30 +304,6 @@ $CategoryColorCopyWith<$Res> get color {
 }
 }
 
-CategoryColor _$CategoryColorFromJson(
-  Map<String, dynamic> json
-) {
-        switch (json['runtimeType']) {
-                  case 'preset':
-          return PresetCategoryColor.fromJson(
-            json
-          );
-                case 'custom':
-          return CustomCategoryColor.fromJson(
-            json
-          );
-        
-          default:
-            throw CheckedFromJsonException(
-  json,
-  'runtimeType',
-  'CategoryColor',
-  'Invalid union type "${json['runtimeType']}"!'
-);
-        }
-      
-}
-
 /// @nodoc
 mixin _$CategoryColor {
 
@@ -344,8 +314,6 @@ mixin _$CategoryColor {
 @pragma('vm:prefer-inline')
 $CategoryColorCopyWith<CategoryColor> get copyWith => _$CategoryColorCopyWithImpl<CategoryColor>(this as CategoryColor, _$identity);
 
-  /// Serializes this CategoryColor to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -353,7 +321,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryColor&&(identical(other.hex, hex) || other.hex == hex));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,hex);
 
@@ -528,18 +496,14 @@ return custom(_that.hex);case _:
 }
 
 /// @nodoc
-@JsonSerializable()
+
 
 class PresetCategoryColor extends CategoryColor {
-  const PresetCategoryColor({required this.name, required this.hex, final  String? $type}): $type = $type ?? 'preset',super._();
-  factory PresetCategoryColor.fromJson(Map<String, dynamic> json) => _$PresetCategoryColorFromJson(json);
+  const PresetCategoryColor({required this.name, required this.hex}): super._();
+  
 
  final  String name;
 @override final  String hex;
-
-@JsonKey(name: 'runtimeType')
-final String $type;
-
 
 /// Create a copy of CategoryColor
 /// with the given fields replaced by the non-null parameter values.
@@ -547,17 +511,14 @@ final String $type;
 @pragma('vm:prefer-inline')
 $PresetCategoryColorCopyWith<PresetCategoryColor> get copyWith => _$PresetCategoryColorCopyWithImpl<PresetCategoryColor>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$PresetCategoryColorToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is PresetCategoryColor&&(identical(other.name, name) || other.name == name)&&(identical(other.hex, hex) || other.hex == hex));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,name,hex);
 
@@ -603,17 +564,13 @@ as String,
 }
 
 /// @nodoc
-@JsonSerializable()
+
 
 class CustomCategoryColor extends CategoryColor {
-  const CustomCategoryColor({required this.hex, final  String? $type}): $type = $type ?? 'custom',super._();
-  factory CustomCategoryColor.fromJson(Map<String, dynamic> json) => _$CustomCategoryColorFromJson(json);
+  const CustomCategoryColor({required this.hex}): super._();
+  
 
 @override final  String hex;
-
-@JsonKey(name: 'runtimeType')
-final String $type;
-
 
 /// Create a copy of CategoryColor
 /// with the given fields replaced by the non-null parameter values.
@@ -621,17 +578,14 @@ final String $type;
 @pragma('vm:prefer-inline')
 $CustomCategoryColorCopyWith<CustomCategoryColor> get copyWith => _$CustomCategoryColorCopyWithImpl<CustomCategoryColor>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$CustomCategoryColorToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is CustomCategoryColor&&(identical(other.hex, hex) || other.hex == hex));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,hex);
 

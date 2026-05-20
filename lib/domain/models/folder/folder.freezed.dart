@@ -11,7 +11,6 @@ part of 'folder.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$FolderDomain {
 
@@ -22,8 +21,6 @@ mixin _$FolderDomain {
 @pragma('vm:prefer-inline')
 $FolderDomainCopyWith<FolderDomain> get copyWith => _$FolderDomainCopyWithImpl<FolderDomain>(this as FolderDomain, _$identity);
 
-  /// Serializes this FolderDomain to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -31,7 +28,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is FolderDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.parentId, parentId) || other.parentId == parentId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,name,imagePath,parentId,categoryId,createdAt,isDeleted,deletedAt);
 
@@ -213,11 +210,11 @@ return $default(_that.id,_that.name,_that.imagePath,_that.parentId,_that.categor
 }
 
 /// @nodoc
-@JsonSerializable()
+
 
 class _FolderDomain implements FolderDomain {
   const _FolderDomain({required this.id, required this.name, this.imagePath, this.parentId, required this.categoryId, required this.createdAt, this.isDeleted = false, this.deletedAt});
-  factory _FolderDomain.fromJson(Map<String, dynamic> json) => _$FolderDomainFromJson(json);
+  
 
 @override final  int id;
 @override final  String name;
@@ -234,17 +231,14 @@ class _FolderDomain implements FolderDomain {
 @pragma('vm:prefer-inline')
 _$FolderDomainCopyWith<_FolderDomain> get copyWith => __$FolderDomainCopyWithImpl<_FolderDomain>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$FolderDomainToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _FolderDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.parentId, parentId) || other.parentId == parentId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,name,imagePath,parentId,categoryId,createdAt,isDeleted,deletedAt);
 

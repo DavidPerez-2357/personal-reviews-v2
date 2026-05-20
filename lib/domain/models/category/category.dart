@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:personal_reviews/core/constants/category_colors.dart';
 
 part 'category.freezed.dart';
-part 'category.g.dart';
 
 @freezed
 abstract class CategoryDomain with _$CategoryDomain {
@@ -15,9 +14,6 @@ abstract class CategoryDomain with _$CategoryDomain {
     @Default(false) bool isDeleted,
     DateTime? deletedAt,
   }) = _CategoryDomain;
-
-  factory CategoryDomain.fromJson(Map<String, Object?> json) =>
-      _$CategoryDomainFromJson(json);
 }
 
 @freezed
@@ -72,7 +68,4 @@ sealed class CategoryColor with _$CategoryColor {
         throw FormatException('[ERROR] Unknown CategoryColorType: $typeStr');
     }
   }
-
-  factory CategoryColor.fromJson(Map<String, Object?> json) =>
-      _$CategoryColorFromJson(json);
 }
