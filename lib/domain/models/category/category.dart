@@ -28,7 +28,7 @@ sealed class CategoryColor with _$CategoryColor {
   const factory CategoryColor.custom({required String hex}) =
       CustomCategoryColor;
 
-  static final String _hexFormat = '#[0-9a-fA-F]{6}';
+  static final String _hexFormat = r'^#[0-9a-fA-F]{6}$';
 
   String toDBFormat() =>
       when(preset: (name, _) => 'preset:$name', custom: (hex) => 'custom:$hex');
