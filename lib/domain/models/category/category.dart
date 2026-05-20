@@ -49,13 +49,13 @@ sealed class CategoryColor with _$CategoryColor {
 
     switch (typeStr) {
       case 'preset':
-        final preset = presetCategoryColors[value];
+        final hex = presetCategoryColors[value];
 
-        if (preset == null) {
+        if (hex == null) {
           throw FormatException('[ERROR] Unknown preset CategoryColor: $value');
         }
 
-        return preset;
+        return CategoryColor.preset(name: value, hex: hex);
 
       case 'custom':
         return CategoryColor.custom(hex: value);
