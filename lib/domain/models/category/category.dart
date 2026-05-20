@@ -32,6 +32,8 @@ sealed class CategoryColor with _$CategoryColor {
   const factory CategoryColor.custom({required String hex}) =
       CustomCategoryColor;
 
+  static final String _hexFormat = '#[0-9a-fA-F]{6}';
+
   String toDBFormat() =>
       when(preset: (name, _) => 'preset:$name', custom: (hex) => 'custom:$hex');
 
@@ -58,6 +60,12 @@ sealed class CategoryColor with _$CategoryColor {
         return CategoryColor.preset(name: value, hex: hex);
 
       case 'custom':
+        if (!RegExp(_hexFormat).hasMatch(value)) {
+          throw FormatException(
+            '[ERROR] Invalid hex format for custom CategoryColor: $value',
+          );
+        }
+
         return CategoryColor.custom(hex: value);
 
       default:
