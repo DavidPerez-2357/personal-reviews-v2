@@ -10,7 +10,7 @@ _CategoryDomain _$CategoryDomainFromJson(Map<String, dynamic> json) =>
     _CategoryDomain(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
-      color: json['color'] as String,
+      color: CategoryColor.fromJson(json['color'] as Map<String, dynamic>),
       icon: json['icon'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       isDeleted: json['isDeleted'] as bool? ?? false,
@@ -29,3 +29,28 @@ Map<String, dynamic> _$CategoryDomainToJson(_CategoryDomain instance) =>
       'isDeleted': instance.isDeleted,
       'deletedAt': instance.deletedAt?.toIso8601String(),
     };
+
+PresetCategoryColor _$PresetCategoryColorFromJson(Map<String, dynamic> json) =>
+    PresetCategoryColor(
+      name: json['name'] as String,
+      hex: json['hex'] as String,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$PresetCategoryColorToJson(
+  PresetCategoryColor instance,
+) => <String, dynamic>{
+  'name': instance.name,
+  'hex': instance.hex,
+  'runtimeType': instance.$type,
+};
+
+CustomCategoryColor _$CustomCategoryColorFromJson(Map<String, dynamic> json) =>
+    CustomCategoryColor(
+      hex: json['hex'] as String,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$CustomCategoryColorToJson(
+  CustomCategoryColor instance,
+) => <String, dynamic>{'hex': instance.hex, 'runtimeType': instance.$type};

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:personal_reviews/core/constants/category_colors.dart';
 
 part 'category.freezed.dart';
 part 'category.g.dart';
@@ -8,7 +9,7 @@ abstract class CategoryDomain with _$CategoryDomain {
   const factory CategoryDomain({
     required int id,
     required String name,
-    required String color,
+    required CategoryColor color,
     required String icon,
     required DateTime createdAt,
     @Default(false) bool isDeleted,
@@ -17,4 +18,53 @@ abstract class CategoryDomain with _$CategoryDomain {
 
   factory CategoryDomain.fromJson(Map<String, Object?> json) =>
       _$CategoryDomainFromJson(json);
+}
+
+@freezed
+sealed class CategoryColor with _$CategoryColor {
+  const CategoryColor._();
+
+  const factory CategoryColor.preset({
+    required String name,
+    required String hex,
+  }) = PresetCategoryColor;
+
+  const factory CategoryColor.custom({required String hex}) =
+      CustomCategoryColor;
+
+  String toDBFormat() =>
+      when(preset: (name, _) => 'preset:$name', custom: (hex) => 'custom:$hex');
+
+  factory CategoryColor.fromDBFormat(String dbString) {
+    final separatorIndex = dbString.indexOf(':');
+
+    if (separatorIndex == -1) {
+      throw FormatException(
+        '[ERROR] Invalid DB format for CategoryColor: $dbString',
+      );
+    }
+
+    final typeStr = dbString.substring(0, separatorIndex);
+    final value = dbString.substring(separatorIndex + 1);
+
+    switch (typeStr) {
+      case 'preset':
+        final preset = presetCategoryColors[value];
+
+        if (preset == null) {
+          throw FormatException('[ERROR] Unknown preset CategoryColor: $value');
+        }
+
+        return preset;
+
+      case 'custom':
+        return CategoryColor.custom(hex: value);
+
+      default:
+        throw FormatException('[ERROR] Unknown CategoryColorType: $typeStr');
+    }
+  }
+
+  factory CategoryColor.fromJson(Map<String, Object?> json) =>
+      _$CategoryColorFromJson(json);
 }
