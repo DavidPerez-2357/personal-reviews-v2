@@ -1,4 +1,4 @@
-final presetCategoryColors = {
+const Map<String, String> presetCategoryColors = {
   'green': '#1EA500',
   'orange': '#F05000',
   'blue': '#0062FF',
