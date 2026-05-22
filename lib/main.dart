@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:personal_reviews/database/app_database.dart';
+import 'package:personal_reviews/shared/layouts/main_layout.dart';
 import 'style/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize the database and run migrations before running the app
   AppDatabase();
 
@@ -28,23 +29,23 @@ class MainApp extends StatelessWidget {
       theme: appTheme,
       darkTheme: appTheme,
       themeMode: ThemeMode.dark,
-      home: Scaffold(
-        body: SafeArea(
-          child: Padding (
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-                children: [
-                  Text('Hello World!'),
-                  Text('Welcome to Flutter!'),
-                  Row(
-                    children: [
-                      Text('This is a row.'),
-                      Text('It contains multiple widgets.')
-                    ],
-                  )
+      home: MainLayout(
+        title: 'Mis reseñas',
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Hello World!'),
+            Text('Welcome to Flutter!'),
+            Row(
+              children: [
+                Text('This is a row.'),
+                Text('It contains multiple widgets. For e.'),
               ],
             ),
-          ),
+            SizedBox(height: 1000),
+            Text('This is the end of the column.'),
+          ],
         ),
       ),
     );
