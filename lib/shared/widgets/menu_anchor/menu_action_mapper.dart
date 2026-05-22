@@ -5,9 +5,12 @@ extension AppMenuActionMapper on MenuAction {
   MenuItemButton toMenuItem(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final color = type == MenuActionType.destructive
+    final Color baseColor = type == MenuActionType.destructive
         ? colorScheme.error
         : colorScheme.onSurface;
+
+    final Color effectiveColor =
+        enabled ? baseColor : baseColor.withValues(alpha: 0.5);
 
     return MenuItemButton(
       onPressed: enabled ? onPressed : null,
@@ -15,17 +18,12 @@ extension AppMenuActionMapper on MenuAction {
           ? Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, size: 15, color: color),
+                Icon(icon, size: 15, color: effectiveColor),
                 const SizedBox(width: 12),
-                Text(label, style: TextStyle(color: color)),
+                Text(label, style: TextStyle(color: effectiveColor)),
               ],
             )
-          : Text(
-              label,
-              style: TextStyle(
-                color: color.withValues(alpha: enabled ? 1.0 : 0.5),
-              ),
-            ),
+          : Text(label, style: TextStyle(color: effectiveColor)),
     );
   }
 }
