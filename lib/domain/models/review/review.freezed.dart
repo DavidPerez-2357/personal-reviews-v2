@@ -14,9 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ReviewDomain {
 
- int get id; String get comment; int get rating;// 1-10
- DateTime get createdAt; DateTime? get updatedAt; int get itemId; Map<int, String>? get images;// image id and path
- bool get isDeleted; DateTime? get deletedAt;
+ int get id; String get comment; int get rating; DateTime get createdAt; DateTime? get updatedAt; int get itemId; Map<int, String>? get images; bool get isDeleted; DateTime? get deletedAt;
 /// Create a copy of ReviewDomain
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -222,7 +220,6 @@ class _ReviewDomain implements ReviewDomain {
 @override final  int id;
 @override final  String comment;
 @override final  int rating;
-// 1-10
 @override final  DateTime createdAt;
 @override final  DateTime? updatedAt;
 @override final  int itemId;
@@ -235,7 +232,6 @@ class _ReviewDomain implements ReviewDomain {
   return EqualUnmodifiableMapView(value);
 }
 
-// image id and path
 @override@JsonKey() final  bool isDeleted;
 @override final  DateTime? deletedAt;
 
