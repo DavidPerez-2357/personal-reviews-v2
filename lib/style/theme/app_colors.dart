@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract final class AppColors {
-  static const surface = Color(0xFF20262F); // background
+  static const surface = Color(0xFF181D24); // background
   static const surfaceContainer = Color(0xFF20262F); // inputs/cards
   static const surfaceContainerHigh = Color(0xFF20262F); // dialogs
 
