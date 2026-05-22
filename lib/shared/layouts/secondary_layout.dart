@@ -34,11 +34,13 @@ class SecondaryLayout extends StatelessWidget {
         foregroundColor: onSurfaceColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => {
-            if (Navigator.of(context).canPop())
-              {Navigator.of(context).pop()}
-            else
-              {Navigator.of(context).pushReplacementNamed('/')},
+          onPressed: () {
+            final navigator = Navigator.of(context);
+            if (navigator.canPop()) {
+              navigator.pop();
+            } else {
+              navigator.pushReplacementNamed('/');
+            }
           },
         ),
         actions: actions.isNotEmpty ? [AppMenuAnchor(actions: actions)] : [],
