@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        ".\\android\\build": true,
+        "flutter": true,
+        "ForEach-Object": true,
+        "C:\\Users\\David\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe": true
+    }
+}
