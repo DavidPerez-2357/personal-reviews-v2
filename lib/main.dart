@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:personal_reviews/database/app_database.dart';
 import 'package:personal_reviews/shared/layouts/main_layout.dart';
 import 'style/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // Initialize the database and run migrations before running the app
   AppDatabase();
