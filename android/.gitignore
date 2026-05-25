@@ -12,3 +12,7 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Agent skills
+.agents/skills/*
+.android-studio/skills/*
