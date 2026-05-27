@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal_reviews/core/extensions/theme_context.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -7,20 +8,18 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-
     return AppBar(
       toolbarHeight: 45,
       title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
       centerTitle: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      foregroundColor: theme.colorScheme.primary,
+      backgroundColor: context.colors.surface,
+      foregroundColor: context.colors.primary,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
         child: Divider(
           height: 1,
           thickness: 1,
-          color: theme.colorScheme.primary,
+          color: context.colors.primary,
           indent: 20.0,
           endIndent: 20.0,
         ),

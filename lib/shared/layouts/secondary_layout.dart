@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_reviews/core/types/menu_action.dart';
+import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/shared/widgets/menu_anchor/menu_anchor.dart';
 
 class SecondaryLayout extends StatelessWidget {
@@ -17,7 +18,7 @@ class SecondaryLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color onSurfaceColor = Theme.of(context).colorScheme.onSurface;
+    final Color onSurfaceColor = context.colors.onSurface;
     final SafeArea body = SafeArea(
       child: Padding(padding: const EdgeInsets.all(24.0), child: child),
     );
@@ -27,10 +28,10 @@ class SecondaryLayout extends StatelessWidget {
         toolbarHeight: 40,
         title: Text(
           title ?? 'Secondary Layout',
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: context.textTheme.bodyMedium,
         ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: context.colors.surface,
         foregroundColor: onSurfaceColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

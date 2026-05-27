@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/core/types/menu_action.dart';
 
 extension AppMenuActionMapper on MenuAction {
   MenuItemButton toMenuItem(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     final Color baseColor = type == MenuActionType.destructive
-        ? colorScheme.error
-        : colorScheme.onSurface;
+        ? context.colors.error
+        : context.colors.onSurface;
 
-    final Color effectiveColor =
-        enabled ? baseColor : baseColor.withValues(alpha: 0.5);
+    final Color effectiveColor = enabled
+        ? baseColor
+        : baseColor.withValues(alpha: 0.5);
 
     return MenuItemButton(
       onPressed: enabled ? onPressed : null,

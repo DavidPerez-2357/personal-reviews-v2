@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_reviews/core/types/page_config.dart';
+import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/features/app_shell/components/main_appbar.dart';
 
 class AppShell extends StatefulWidget {
@@ -12,7 +13,7 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int currentPageIndex = 1;
 
-  late final List<PageConfig> pages = const [
+  late final List<PageConfig> pages = [
     PageConfig(
       title: 'Resumen',
       child: Center(child: Text('Resumen')),
@@ -30,7 +31,6 @@ class _AppShellState extends State<AppShell> {
   @override
   Widget build(BuildContext context) {
     final currentPage = pages[currentPageIndex];
-    final ThemeData theme = Theme.of(context);
 
     Widget body = SafeArea(
       child: Padding(
@@ -51,7 +51,7 @@ class _AppShellState extends State<AppShell> {
 
       bottomNavigationBar: NavigationBar(
         // style
-        indicatorColor: theme.colorScheme.primary.withValues(alpha: 0.24),
+        indicatorColor: context.colors.primary.withValues(alpha: 0.24),
         indicatorShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
         ),
@@ -78,7 +78,7 @@ class _AppShellState extends State<AppShell> {
             selectedIcon: Icon(
               Icons.leaderboard,
               size: 30,
-              color: theme.colorScheme.primary,
+              color: context.colors.primary,
             ),
             label: 'Resumen',
           ),
@@ -87,7 +87,7 @@ class _AppShellState extends State<AppShell> {
             selectedIcon: Icon(
               Icons.star_rounded,
               size: 33,
-              color: theme.colorScheme.primary,
+              color: context.colors.primary,
             ),
             label: 'Reseñas',
           ),
@@ -96,16 +96,13 @@ class _AppShellState extends State<AppShell> {
             selectedIcon: Icon(
               Icons.settings,
               size: 30,
-              color: theme.colorScheme.primary,
+              color: context.colors.primary,
             ),
             label: 'Ajustes',
           ),
         ],
       ),
-      body: IndexedStack(
-        index: currentPageIndex,
-        children: pages.map((page) => page.child).toList(),
-      ),
+      body: body,
     );
   }
 }
