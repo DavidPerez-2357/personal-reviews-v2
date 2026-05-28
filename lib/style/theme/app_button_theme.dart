@@ -26,7 +26,7 @@ class AppButtonStyles {
 
   static ButtonStyle outlined(ColorScheme colorScheme) {
     return ButtonStyle(
-      foregroundColor: WidgetStatePropertyAll(colorScheme.primary),
+      foregroundColor: WidgetStatePropertyAll(colorScheme.onSurface),
       side: WidgetStatePropertyAll(BorderSide(color: colorScheme.outline)),
       minimumSize: minimumSize,
       padding: padding,

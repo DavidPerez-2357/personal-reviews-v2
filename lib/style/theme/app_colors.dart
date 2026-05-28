@@ -18,6 +18,7 @@ abstract final class AppColors {
   static const warning = Color(0xFFF59E0B);
 
   static const onSurface = Color(0xFFE5E7EB);
+  static const onSurfaceVariant = Color(0xFF9CA3AF);
 
   static const onPrimary = onSurface;
   static const onSecondary = onSurface;
