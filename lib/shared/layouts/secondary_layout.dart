@@ -20,7 +20,10 @@ class SecondaryLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color onSurfaceColor = context.colors.onSurface;
     final SafeArea body = SafeArea(
-      child: Padding(padding: const EdgeInsets.all(24.0), child: child),
+      child: Padding(
+        padding: EdgeInsets.all(context.spacing.pagePadding),
+        child: child,
+      ),
     );
 
     return Scaffold(

@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 abstract final class AppColors {
   static const surface = Color(0xFF181D24); // background
   static const surfaceContainer = Color(0xFF20262F); // inputs/cards
+  static const surfaceContainerLow = Color(0xFF20262F); // disabled elements
   static const surfaceContainerHigh = Color(0xFF20262F); // dialogs
+  static const surfaceContainerHighest = Color(
+    0xFF393E46,
+  ); // empty star in rating display
 
   static const primary = Color(0xFF1E8E93);
   static const secondary = Color(0xFF056244);
