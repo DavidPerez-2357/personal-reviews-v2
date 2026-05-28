@@ -9,6 +9,7 @@ La idea es evitar duplicar UI, mantener consistente el estilo de la app y separa
 shared/
   components/
   layouts/
+  presentation/
   widgets/
 ```
 
@@ -32,6 +33,13 @@ Se usan para definir la composicion general de una pantalla: `Scaffold`, `AppBar
 Ejemplos:
 - layouts secundarios o de detalle
 - estructuras comunes de paginas con navegacion y acciones compartidas
+
+### `presentation/`
+Presentadores y adaptadores de UI: aquí pueden ir mappers, presenters o pequeñas capas de presentación
+que adaptan modelos de dominio a vistas (por ejemplo, formatos de texto, view models sencillos o
+helpers que traducen estados a widgets). No es para lógica de negocio compleja, sino para transformación
+ligera orientada a la UI.
+
 
 ### `widgets/`
 Widgets reutilizables de menor nivel, normalmente mas cercanos a un bloque tecnico que a una pantalla.
