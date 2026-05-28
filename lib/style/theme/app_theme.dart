@@ -22,9 +22,12 @@ final colorScheme = ColorScheme.dark(
   error: AppColors.error,
 
   onSurface: AppColors.onSurface,
+  onSurfaceVariant: AppColors.onSurfaceVariant,
   onPrimary: AppColors.onPrimary,
   onSecondary: AppColors.onSecondary,
   onTertiary: AppColors.onTertiary,
+
+  outline: AppColors.surfaceContainerHighest,
 );
 
 final appTheme = ThemeData(
