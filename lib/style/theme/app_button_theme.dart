@@ -4,7 +4,7 @@ import 'package:personal_reviews/style/theme/app_border.dart';
 class AppButtonStyles {
   static final WidgetStateProperty<OutlinedBorder> shape =
       WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: AppRadius().mdBorder),
+        RoundedRectangleBorder(borderRadius: AppRadius.mdBorder),
       );
 
   static const WidgetStateProperty<Size> minimumSize = WidgetStatePropertyAll(

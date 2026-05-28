@@ -68,10 +68,6 @@ final appTheme = ThemeData(
     ),
   ),
 
-  iconButtonTheme: IconButtonThemeData(
-    style: AppButtonStyles.icon(colorScheme),
-  ),
-
   segmentedButtonTheme: SegmentedButtonThemeData(
     style: AppButtonStyles.segmented(colorScheme),
   ),

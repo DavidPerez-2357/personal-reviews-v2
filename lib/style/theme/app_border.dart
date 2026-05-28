@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class AppRadius {
-  final sm = Radius.circular(3);
-  final md = Radius.circular(5);
-  final lg = Radius.circular(10);
+abstract final class AppRadius {
+  static const Radius sm = Radius.circular(3);
+  static const Radius md = Radius.circular(5);
+  static const Radius lg = Radius.circular(10);
 
-  BorderRadius get smBorder => BorderRadius.all(sm);
-  BorderRadius get mdBorder => BorderRadius.all(md);
-  BorderRadius get lgBorder => BorderRadius.all(lg);
+  static const BorderRadius smBorder = BorderRadius.all(sm);
+  static const BorderRadius mdBorder = BorderRadius.all(md);
+  static const BorderRadius lgBorder = BorderRadius.all(lg);
 }
