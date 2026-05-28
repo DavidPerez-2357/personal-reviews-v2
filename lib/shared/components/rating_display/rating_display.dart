@@ -17,11 +17,14 @@ class RatingDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Ensure rating is between 0 and 10
+    final clampedRating = rating.clamp(0, 10);
+
     // Put default colors if not provided
     final fill = fillColor ?? context.colors.primary;
     final empty = emptyColor ?? context.colors.surfaceContainerHighest;
 
-    final ratingFinal = rating / 2; // Convert 0-10 scale to 0-5 scale
+    final ratingFinal = clampedRating / 2; // Convert 0-10 scale to 0-5 scale
     final fullStars = ratingFinal.floor();
     final hasHalfStar = (ratingFinal - fullStars) >= 0.5;
 
