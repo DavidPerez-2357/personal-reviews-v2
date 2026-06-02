@@ -1,5 +1,5 @@
 import 'package:personal_reviews/database/app_database.dart';
-import 'package:personal_reviews/domain/models/folder/folder.dart';
+import 'package:personal_reviews/domain/models/folder.dart';
 
 class FolderMapper {
   static FolderDomain fromRow(Folder row) {

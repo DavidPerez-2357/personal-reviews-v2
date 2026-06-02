@@ -1,7 +1,7 @@
 import 'package:personal_reviews/data/mappers/folder_mapper.dart';
 import 'package:personal_reviews/database/daos/folders_dao.dart';
-import 'package:personal_reviews/domain/models/folder/folder.dart';
-import 'package:personal_reviews/domain/models/folder_tree/folder_tree.dart';
+import 'package:personal_reviews/domain/models/folder.dart';
+import 'package:personal_reviews/domain/models/folder_tree.dart';
 
 class FolderRepository {
   final FoldersDao _foldersDao;

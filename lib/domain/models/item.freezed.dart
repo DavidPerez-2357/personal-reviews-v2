@@ -25,12 +25,12 @@ $ItemDomainCopyWith<ItemDomain> get copyWith => _$ItemDomainCopyWithImpl<ItemDom
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other.category, category)&&const DeepCollectionEquality().equals(other.folder, folder)&&const DeepCollectionEquality().equals(other.reviews, reviews)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ItemDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.category, category) || other.category == category)&&(identical(other.folder, folder) || other.folder == folder)&&const DeepCollectionEquality().equals(other.reviews, reviews)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,imagePath,createdAt,updatedAt,const DeepCollectionEquality().hash(category),const DeepCollectionEquality().hash(folder),const DeepCollectionEquality().hash(reviews),isDeleted,deletedAt);
+int get hashCode => Object.hash(runtimeType,id,name,imagePath,createdAt,updatedAt,category,folder,const DeepCollectionEquality().hash(reviews),isDeleted,deletedAt);
 
 @override
 String toString() {
@@ -49,7 +49,7 @@ $Res call({
 });
 
 
-
+$CategoryDomainCopyWith<$Res> get category;$FolderDomainCopyWith<$Res>? get folder;
 
 }
 /// @nodoc
@@ -62,14 +62,14 @@ class _$ItemDomainCopyWithImpl<$Res>
 
 /// Create a copy of ItemDomain
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? imagePath = freezed,Object? createdAt = null,Object? updatedAt = freezed,Object? category = freezed,Object? folder = freezed,Object? reviews = null,Object? isDeleted = null,Object? deletedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? imagePath = freezed,Object? createdAt = null,Object? updatedAt = freezed,Object? category = null,Object? folder = freezed,Object? reviews = null,Object? isDeleted = null,Object? deletedAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,imagePath: freezed == imagePath ? _self.imagePath : imagePath // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as DateTime?,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as CategoryDomain,folder: freezed == folder ? _self.folder : folder // ignore: cast_nullable_to_non_nullable
 as FolderDomain?,reviews: null == reviews ? _self.reviews : reviews // ignore: cast_nullable_to_non_nullable
 as List<ReviewDomain>,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
@@ -77,7 +77,28 @@ as bool,deletedAt: freezed == deletedAt ? _self.deletedAt : deletedAt // ignore:
 as DateTime?,
   ));
 }
+/// Create a copy of ItemDomain
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CategoryDomainCopyWith<$Res> get category {
+  
+  return $CategoryDomainCopyWith<$Res>(_self.category, (value) {
+    return _then(_self.copyWith(category: value));
+  });
+}/// Create a copy of ItemDomain
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FolderDomainCopyWith<$Res>? get folder {
+    if (_self.folder == null) {
+    return null;
+  }
 
+  return $FolderDomainCopyWith<$Res>(_self.folder!, (value) {
+    return _then(_self.copyWith(folder: value));
+  });
+}
 }
 
 
@@ -245,12 +266,12 @@ _$ItemDomainCopyWith<_ItemDomain> get copyWith => __$ItemDomainCopyWithImpl<_Ite
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other.category, category)&&const DeepCollectionEquality().equals(other.folder, folder)&&const DeepCollectionEquality().equals(other._reviews, _reviews)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ItemDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.category, category) || other.category == category)&&(identical(other.folder, folder) || other.folder == folder)&&const DeepCollectionEquality().equals(other._reviews, _reviews)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,imagePath,createdAt,updatedAt,const DeepCollectionEquality().hash(category),const DeepCollectionEquality().hash(folder),const DeepCollectionEquality().hash(_reviews),isDeleted,deletedAt);
+int get hashCode => Object.hash(runtimeType,id,name,imagePath,createdAt,updatedAt,category,folder,const DeepCollectionEquality().hash(_reviews),isDeleted,deletedAt);
 
 @override
 String toString() {
@@ -269,7 +290,7 @@ $Res call({
 });
 
 
-
+@override $CategoryDomainCopyWith<$Res> get category;@override $FolderDomainCopyWith<$Res>? get folder;
 
 }
 /// @nodoc
@@ -282,14 +303,14 @@ class __$ItemDomainCopyWithImpl<$Res>
 
 /// Create a copy of ItemDomain
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? imagePath = freezed,Object? createdAt = null,Object? updatedAt = freezed,Object? category = freezed,Object? folder = freezed,Object? reviews = null,Object? isDeleted = null,Object? deletedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? imagePath = freezed,Object? createdAt = null,Object? updatedAt = freezed,Object? category = null,Object? folder = freezed,Object? reviews = null,Object? isDeleted = null,Object? deletedAt = freezed,}) {
   return _then(_ItemDomain(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,imagePath: freezed == imagePath ? _self.imagePath : imagePath // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as DateTime?,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as CategoryDomain,folder: freezed == folder ? _self.folder : folder // ignore: cast_nullable_to_non_nullable
 as FolderDomain?,reviews: null == reviews ? _self._reviews : reviews // ignore: cast_nullable_to_non_nullable
 as List<ReviewDomain>,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
@@ -298,7 +319,28 @@ as DateTime?,
   ));
 }
 
+/// Create a copy of ItemDomain
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$CategoryDomainCopyWith<$Res> get category {
+  
+  return $CategoryDomainCopyWith<$Res>(_self.category, (value) {
+    return _then(_self.copyWith(category: value));
+  });
+}/// Create a copy of ItemDomain
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FolderDomainCopyWith<$Res>? get folder {
+    if (_self.folder == null) {
+    return null;
+  }
 
+  return $FolderDomainCopyWith<$Res>(_self.folder!, (value) {
+    return _then(_self.copyWith(folder: value));
+  });
+}
 }
 
 // dart format on

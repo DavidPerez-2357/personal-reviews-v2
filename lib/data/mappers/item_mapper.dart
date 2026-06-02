@@ -2,10 +2,10 @@ import 'package:personal_reviews/data/mappers/category_mapper.dart';
 import 'package:personal_reviews/data/mappers/folder_mapper.dart';
 import 'package:personal_reviews/data/mappers/review_mapper.dart';
 import 'package:personal_reviews/database/app_database.dart';
-import 'package:personal_reviews/domain/models/category/category.dart';
-import 'package:personal_reviews/domain/models/folder/folder.dart';
-import 'package:personal_reviews/domain/models/item/item.dart';
-import 'package:personal_reviews/domain/models/review/review.dart';
+import 'package:personal_reviews/domain/models/category.dart';
+import 'package:personal_reviews/domain/models/folder.dart';
+import 'package:personal_reviews/domain/models/item.dart';
+import 'package:personal_reviews/domain/models/review.dart';
 
 class ItemMapper {
   static ItemDomain fromRow(
@@ -15,7 +15,7 @@ class ItemMapper {
     List<Review>? reviews,
     List<ReviewImage>? reviewImages,
   ) {
-    CategoryDomain categoryDomain = CategoryMapper.fromRow(category);
+    CategoryDomain categoryDomain = CategoryMapper.fromRow(category, null);
 
     FolderDomain? folderDomain = folder != null
         ? FolderMapper.fromRow(folder)

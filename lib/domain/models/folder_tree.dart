@@ -1,4 +1,4 @@
-import 'package:personal_reviews/domain/models/folder/folder.dart';
+import 'package:personal_reviews/domain/models/folder.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'folder_tree.freezed.dart';

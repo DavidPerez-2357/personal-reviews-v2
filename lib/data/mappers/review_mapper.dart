@@ -1,5 +1,5 @@
 import 'package:personal_reviews/database/app_database.dart';
-import 'package:personal_reviews/domain/models/review/review.dart';
+import 'package:personal_reviews/domain/models/review.dart';
 
 class ReviewMapper {
   static ReviewDomain fromRow(Review row, List<ReviewImage>? images) {

@@ -1,7 +1,7 @@
+import 'package:personal_reviews/domain/models/category.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:personal_reviews/domain/models/category/category.dart';
-import 'package:personal_reviews/domain/models/folder/folder.dart';
-import 'package:personal_reviews/domain/models/review/review.dart';
+import 'package:personal_reviews/domain/models/folder.dart';
+import 'package:personal_reviews/domain/models/review.dart';
 
 part 'item.freezed.dart';
 

@@ -5,7 +5,7 @@ import 'package:personal_reviews/database/daos/folders_dao.dart';
 import 'package:personal_reviews/database/daos/items_dao.dart';
 import 'package:personal_reviews/database/daos/review_images_dao.dart';
 import 'package:personal_reviews/database/daos/reviews_dao.dart';
-import 'package:personal_reviews/domain/models/item/item.dart';
+import 'package:personal_reviews/domain/models/item.dart';
 
 class ItemRepository {
   final ItemsDao _itemsDao;
