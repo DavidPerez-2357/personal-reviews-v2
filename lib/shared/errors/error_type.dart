@@ -2,6 +2,7 @@ enum ErrorType {
   validation,
   network,
   storage,
+  database,
   critical,
   authentication,
   authorization,

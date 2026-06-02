@@ -1,6 +1,6 @@
+import 'package:personal_reviews/shared/errors/error_ui_model.dart';
+import 'package:personal_reviews/shared/errors/error_type.dart';
 import 'package:flutter/material.dart';
-import 'package:personal_reviews/core/enums/error_type.dart';
-import 'package:personal_reviews/shared/presentation/errors/error_ui_model.dart';
 
 class ErrorTypePresenter {
   const ErrorTypePresenter._();
@@ -24,6 +24,13 @@ class ErrorTypePresenter {
       case ErrorType.storage:
         return const ErrorUIModel(
           title: 'Error de almacenamiento',
+          icon: Icons.shopping_bag_rounded,
+          retryable: true,
+        );
+
+      case ErrorType.database:
+        return const ErrorUIModel(
+          title: 'Error de base de datos',
           icon: Icons.storage_rounded,
           retryable: true,
         );
