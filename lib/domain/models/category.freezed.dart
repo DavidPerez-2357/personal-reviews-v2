@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CategoryDomain {
 
- int get id; String get name; CategoryColor get color; String get icon; DateTime get createdAt; bool get isDeleted; DateTime? get deletedAt;
+ int get id; String get name; CategoryColor get color; String get icon; DateTime get createdAt; bool get isDeleted; DateTime? get deletedAt; int get reviewCount;
 /// Create a copy of CategoryDomain
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $CategoryDomainCopyWith<CategoryDomain> get copyWith => _$CategoryDomainCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.color, color) || other.color == color)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.color, color) || other.color == color)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.reviewCount, reviewCount) || other.reviewCount == reviewCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,color,icon,createdAt,isDeleted,deletedAt);
+int get hashCode => Object.hash(runtimeType,id,name,color,icon,createdAt,isDeleted,deletedAt,reviewCount);
 
 @override
 String toString() {
-  return 'CategoryDomain(id: $id, name: $name, color: $color, icon: $icon, createdAt: $createdAt, isDeleted: $isDeleted, deletedAt: $deletedAt)';
+  return 'CategoryDomain(id: $id, name: $name, color: $color, icon: $icon, createdAt: $createdAt, isDeleted: $isDeleted, deletedAt: $deletedAt, reviewCount: $reviewCount)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $CategoryDomainCopyWith<$Res>  {
   factory $CategoryDomainCopyWith(CategoryDomain value, $Res Function(CategoryDomain) _then) = _$CategoryDomainCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, CategoryColor color, String icon, DateTime createdAt, bool isDeleted, DateTime? deletedAt
+ int id, String name, CategoryColor color, String icon, DateTime createdAt, bool isDeleted, DateTime? deletedAt, int reviewCount
 });
 
 
@@ -62,7 +62,7 @@ class _$CategoryDomainCopyWithImpl<$Res>
 
 /// Create a copy of CategoryDomain
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? color = null,Object? icon = null,Object? createdAt = null,Object? isDeleted = null,Object? deletedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? color = null,Object? icon = null,Object? createdAt = null,Object? isDeleted = null,Object? deletedAt = freezed,Object? reviewCount = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -71,7 +71,8 @@ as CategoryColor,icon: null == icon ? _self.icon : icon // ignore: cast_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
 as bool,deletedAt: freezed == deletedAt ? _self.deletedAt : deletedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,reviewCount: null == reviewCount ? _self.reviewCount : reviewCount // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 /// Create a copy of CategoryDomain
@@ -165,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  CategoryColor color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  CategoryColor color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt,  int reviewCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CategoryDomain() when $default != null:
-return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that.isDeleted,_that.deletedAt);case _:
+return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that.isDeleted,_that.deletedAt,_that.reviewCount);case _:
   return orElse();
 
 }
@@ -186,10 +187,10 @@ return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  CategoryColor color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  CategoryColor color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt,  int reviewCount)  $default,) {final _that = this;
 switch (_that) {
 case _CategoryDomain():
-return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that.isDeleted,_that.deletedAt);case _:
+return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that.isDeleted,_that.deletedAt,_that.reviewCount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +207,10 @@ return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  CategoryColor color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  CategoryColor color,  String icon,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt,  int reviewCount)?  $default,) {final _that = this;
 switch (_that) {
 case _CategoryDomain() when $default != null:
-return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that.isDeleted,_that.deletedAt);case _:
+return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that.isDeleted,_that.deletedAt,_that.reviewCount);case _:
   return null;
 
 }
@@ -221,7 +222,7 @@ return $default(_that.id,_that.name,_that.color,_that.icon,_that.createdAt,_that
 
 
 class _CategoryDomain implements CategoryDomain {
-  const _CategoryDomain({required this.id, required this.name, required this.color, required this.icon, required this.createdAt, this.isDeleted = false, this.deletedAt});
+  const _CategoryDomain({required this.id, required this.name, required this.color, required this.icon, required this.createdAt, this.isDeleted = false, this.deletedAt, this.reviewCount = 0});
   
 
 @override final  int id;
@@ -231,6 +232,7 @@ class _CategoryDomain implements CategoryDomain {
 @override final  DateTime createdAt;
 @override@JsonKey() final  bool isDeleted;
 @override final  DateTime? deletedAt;
+@override@JsonKey() final  int reviewCount;
 
 /// Create a copy of CategoryDomain
 /// with the given fields replaced by the non-null parameter values.
@@ -242,16 +244,16 @@ _$CategoryDomainCopyWith<_CategoryDomain> get copyWith => __$CategoryDomainCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CategoryDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.color, color) || other.color == color)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CategoryDomain&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.color, color) || other.color == color)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.reviewCount, reviewCount) || other.reviewCount == reviewCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,color,icon,createdAt,isDeleted,deletedAt);
+int get hashCode => Object.hash(runtimeType,id,name,color,icon,createdAt,isDeleted,deletedAt,reviewCount);
 
 @override
 String toString() {
-  return 'CategoryDomain(id: $id, name: $name, color: $color, icon: $icon, createdAt: $createdAt, isDeleted: $isDeleted, deletedAt: $deletedAt)';
+  return 'CategoryDomain(id: $id, name: $name, color: $color, icon: $icon, createdAt: $createdAt, isDeleted: $isDeleted, deletedAt: $deletedAt, reviewCount: $reviewCount)';
 }
 
 
@@ -262,7 +264,7 @@ abstract mixin class _$CategoryDomainCopyWith<$Res> implements $CategoryDomainCo
   factory _$CategoryDomainCopyWith(_CategoryDomain value, $Res Function(_CategoryDomain) _then) = __$CategoryDomainCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, CategoryColor color, String icon, DateTime createdAt, bool isDeleted, DateTime? deletedAt
+ int id, String name, CategoryColor color, String icon, DateTime createdAt, bool isDeleted, DateTime? deletedAt, int reviewCount
 });
 
 
@@ -279,7 +281,7 @@ class __$CategoryDomainCopyWithImpl<$Res>
 
 /// Create a copy of CategoryDomain
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? color = null,Object? icon = null,Object? createdAt = null,Object? isDeleted = null,Object? deletedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? color = null,Object? icon = null,Object? createdAt = null,Object? isDeleted = null,Object? deletedAt = freezed,Object? reviewCount = null,}) {
   return _then(_CategoryDomain(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -288,7 +290,8 @@ as CategoryColor,icon: null == icon ? _self.icon : icon // ignore: cast_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
 as bool,deletedAt: freezed == deletedAt ? _self.deletedAt : deletedAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,reviewCount: null == reviewCount ? _self.reviewCount : reviewCount // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

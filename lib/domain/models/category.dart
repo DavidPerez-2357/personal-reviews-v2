@@ -1,5 +1,7 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:personal_reviews/core/constants/category_colors.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:personal_reviews/core/utils/colors.dart';
+import 'dart:ui';
 
 part 'category.freezed.dart';
 
@@ -13,6 +15,7 @@ abstract class CategoryDomain with _$CategoryDomain {
     required DateTime createdAt,
     @Default(false) bool isDeleted,
     DateTime? deletedAt,
+    @Default(0) int reviewCount,
   }) = _CategoryDomain;
 }
 
@@ -68,4 +71,9 @@ sealed class CategoryColor with _$CategoryColor {
         throw FormatException('[ERROR] Unknown CategoryColorType: $typeStr');
     }
   }
+
+  Color toColor() => when(
+    preset: (_, hex) => hexStringToColor(hex),
+    custom: (hex) => hexStringToColor(hex),
+  );
 }
