@@ -1,5 +1,5 @@
 import 'package:personal_reviews/shared/errors/error_ui_model.dart';
-import 'package:personal_reviews/shared/widgets/dialog/app_dialog.dart';
+import 'package:personal_reviews/shared/widgets/app_dialog.dart';
 import 'package:personal_reviews/style/theme/app_border.dart';
 import 'package:personal_reviews/style/theme/app_colors.dart';
 import 'package:flutter/material.dart';
