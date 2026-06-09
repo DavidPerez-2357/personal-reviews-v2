@@ -11,6 +11,7 @@ La idea es separar responsabilidades para que cada parte del codigo tenga un pro
 - [data](data/README.md): traduccion y acceso a fuentes de datos.
 - [database](database/README.md): persistencia local con Drift y SQLite.
 - [features](features/README.md): capacidades y pantallas organizadas por funcionalidad.
+- providers: inyeccion de dependencias y gestion de estado.
 - [style](style/README.md): sistema visual, tema y tokens de la app.
 
 ## Entrada de la app
