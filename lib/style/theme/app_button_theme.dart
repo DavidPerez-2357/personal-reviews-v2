@@ -8,7 +8,7 @@ class AppButtonStyles {
       );
 
   static const WidgetStateProperty<Size> minimumSize = WidgetStatePropertyAll(
-    Size.fromHeight(52),
+    Size.fromHeight(40),
   );
 
   static const WidgetStateProperty<EdgeInsetsGeometry> padding =
