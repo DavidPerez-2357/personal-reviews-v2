@@ -289,4 +289,1146 @@ as DateTime?,
 
 }
 
+/// @nodoc
+mixin _$FolderDetailed {
+
+ FolderDomain get folder; int get itemCount; List<String> get previewImages;
+/// Create a copy of FolderDetailed
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$FolderDetailedCopyWith<FolderDetailed> get copyWith => _$FolderDetailedCopyWithImpl<FolderDetailed>(this as FolderDetailed, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FolderDetailed&&(identical(other.folder, folder) || other.folder == folder)&&(identical(other.itemCount, itemCount) || other.itemCount == itemCount)&&const DeepCollectionEquality().equals(other.previewImages, previewImages));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,folder,itemCount,const DeepCollectionEquality().hash(previewImages));
+
+@override
+String toString() {
+  return 'FolderDetailed(folder: $folder, itemCount: $itemCount, previewImages: $previewImages)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $FolderDetailedCopyWith<$Res>  {
+  factory $FolderDetailedCopyWith(FolderDetailed value, $Res Function(FolderDetailed) _then) = _$FolderDetailedCopyWithImpl;
+@useResult
+$Res call({
+ FolderDomain folder, int itemCount, List<String> previewImages
+});
+
+
+$FolderDomainCopyWith<$Res> get folder;
+
+}
+/// @nodoc
+class _$FolderDetailedCopyWithImpl<$Res>
+    implements $FolderDetailedCopyWith<$Res> {
+  _$FolderDetailedCopyWithImpl(this._self, this._then);
+
+  final FolderDetailed _self;
+  final $Res Function(FolderDetailed) _then;
+
+/// Create a copy of FolderDetailed
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? folder = null,Object? itemCount = null,Object? previewImages = null,}) {
+  return _then(_self.copyWith(
+folder: null == folder ? _self.folder : folder // ignore: cast_nullable_to_non_nullable
+as FolderDomain,itemCount: null == itemCount ? _self.itemCount : itemCount // ignore: cast_nullable_to_non_nullable
+as int,previewImages: null == previewImages ? _self.previewImages : previewImages // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
+}
+/// Create a copy of FolderDetailed
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FolderDomainCopyWith<$Res> get folder {
+  
+  return $FolderDomainCopyWith<$Res>(_self.folder, (value) {
+    return _then(_self.copyWith(folder: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [FolderDetailed].
+extension FolderDetailedPatterns on FolderDetailed {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FolderDetailed value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _FolderDetailed() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FolderDetailed value)  $default,){
+final _that = this;
+switch (_that) {
+case _FolderDetailed():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FolderDetailed value)?  $default,){
+final _that = this;
+switch (_that) {
+case _FolderDetailed() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( FolderDomain folder,  int itemCount,  List<String> previewImages)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _FolderDetailed() when $default != null:
+return $default(_that.folder,_that.itemCount,_that.previewImages);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( FolderDomain folder,  int itemCount,  List<String> previewImages)  $default,) {final _that = this;
+switch (_that) {
+case _FolderDetailed():
+return $default(_that.folder,_that.itemCount,_that.previewImages);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( FolderDomain folder,  int itemCount,  List<String> previewImages)?  $default,) {final _that = this;
+switch (_that) {
+case _FolderDetailed() when $default != null:
+return $default(_that.folder,_that.itemCount,_that.previewImages);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _FolderDetailed implements FolderDetailed {
+  const _FolderDetailed({required this.folder, required this.itemCount, required final  List<String> previewImages}): _previewImages = previewImages;
+  
+
+@override final  FolderDomain folder;
+@override final  int itemCount;
+ final  List<String> _previewImages;
+@override List<String> get previewImages {
+  if (_previewImages is EqualUnmodifiableListView) return _previewImages;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_previewImages);
+}
+
+
+/// Create a copy of FolderDetailed
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$FolderDetailedCopyWith<_FolderDetailed> get copyWith => __$FolderDetailedCopyWithImpl<_FolderDetailed>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FolderDetailed&&(identical(other.folder, folder) || other.folder == folder)&&(identical(other.itemCount, itemCount) || other.itemCount == itemCount)&&const DeepCollectionEquality().equals(other._previewImages, _previewImages));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,folder,itemCount,const DeepCollectionEquality().hash(_previewImages));
+
+@override
+String toString() {
+  return 'FolderDetailed(folder: $folder, itemCount: $itemCount, previewImages: $previewImages)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$FolderDetailedCopyWith<$Res> implements $FolderDetailedCopyWith<$Res> {
+  factory _$FolderDetailedCopyWith(_FolderDetailed value, $Res Function(_FolderDetailed) _then) = __$FolderDetailedCopyWithImpl;
+@override @useResult
+$Res call({
+ FolderDomain folder, int itemCount, List<String> previewImages
+});
+
+
+@override $FolderDomainCopyWith<$Res> get folder;
+
+}
+/// @nodoc
+class __$FolderDetailedCopyWithImpl<$Res>
+    implements _$FolderDetailedCopyWith<$Res> {
+  __$FolderDetailedCopyWithImpl(this._self, this._then);
+
+  final _FolderDetailed _self;
+  final $Res Function(_FolderDetailed) _then;
+
+/// Create a copy of FolderDetailed
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? folder = null,Object? itemCount = null,Object? previewImages = null,}) {
+  return _then(_FolderDetailed(
+folder: null == folder ? _self.folder : folder // ignore: cast_nullable_to_non_nullable
+as FolderDomain,itemCount: null == itemCount ? _self.itemCount : itemCount // ignore: cast_nullable_to_non_nullable
+as int,previewImages: null == previewImages ? _self._previewImages : previewImages // ignore: cast_nullable_to_non_nullable
+as List<String>,
+  ));
+}
+
+/// Create a copy of FolderDetailed
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FolderDomainCopyWith<$Res> get folder {
+  
+  return $FolderDomainCopyWith<$Res>(_self.folder, (value) {
+    return _then(_self.copyWith(folder: value));
+  });
+}
+}
+
+/// @nodoc
+mixin _$FolderNode {
+
+ int get id; String get name; int get categoryId; String? get imagePath; DateTime get createdAt; bool get isDeleted; DateTime? get deletedAt; int? get parentId; List<FolderNode> get children;
+/// Create a copy of FolderNode
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$FolderNodeCopyWith<FolderNode> get copyWith => _$FolderNodeCopyWithImpl<FolderNode>(this as FolderNode, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FolderNode&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.parentId, parentId) || other.parentId == parentId)&&const DeepCollectionEquality().equals(other.children, children));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,name,categoryId,imagePath,createdAt,isDeleted,deletedAt,parentId,const DeepCollectionEquality().hash(children));
+
+@override
+String toString() {
+  return 'FolderNode(id: $id, name: $name, categoryId: $categoryId, imagePath: $imagePath, createdAt: $createdAt, isDeleted: $isDeleted, deletedAt: $deletedAt, parentId: $parentId, children: $children)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $FolderNodeCopyWith<$Res>  {
+  factory $FolderNodeCopyWith(FolderNode value, $Res Function(FolderNode) _then) = _$FolderNodeCopyWithImpl;
+@useResult
+$Res call({
+ int id, String name, int categoryId, String? imagePath, DateTime createdAt, bool isDeleted, DateTime? deletedAt, int? parentId, List<FolderNode> children
+});
+
+
+
+
+}
+/// @nodoc
+class _$FolderNodeCopyWithImpl<$Res>
+    implements $FolderNodeCopyWith<$Res> {
+  _$FolderNodeCopyWithImpl(this._self, this._then);
+
+  final FolderNode _self;
+  final $Res Function(FolderNode) _then;
+
+/// Create a copy of FolderNode
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? categoryId = null,Object? imagePath = freezed,Object? createdAt = null,Object? isDeleted = null,Object? deletedAt = freezed,Object? parentId = freezed,Object? children = null,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as int,imagePath: freezed == imagePath ? _self.imagePath : imagePath // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
+as bool,deletedAt: freezed == deletedAt ? _self.deletedAt : deletedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,parentId: freezed == parentId ? _self.parentId : parentId // ignore: cast_nullable_to_non_nullable
+as int?,children: null == children ? _self.children : children // ignore: cast_nullable_to_non_nullable
+as List<FolderNode>,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [FolderNode].
+extension FolderNodePatterns on FolderNode {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FolderNode value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _FolderNode() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FolderNode value)  $default,){
+final _that = this;
+switch (_that) {
+case _FolderNode():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FolderNode value)?  $default,){
+final _that = this;
+switch (_that) {
+case _FolderNode() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  int categoryId,  String? imagePath,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt,  int? parentId,  List<FolderNode> children)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _FolderNode() when $default != null:
+return $default(_that.id,_that.name,_that.categoryId,_that.imagePath,_that.createdAt,_that.isDeleted,_that.deletedAt,_that.parentId,_that.children);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  int categoryId,  String? imagePath,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt,  int? parentId,  List<FolderNode> children)  $default,) {final _that = this;
+switch (_that) {
+case _FolderNode():
+return $default(_that.id,_that.name,_that.categoryId,_that.imagePath,_that.createdAt,_that.isDeleted,_that.deletedAt,_that.parentId,_that.children);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  int categoryId,  String? imagePath,  DateTime createdAt,  bool isDeleted,  DateTime? deletedAt,  int? parentId,  List<FolderNode> children)?  $default,) {final _that = this;
+switch (_that) {
+case _FolderNode() when $default != null:
+return $default(_that.id,_that.name,_that.categoryId,_that.imagePath,_that.createdAt,_that.isDeleted,_that.deletedAt,_that.parentId,_that.children);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _FolderNode extends FolderNode {
+  const _FolderNode({required this.id, required this.name, required this.categoryId, this.imagePath, required this.createdAt, required this.isDeleted, this.deletedAt, this.parentId, final  List<FolderNode> children = const []}): _children = children,super._();
+  
+
+@override final  int id;
+@override final  String name;
+@override final  int categoryId;
+@override final  String? imagePath;
+@override final  DateTime createdAt;
+@override final  bool isDeleted;
+@override final  DateTime? deletedAt;
+@override final  int? parentId;
+ final  List<FolderNode> _children;
+@override@JsonKey() List<FolderNode> get children {
+  if (_children is EqualUnmodifiableListView) return _children;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_children);
+}
+
+
+/// Create a copy of FolderNode
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$FolderNodeCopyWith<_FolderNode> get copyWith => __$FolderNodeCopyWithImpl<_FolderNode>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FolderNode&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.imagePath, imagePath) || other.imagePath == imagePath)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDeleted, isDeleted) || other.isDeleted == isDeleted)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.parentId, parentId) || other.parentId == parentId)&&const DeepCollectionEquality().equals(other._children, _children));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,name,categoryId,imagePath,createdAt,isDeleted,deletedAt,parentId,const DeepCollectionEquality().hash(_children));
+
+@override
+String toString() {
+  return 'FolderNode(id: $id, name: $name, categoryId: $categoryId, imagePath: $imagePath, createdAt: $createdAt, isDeleted: $isDeleted, deletedAt: $deletedAt, parentId: $parentId, children: $children)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$FolderNodeCopyWith<$Res> implements $FolderNodeCopyWith<$Res> {
+  factory _$FolderNodeCopyWith(_FolderNode value, $Res Function(_FolderNode) _then) = __$FolderNodeCopyWithImpl;
+@override @useResult
+$Res call({
+ int id, String name, int categoryId, String? imagePath, DateTime createdAt, bool isDeleted, DateTime? deletedAt, int? parentId, List<FolderNode> children
+});
+
+
+
+
+}
+/// @nodoc
+class __$FolderNodeCopyWithImpl<$Res>
+    implements _$FolderNodeCopyWith<$Res> {
+  __$FolderNodeCopyWithImpl(this._self, this._then);
+
+  final _FolderNode _self;
+  final $Res Function(_FolderNode) _then;
+
+/// Create a copy of FolderNode
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? categoryId = null,Object? imagePath = freezed,Object? createdAt = null,Object? isDeleted = null,Object? deletedAt = freezed,Object? parentId = freezed,Object? children = null,}) {
+  return _then(_FolderNode(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as int,imagePath: freezed == imagePath ? _self.imagePath : imagePath // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,isDeleted: null == isDeleted ? _self.isDeleted : isDeleted // ignore: cast_nullable_to_non_nullable
+as bool,deletedAt: freezed == deletedAt ? _self.deletedAt : deletedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,parentId: freezed == parentId ? _self.parentId : parentId // ignore: cast_nullable_to_non_nullable
+as int?,children: null == children ? _self._children : children // ignore: cast_nullable_to_non_nullable
+as List<FolderNode>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$FolderDetailedNode {
+
+ FolderDomain get folder; int get itemCount; List<String> get previewImages; List<FolderDetailedNode> get children;
+/// Create a copy of FolderDetailedNode
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$FolderDetailedNodeCopyWith<FolderDetailedNode> get copyWith => _$FolderDetailedNodeCopyWithImpl<FolderDetailedNode>(this as FolderDetailedNode, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FolderDetailedNode&&(identical(other.folder, folder) || other.folder == folder)&&(identical(other.itemCount, itemCount) || other.itemCount == itemCount)&&const DeepCollectionEquality().equals(other.previewImages, previewImages)&&const DeepCollectionEquality().equals(other.children, children));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,folder,itemCount,const DeepCollectionEquality().hash(previewImages),const DeepCollectionEquality().hash(children));
+
+@override
+String toString() {
+  return 'FolderDetailedNode(folder: $folder, itemCount: $itemCount, previewImages: $previewImages, children: $children)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $FolderDetailedNodeCopyWith<$Res>  {
+  factory $FolderDetailedNodeCopyWith(FolderDetailedNode value, $Res Function(FolderDetailedNode) _then) = _$FolderDetailedNodeCopyWithImpl;
+@useResult
+$Res call({
+ FolderDomain folder, int itemCount, List<String> previewImages, List<FolderDetailedNode> children
+});
+
+
+$FolderDomainCopyWith<$Res> get folder;
+
+}
+/// @nodoc
+class _$FolderDetailedNodeCopyWithImpl<$Res>
+    implements $FolderDetailedNodeCopyWith<$Res> {
+  _$FolderDetailedNodeCopyWithImpl(this._self, this._then);
+
+  final FolderDetailedNode _self;
+  final $Res Function(FolderDetailedNode) _then;
+
+/// Create a copy of FolderDetailedNode
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? folder = null,Object? itemCount = null,Object? previewImages = null,Object? children = null,}) {
+  return _then(_self.copyWith(
+folder: null == folder ? _self.folder : folder // ignore: cast_nullable_to_non_nullable
+as FolderDomain,itemCount: null == itemCount ? _self.itemCount : itemCount // ignore: cast_nullable_to_non_nullable
+as int,previewImages: null == previewImages ? _self.previewImages : previewImages // ignore: cast_nullable_to_non_nullable
+as List<String>,children: null == children ? _self.children : children // ignore: cast_nullable_to_non_nullable
+as List<FolderDetailedNode>,
+  ));
+}
+/// Create a copy of FolderDetailedNode
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FolderDomainCopyWith<$Res> get folder {
+  
+  return $FolderDomainCopyWith<$Res>(_self.folder, (value) {
+    return _then(_self.copyWith(folder: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [FolderDetailedNode].
+extension FolderDetailedNodePatterns on FolderDetailedNode {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FolderDetailedNode value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _FolderDetailedNode() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FolderDetailedNode value)  $default,){
+final _that = this;
+switch (_that) {
+case _FolderDetailedNode():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FolderDetailedNode value)?  $default,){
+final _that = this;
+switch (_that) {
+case _FolderDetailedNode() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( FolderDomain folder,  int itemCount,  List<String> previewImages,  List<FolderDetailedNode> children)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _FolderDetailedNode() when $default != null:
+return $default(_that.folder,_that.itemCount,_that.previewImages,_that.children);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( FolderDomain folder,  int itemCount,  List<String> previewImages,  List<FolderDetailedNode> children)  $default,) {final _that = this;
+switch (_that) {
+case _FolderDetailedNode():
+return $default(_that.folder,_that.itemCount,_that.previewImages,_that.children);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( FolderDomain folder,  int itemCount,  List<String> previewImages,  List<FolderDetailedNode> children)?  $default,) {final _that = this;
+switch (_that) {
+case _FolderDetailedNode() when $default != null:
+return $default(_that.folder,_that.itemCount,_that.previewImages,_that.children);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _FolderDetailedNode extends FolderDetailedNode {
+  const _FolderDetailedNode({required this.folder, this.itemCount = 0, final  List<String> previewImages = const [], final  List<FolderDetailedNode> children = const []}): _previewImages = previewImages,_children = children,super._();
+  
+
+@override final  FolderDomain folder;
+@override@JsonKey() final  int itemCount;
+ final  List<String> _previewImages;
+@override@JsonKey() List<String> get previewImages {
+  if (_previewImages is EqualUnmodifiableListView) return _previewImages;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_previewImages);
+}
+
+ final  List<FolderDetailedNode> _children;
+@override@JsonKey() List<FolderDetailedNode> get children {
+  if (_children is EqualUnmodifiableListView) return _children;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_children);
+}
+
+
+/// Create a copy of FolderDetailedNode
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$FolderDetailedNodeCopyWith<_FolderDetailedNode> get copyWith => __$FolderDetailedNodeCopyWithImpl<_FolderDetailedNode>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FolderDetailedNode&&(identical(other.folder, folder) || other.folder == folder)&&(identical(other.itemCount, itemCount) || other.itemCount == itemCount)&&const DeepCollectionEquality().equals(other._previewImages, _previewImages)&&const DeepCollectionEquality().equals(other._children, _children));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,folder,itemCount,const DeepCollectionEquality().hash(_previewImages),const DeepCollectionEquality().hash(_children));
+
+@override
+String toString() {
+  return 'FolderDetailedNode(folder: $folder, itemCount: $itemCount, previewImages: $previewImages, children: $children)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$FolderDetailedNodeCopyWith<$Res> implements $FolderDetailedNodeCopyWith<$Res> {
+  factory _$FolderDetailedNodeCopyWith(_FolderDetailedNode value, $Res Function(_FolderDetailedNode) _then) = __$FolderDetailedNodeCopyWithImpl;
+@override @useResult
+$Res call({
+ FolderDomain folder, int itemCount, List<String> previewImages, List<FolderDetailedNode> children
+});
+
+
+@override $FolderDomainCopyWith<$Res> get folder;
+
+}
+/// @nodoc
+class __$FolderDetailedNodeCopyWithImpl<$Res>
+    implements _$FolderDetailedNodeCopyWith<$Res> {
+  __$FolderDetailedNodeCopyWithImpl(this._self, this._then);
+
+  final _FolderDetailedNode _self;
+  final $Res Function(_FolderDetailedNode) _then;
+
+/// Create a copy of FolderDetailedNode
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? folder = null,Object? itemCount = null,Object? previewImages = null,Object? children = null,}) {
+  return _then(_FolderDetailedNode(
+folder: null == folder ? _self.folder : folder // ignore: cast_nullable_to_non_nullable
+as FolderDomain,itemCount: null == itemCount ? _self.itemCount : itemCount // ignore: cast_nullable_to_non_nullable
+as int,previewImages: null == previewImages ? _self._previewImages : previewImages // ignore: cast_nullable_to_non_nullable
+as List<String>,children: null == children ? _self._children : children // ignore: cast_nullable_to_non_nullable
+as List<FolderDetailedNode>,
+  ));
+}
+
+/// Create a copy of FolderDetailedNode
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FolderDomainCopyWith<$Res> get folder {
+  
+  return $FolderDomainCopyWith<$Res>(_self.folder, (value) {
+    return _then(_self.copyWith(folder: value));
+  });
+}
+}
+
+/// @nodoc
+mixin _$FolderContent {
+
+ List<FolderDetailedNode> get folders; List<ItemWithLastReview> get items;
+/// Create a copy of FolderContent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$FolderContentCopyWith<FolderContent> get copyWith => _$FolderContentCopyWithImpl<FolderContent>(this as FolderContent, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FolderContent&&const DeepCollectionEquality().equals(other.folders, folders)&&const DeepCollectionEquality().equals(other.items, items));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(folders),const DeepCollectionEquality().hash(items));
+
+@override
+String toString() {
+  return 'FolderContent(folders: $folders, items: $items)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $FolderContentCopyWith<$Res>  {
+  factory $FolderContentCopyWith(FolderContent value, $Res Function(FolderContent) _then) = _$FolderContentCopyWithImpl;
+@useResult
+$Res call({
+ List<FolderDetailedNode> folders, List<ItemWithLastReview> items
+});
+
+
+
+
+}
+/// @nodoc
+class _$FolderContentCopyWithImpl<$Res>
+    implements $FolderContentCopyWith<$Res> {
+  _$FolderContentCopyWithImpl(this._self, this._then);
+
+  final FolderContent _self;
+  final $Res Function(FolderContent) _then;
+
+/// Create a copy of FolderContent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? folders = null,Object? items = null,}) {
+  return _then(_self.copyWith(
+folders: null == folders ? _self.folders : folders // ignore: cast_nullable_to_non_nullable
+as List<FolderDetailedNode>,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
+as List<ItemWithLastReview>,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [FolderContent].
+extension FolderContentPatterns on FolderContent {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FolderContent value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _FolderContent() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FolderContent value)  $default,){
+final _that = this;
+switch (_that) {
+case _FolderContent():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FolderContent value)?  $default,){
+final _that = this;
+switch (_that) {
+case _FolderContent() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<FolderDetailedNode> folders,  List<ItemWithLastReview> items)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _FolderContent() when $default != null:
+return $default(_that.folders,_that.items);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<FolderDetailedNode> folders,  List<ItemWithLastReview> items)  $default,) {final _that = this;
+switch (_that) {
+case _FolderContent():
+return $default(_that.folders,_that.items);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<FolderDetailedNode> folders,  List<ItemWithLastReview> items)?  $default,) {final _that = this;
+switch (_that) {
+case _FolderContent() when $default != null:
+return $default(_that.folders,_that.items);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _FolderContent implements FolderContent {
+  const _FolderContent({final  List<FolderDetailedNode> folders = const [], final  List<ItemWithLastReview> items = const []}): _folders = folders,_items = items;
+  
+
+ final  List<FolderDetailedNode> _folders;
+@override@JsonKey() List<FolderDetailedNode> get folders {
+  if (_folders is EqualUnmodifiableListView) return _folders;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_folders);
+}
+
+ final  List<ItemWithLastReview> _items;
+@override@JsonKey() List<ItemWithLastReview> get items {
+  if (_items is EqualUnmodifiableListView) return _items;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_items);
+}
+
+
+/// Create a copy of FolderContent
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$FolderContentCopyWith<_FolderContent> get copyWith => __$FolderContentCopyWithImpl<_FolderContent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FolderContent&&const DeepCollectionEquality().equals(other._folders, _folders)&&const DeepCollectionEquality().equals(other._items, _items));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_folders),const DeepCollectionEquality().hash(_items));
+
+@override
+String toString() {
+  return 'FolderContent(folders: $folders, items: $items)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$FolderContentCopyWith<$Res> implements $FolderContentCopyWith<$Res> {
+  factory _$FolderContentCopyWith(_FolderContent value, $Res Function(_FolderContent) _then) = __$FolderContentCopyWithImpl;
+@override @useResult
+$Res call({
+ List<FolderDetailedNode> folders, List<ItemWithLastReview> items
+});
+
+
+
+
+}
+/// @nodoc
+class __$FolderContentCopyWithImpl<$Res>
+    implements _$FolderContentCopyWith<$Res> {
+  __$FolderContentCopyWithImpl(this._self, this._then);
+
+  final _FolderContent _self;
+  final $Res Function(_FolderContent) _then;
+
+/// Create a copy of FolderContent
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? folders = null,Object? items = null,}) {
+  return _then(_FolderContent(
+folders: null == folders ? _self._folders : folders // ignore: cast_nullable_to_non_nullable
+as List<FolderDetailedNode>,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
+as List<ItemWithLastReview>,
+  ));
+}
+
+
+}
+
 // dart format on

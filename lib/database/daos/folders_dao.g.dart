@@ -6,6 +6,7 @@ part of 'folders_dao.dart';
 mixin _$FoldersDaoMixin on DatabaseAccessor<AppDatabase> {
   $CategoriesTable get categories => attachedDatabase.categories;
   $FoldersTable get folders => attachedDatabase.folders;
+  $ItemsTable get items => attachedDatabase.items;
   FoldersDaoManager get managers => FoldersDaoManager(this);
 }
 
@@ -16,4 +17,6 @@ class FoldersDaoManager {
       $$CategoriesTableTableManager(_db.attachedDatabase, _db.categories);
   $$FoldersTableTableManager get folders =>
       $$FoldersTableTableManager(_db.attachedDatabase, _db.folders);
+  $$ItemsTableTableManager get items =>
+      $$ItemsTableTableManager(_db.attachedDatabase, _db.items);
 }
