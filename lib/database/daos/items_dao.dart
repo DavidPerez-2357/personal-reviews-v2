@@ -1,9 +1,11 @@
-import 'package:drift/drift.dart';
-import 'package:personal_reviews/database/app_database.dart';
+import 'package:personal_reviews/database/models/item_rows.dart';
+import 'package:personal_reviews/database/tables/reviews_table.dart';
 import 'package:personal_reviews/database/tables/items_table.dart';
+import 'package:personal_reviews/database/app_database.dart';
+import 'package:drift/drift.dart';
 part 'items_dao.g.dart';
 
-@DriftAccessor(tables: [Items])
+@DriftAccessor(tables: [Items, Reviews])
 class ItemsDao extends DatabaseAccessor<AppDatabase> with _$ItemsDaoMixin {
   ItemsDao(super.attachedDatabase);
 
@@ -64,5 +66,90 @@ class ItemsDao extends DatabaseAccessor<AppDatabase> with _$ItemsDaoMixin {
           ),
         )
         .then((rowsAffected) => rowsAffected > 0);
+  }
+
+  /* Item with last review */
+  Stream<List<ItemWithLastReviewRow>> watchItemsWithLastReviewByCategoryId(
+    int categoryId,
+  ) {
+    final query =
+        select(items).join([
+            leftOuterJoin(
+              reviews,
+              reviews.itemId.equalsExp(items.id) &
+                  reviews.isDeleted.equals(false),
+            ),
+          ])
+          ..where(
+            items.categoryId.equals(categoryId) &
+                items.folderId.isNull() &
+                items.isDeleted.equals(false),
+          )
+          ..orderBy([
+            OrderingTerm(expression: items.id, mode: OrderingMode.asc),
+            OrderingTerm(
+              expression: reviews.createdAt,
+              mode: OrderingMode.desc,
+            ),
+          ]);
+
+    return query.watch().map((rows) {
+      final result = <int, ItemWithLastReviewRow>{};
+
+      for (final row in rows) {
+        final item = row.readTable(items);
+
+        result.putIfAbsent(
+          item.id,
+          () => ItemWithLastReviewRow(
+            item: item,
+            lastReview: row.readTableOrNull(reviews),
+          ),
+        );
+      }
+
+      return result.values.toList();
+    });
+  }
+
+  Stream<List<ItemWithLastReviewRow>> watchItemsWithLastReviewByFolderId(
+    int folderId,
+  ) {
+    final query =
+        select(items).join([
+            leftOuterJoin(
+              reviews,
+              reviews.itemId.equalsExp(items.id) &
+                  reviews.isDeleted.equals(false),
+            ),
+          ])
+          ..where(
+            items.folderId.equals(folderId) & items.isDeleted.equals(false),
+          )
+          ..orderBy([
+            OrderingTerm(expression: items.id, mode: OrderingMode.asc),
+            OrderingTerm(
+              expression: reviews.createdAt,
+              mode: OrderingMode.desc,
+            ),
+          ]);
+
+    return query.watch().map((rows) {
+      final result = <int, ItemWithLastReviewRow>{};
+
+      for (final row in rows) {
+        final item = row.readTable(items);
+
+        result.putIfAbsent(
+          item.id,
+          () => ItemWithLastReviewRow(
+            item: item,
+            lastReview: row.readTableOrNull(reviews),
+          ),
+        );
+      }
+
+      return result.values.toList();
+    });
   }
 }

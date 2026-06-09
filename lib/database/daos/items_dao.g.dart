@@ -7,6 +7,7 @@ mixin _$ItemsDaoMixin on DatabaseAccessor<AppDatabase> {
   $CategoriesTable get categories => attachedDatabase.categories;
   $FoldersTable get folders => attachedDatabase.folders;
   $ItemsTable get items => attachedDatabase.items;
+  $ReviewsTable get reviews => attachedDatabase.reviews;
   ItemsDaoManager get managers => ItemsDaoManager(this);
 }
 
@@ -19,4 +20,6 @@ class ItemsDaoManager {
       $$FoldersTableTableManager(_db.attachedDatabase, _db.folders);
   $$ItemsTableTableManager get items =>
       $$ItemsTableTableManager(_db.attachedDatabase, _db.items);
+  $$ReviewsTableTableManager get reviews =>
+      $$ReviewsTableTableManager(_db.attachedDatabase, _db.reviews);
 }
