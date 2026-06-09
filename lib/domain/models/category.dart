@@ -15,7 +15,6 @@ abstract class CategoryDomain with _$CategoryDomain {
     required DateTime createdAt,
     @Default(false) bool isDeleted,
     DateTime? deletedAt,
-    @Default(0) int reviewCount,
   }) = _CategoryDomain;
 }
 
@@ -36,6 +35,21 @@ sealed class CategoryColor with _$CategoryColor {
   String toDBFormat() =>
       when(preset: (name, _) => 'preset:$name', custom: (hex) => 'custom:$hex');
 
+  Color toColor() => when(
+    preset: (_, hex) => hexStringToColor(hex),
+    custom: (hex) => hexStringToColor(hex),
+  );
+
+  factory CategoryColor.fromPresetName(String name) {
+    final hex = presetCategoryColors[name];
+
+    if (hex == null) {
+      throw FormatException('[ERROR] Unknown preset CategoryColor: $name');
+    }
+
+    return CategoryColor.preset(name: name, hex: hex);
+  }
+
   factory CategoryColor.fromDBFormat(String dbString) {
     final separatorIndex = dbString.indexOf(':');
 
@@ -50,13 +64,7 @@ sealed class CategoryColor with _$CategoryColor {
 
     switch (typeStr) {
       case 'preset':
-        final hex = presetCategoryColors[value];
-
-        if (hex == null) {
-          throw FormatException('[ERROR] Unknown preset CategoryColor: $value');
-        }
-
-        return CategoryColor.preset(name: value, hex: hex);
+        return CategoryColor.fromPresetName(value);
 
       case 'custom':
         if (!RegExp(_hexFormat).hasMatch(value)) {
@@ -71,9 +79,12 @@ sealed class CategoryColor with _$CategoryColor {
         throw FormatException('[ERROR] Unknown CategoryColorType: $typeStr');
     }
   }
+}
 
-  Color toColor() => when(
-    preset: (_, hex) => hexStringToColor(hex),
-    custom: (hex) => hexStringToColor(hex),
-  );
+@freezed
+abstract class CategoryWithStats with _$CategoryWithStats {
+  const factory CategoryWithStats({
+    required CategoryDomain category,
+    required int itemCount,
+  }) = _CategoryWithStats;
 }

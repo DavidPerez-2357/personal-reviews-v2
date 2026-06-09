@@ -1,14 +1,14 @@
+import 'package:personal_reviews/database/models/category_rows.dart';
 import 'package:personal_reviews/database/app_database.dart';
 import 'package:personal_reviews/domain/models/category.dart';
 
 class CategoryMapper {
-  static CategoryDomain fromRow(Category row, int? reviewCount) {
+  static CategoryDomain fromRow(Category row) {
     return CategoryDomain(
       id: row.id,
       name: row.name,
       color: CategoryColor.fromDBFormat(row.color),
       icon: row.icon,
-      reviewCount: reviewCount ?? 0,
       createdAt: row.createdAt,
       isDeleted: row.isDeleted,
       deletedAt: row.deletedAt,
@@ -16,6 +16,19 @@ class CategoryMapper {
   }
 
   static List<CategoryDomain> fromRows(List<Category> rows) {
-    return rows.map((row) => fromRow(row, null)).toList();
+    return rows.map((row) => fromRow(row)).toList();
+  }
+}
+
+class CategoryWithStatsMapper {
+  static CategoryWithStats fromRow(CategoryWithStatsRow row) {
+    return CategoryWithStats(
+      category: CategoryMapper.fromRow(row.category),
+      itemCount: row.itemCount,
+    );
+  }
+
+  static List<CategoryWithStats> fromRows(List<CategoryWithStatsRow> rows) {
+    return rows.map((row) => fromRow(row)).toList();
   }
 }
