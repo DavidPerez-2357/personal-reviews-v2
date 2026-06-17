@@ -1,3 +1,5 @@
+import 'package:personal_reviews/core/types/elements_filter.dart';
+import 'package:personal_reviews/core/types/elements_sort.dart';
 import 'package:personal_reviews/data/mappers/folder_mapper.dart';
 import 'package:personal_reviews/database/daos/folders_dao.dart';
 import 'package:personal_reviews/domain/models/folder.dart';
@@ -84,7 +86,7 @@ class FolderRepository {
         .then((folderDomains) => FolderNode.buildFolderTree(folderDomains));
   }
 
-  Future<FolderNode?> getFolderWithTreeById(int id) async {
+  Future<FolderNode?> getAllWithTreeById(int id) async {
     final folder = await _foldersDao.getById(id);
     if (folder == null) return null;
 
@@ -100,14 +102,30 @@ class FolderRepository {
     return null;
   }
 
-  Stream<List<FolderDetailedNode>> watchDetailedTreeByCategoryId(
-    int categoryId,
-  ) {
-    return _foldersDao.watchFoldersDetailedByCategoryId(categoryId, false).map((
-      foldersDtos,
-    ) {
-      final foldersWithDetails = FolderDetailedMapper.fromRows(foldersDtos);
-      return FolderDetailedNode.buildFolderTree(foldersWithDetails);
-    });
+  Future<List<FolderDetailedNode>> queryDetailedTree({
+    required ElementsSort sort,
+    required ElementsFilter filter,
+    String searchQuery = '',
+    int? folderId,
+    bool includeDeleted = false,
+    bool excludeNonDeleted = false,
+  }) {
+    // Replace searrchQuery spaces with % for SQL LIKE query
+    searchQuery = searchQuery.trim().replaceAll(' ', '%');
+
+    return _foldersDao
+        .queryFolders(
+          sort: sort,
+          filter: filter,
+          searchQuery: searchQuery,
+          folderId: folderId,
+          includeDeleted: includeDeleted,
+          excludeNonDeleted: excludeNonDeleted,
+        )
+        .then((folders) => FolderDetailedMapper.fromRows(folders))
+        .then(
+          (foldersWithDetails) =>
+              FolderDetailedNode.buildFolderTree(foldersWithDetails),
+        );
   }
 }

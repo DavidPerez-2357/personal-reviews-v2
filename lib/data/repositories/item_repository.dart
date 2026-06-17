@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:personal_reviews/core/types/elements_filter.dart';
+import 'package:personal_reviews/core/types/elements_sort.dart';
 import 'package:personal_reviews/data/mappers/item_mapper.dart';
 import 'package:personal_reviews/database/daos/items_dao.dart';
 import 'package:personal_reviews/domain/models/item.dart';
@@ -60,19 +63,31 @@ class ItemRepository {
   }
 
   /* Item with last review */
-  Stream<List<ItemWithLastReview>> watchItemsWithLastReviewByCategoryId(
-    int categoryId,
-  ) {
-    return _itemsDao
-        .watchItemsWithLastReviewByCategoryId(categoryId)
-        .map((rows) => ItemWithLastReviewMapper.fromRows(rows));
-  }
+  Future<List<ItemWithLastReview>> queryItems({
+    required ElementsSort sort,
+    required ElementsFilter filter,
+    String searchQuery = '',
+    int? folderId,
+    bool groupByFolders = false,
+    bool includeDeleted = false,
+    bool excludeNonDeleted = false,
+  }) async {
+    // Replace searchQuery spaces with % for SQL LIKE query
+    searchQuery = searchQuery.trim().replaceAll(' ', '%');
 
-  Stream<List<ItemWithLastReview>> watchItemsWithLastReviewByFolderId(
-    int folderId,
-  ) {
-    return _itemsDao
-        .watchItemsWithLastReviewByFolderId(folderId)
-        .map((rows) => ItemWithLastReviewMapper.fromRows(rows));
+    debugPrint(
+      'ItemRepository.queryItems: sort=$sort, filter=$filter, searchQuery=$searchQuery, folderId=$folderId, groupByFolders=$groupByFolders, includeDeleted=$includeDeleted, excludeNonDeleted=$excludeNonDeleted',
+    );
+
+    final rows = await _itemsDao.queryItems(
+      sort: sort,
+      filter: filter,
+      searchQuery: searchQuery,
+      folderId: folderId,
+      groupByFolders: groupByFolders,
+      includeDeleted: includeDeleted,
+      excludeNonDeleted: excludeNonDeleted,
+    );
+    return ItemWithLastReviewMapper.fromRows(rows);
   }
 }
