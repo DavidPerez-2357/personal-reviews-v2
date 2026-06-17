@@ -1,13 +1,33 @@
-import 'package:drift/drift.dart';
-import 'package:personal_reviews/database/models/folder_rows.dart';
-import 'package:personal_reviews/database/app_database.dart';
+import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/database/tables/folders_table.dart';
+import 'package:personal_reviews/database/models/folder_rows.dart';
 import 'package:personal_reviews/database/tables/items_table.dart';
+import 'package:personal_reviews/core/types/elements_sort.dart';
+import 'package:personal_reviews/database/app_database.dart';
+import 'package:personal_reviews/core/types/sort.dart';
+import 'package:drift/drift.dart';
 part 'folders_dao.g.dart';
 
 @DriftAccessor(tables: [Folders, Items])
 class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
   FoldersDao(super.attachedDatabase);
+
+  OrderingTerm _getOrderingTerm(ElementsSort sort) {
+    final sortOrder = sort.type == SortType.ASC
+        ? OrderingMode.asc
+        : OrderingMode.desc;
+
+    switch (sort.field) {
+      case ElementsSortField.name:
+        return OrderingTerm(expression: folders.name, mode: sortOrder);
+
+      case ElementsSortField.date:
+        return OrderingTerm(expression: folders.createdAt, mode: sortOrder);
+
+      default:
+        return OrderingTerm(expression: folders.id, mode: OrderingMode.asc);
+    }
+  }
 
   Future<List<Folder>> getAll(bool isDeleted) {
     return (select(folders)..where((t) => t.isDeleted.equals(isDeleted))).get();
@@ -83,68 +103,6 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
         .then((rowsAffected) => rowsAffected > 0);
   }
 
-  /* Folder detailed with item count and preview images */
-  Stream<List<FolderDetailedRow>> watchFoldersDetailedByCategoryId(
-    int categoryId,
-    bool isDeleted,
-  ) {
-    return _watchFoldersWithItemCount(categoryId, isDeleted).asyncMap((
-      foldersWithCount,
-    ) async {
-      if (foldersWithCount.isEmpty) {
-        return [];
-      }
-
-      final previewImages = await _getPreviewImagesByFolderIds(
-        foldersWithCount.map((e) => e.folder.id).toList(),
-      );
-
-      return foldersWithCount.map((folderData) {
-        return FolderDetailedRow(
-          folder: folderData.folder,
-          itemCount: folderData.itemCount,
-          previewImages: previewImages[folderData.folder.id] ?? const [],
-        );
-      }).toList();
-    });
-  }
-
-  Stream<List<FolderWithItemCountRow>> _watchFoldersWithItemCount(
-    int categoryId,
-    bool isDeleted,
-  ) {
-    final folderAlias = alias(folders, 'f');
-    final itemAlias = alias(items, 'i');
-
-    final itemCountExpression = itemAlias.id.count();
-
-    final query =
-        select(folderAlias).join([
-            leftOuterJoin(
-              itemAlias,
-              itemAlias.folderId.equalsExp(folderAlias.id) &
-                  itemAlias.isDeleted.equals(false),
-            ),
-          ])
-          ..where(
-            folderAlias.categoryId.equals(categoryId) &
-                folderAlias.isDeleted.equals(isDeleted),
-          )
-          ..addColumns([itemCountExpression])
-          ..groupBy([folderAlias.id]);
-
-    final rows = query.watch();
-
-    return rows.map((rows) {
-      return rows.map((row) {
-        return FolderWithItemCountRow(
-          folder: row.readTable(folderAlias),
-          itemCount: row.read(itemCountExpression) ?? 0,
-        );
-      }).toList();
-    });
-  }
-
   Future<Map<int, List<String>>> _getPreviewImagesByFolderIds(
     List<int> folderIds,
   ) async {
@@ -172,5 +130,78 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
     }
 
     return previews;
+  }
+
+  /* Get detailed folder with item count and preview images with sort and filter */
+  Future<List<FolderDetailedRow>> queryFolders({
+    required ElementsSort sort,
+    required ElementsFilter filter,
+    String searchQuery = '',
+    int? folderId,
+    bool includeDeleted = false,
+    bool excludeNonDeleted = false,
+  }) {
+    /* Sort */
+    OrderingTerm ordering = _getOrderingTerm(sort);
+
+    /* Filter */
+    final categoryFilter = filter.categoryIds.isNotEmpty
+        ? folders.categoryId.isIn(filter.categoryIds)
+        : const Constant(true);
+
+    /* Search */
+    final searchFilter = searchQuery.isNotEmpty
+        ? folders.name.like('%$searchQuery%')
+        : const Constant(true);
+
+    /* Other options */
+    final folderIdFilter = folderId != null
+        ? folders.parentId.equals(folderId)
+        : const Constant(true);
+
+    final includeDeletedFilter = includeDeleted
+        ? const Constant(true)
+        : folders.isDeleted.equals(false);
+
+    final excludeNonDeletedFilter = excludeNonDeleted
+        ? folders.isDeleted.equals(true)
+        : const Constant(true);
+
+    /* Query */
+    final query =
+        select(folders).join([
+            leftOuterJoin(
+              items,
+              items.folderId.equalsExp(folders.id) &
+                  items.isDeleted.equals(false),
+            ),
+          ])
+          ..addColumns([items.id.count()])
+          ..where(
+            includeDeletedFilter &
+                excludeNonDeletedFilter &
+                categoryFilter &
+                searchFilter &
+                folderIdFilter,
+          )
+          ..groupBy([folders.id])
+          ..orderBy([ordering]);
+
+    final rows = query.get();
+
+    return rows.then((rows) async {
+      final folderIds = rows.map((row) => row.readTable(folders).id).toList();
+      final previewImages = await _getPreviewImagesByFolderIds(folderIds);
+
+      return rows.map((row) {
+        final folder = row.readTable(folders);
+        final itemCount = row.read(items.id.count()) ?? 0;
+        return FolderDetailedRow(
+          folder: folder,
+          itemCount: itemCount,
+          previewImages: previewImages[folder.id] ?? const [],
+        );
+      }).toList();
+    });
   }
 }
