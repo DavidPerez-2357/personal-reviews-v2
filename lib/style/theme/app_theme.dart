@@ -21,6 +21,9 @@ final colorScheme = ColorScheme.dark(
 
   error: AppColors.error,
 
+  primaryContainer: AppColors.primaryContainer,
+  secondaryContainer: AppColors.secondaryContainer,
+
   onSurface: AppColors.onSurface,
   onSurfaceVariant: AppColors.onSurfaceVariant,
   onPrimary: AppColors.onPrimary,
@@ -50,6 +53,20 @@ final appTheme = ThemeData(
 
   searchBarTheme: appSearchBarTheme,
 
+  /* Chips */
+  chipTheme: ChipThemeData(
+    side: WidgetStateBorderSide.resolveWith((states) {
+      return BorderSide(
+        color: states.contains(WidgetState.selected)
+            ? colorScheme.secondaryContainer
+            : colorScheme.outline,
+      );
+    }),
+    backgroundColor: Colors.transparent,
+    selectedColor: colorScheme.secondaryContainer,
+    showCheckmark: false,
+  ),
+
   /* Buttons */
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: AppButtonStyles.primary(colorScheme),
@@ -73,5 +90,24 @@ final appTheme = ThemeData(
 
   segmentedButtonTheme: SegmentedButtonThemeData(
     style: AppButtonStyles.segmented(colorScheme),
+  ),
+
+  /* Range */
+  sliderTheme: SliderThemeData(
+    activeTrackColor: colorScheme.secondary.withValues(alpha: 0.8),
+    inactiveTrackColor: colorScheme.onSurface.withValues(alpha: 0.3),
+    thumbColor: colorScheme.secondary,
+    trackHeight: 5,
+    overlayColor: colorScheme.secondary.withValues(alpha: 0.2),
+
+    activeTickMarkColor: colorScheme.secondary.withValues(green: 0.6),
+    inactiveTickMarkColor: colorScheme.onSurface.withValues(alpha: 0.5),
+
+    valueIndicatorTextStyle: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+      color: colorScheme.onSurface,
+    ),
+    valueIndicatorColor: colorScheme.surface,
   ),
 );

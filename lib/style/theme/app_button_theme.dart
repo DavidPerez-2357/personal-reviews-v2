@@ -8,7 +8,7 @@ class AppButtonStyles {
       );
 
   static const WidgetStateProperty<Size> minimumSize = WidgetStatePropertyAll(
-    Size.fromHeight(40),
+    Size(0, 40),
   );
 
   static const WidgetStateProperty<EdgeInsetsGeometry> padding =
@@ -16,7 +16,7 @@ class AppButtonStyles {
 
   static ButtonStyle primary(ColorScheme colorScheme) {
     return ButtonStyle(
-      backgroundColor: WidgetStatePropertyAll(colorScheme.primary),
+      backgroundColor: WidgetStatePropertyAll(colorScheme.primaryContainer),
       foregroundColor: WidgetStatePropertyAll(colorScheme.onPrimary),
       minimumSize: minimumSize,
       padding: padding,
@@ -46,7 +46,7 @@ class AppButtonStyles {
 
   static ButtonStyle icon(ColorScheme colorScheme) {
     return ButtonStyle(
-      backgroundColor: WidgetStatePropertyAll(colorScheme.primary),
+      backgroundColor: WidgetStatePropertyAll(colorScheme.primaryContainer),
       foregroundColor: WidgetStatePropertyAll(colorScheme.onPrimary),
       shape: shape,
       padding: const WidgetStatePropertyAll(EdgeInsets.all(12)),

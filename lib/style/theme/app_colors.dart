@@ -9,9 +9,14 @@ abstract final class AppColors {
     0xFF393E46,
   ); // empty star in rating display
 
-  static const primary = Color(0xFF00ADB5); // prev: 0xFF1E8E93
-  static const secondary = Color(0xFF056244);
+  static const primary = Color(0xFF00ADB5);
+  static const secondary = Color(0xFF087C57);
   static const tertiary = Color(0xFF0051A1);
+
+  // Container for backgrounds
+  static const primaryContainer = Color(0xFF167277);
+  static const secondaryContainer = Color(0xFF035A3F);
+  static const tertiaryContainer = Color(0xFF03498F);
 
   static const success = Color(0xFF16A34A);
   static const error = Color(0xFFDC2626);
