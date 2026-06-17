@@ -1,13 +1,16 @@
-import 'style/theme/app_theme.dart';
+import 'package:personal_reviews/features/app_shell/app_shell.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:personal_reviews/database/app_database.dart';
-import 'package:personal_reviews/features/app_shell/app_shell.dart';
+import 'style/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  //AppDatabase database = AppDatabase();
+  //database.deleteDatabase();
 
   // Set the system UI overlay style to make the status bar and navigation bar transparent
   SystemChrome.setSystemUIOverlayStyle(
@@ -21,10 +24,7 @@ void main() async {
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  // Initialize the database and run migrations before running the app
-  AppDatabase();
-
-  runApp(const MainApp());
+  runApp(const ProviderScope(child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
