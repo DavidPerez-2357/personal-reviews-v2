@@ -1,31 +1,34 @@
-import 'package:personal_reviews/core/types/folder_explorer.dart';
-import 'package:personal_reviews/domain/models/folder.dart';
-import 'package:personal_reviews/domain/models/item.dart';
-import 'package:personal_reviews/features/folder_explorer/providers/folder_explorer_state.dart';
+import 'package:personal_reviews/domain/explorer/explorer_state.dart';
 import 'package:personal_reviews/data/repositories/folder_repository.dart';
 import 'package:personal_reviews/data/repositories/item_repository.dart';
+import 'package:personal_reviews/domain/explorer/explorer_transformer.dart';
 import 'package:personal_reviews/providers/repositories_provider.dart';
+import 'package:personal_reviews/core/types/folder_explorer.dart';
 import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/elements_sort.dart';
+import 'package:personal_reviews/domain/models/folder.dart';
+import 'package:personal_reviews/domain/models/item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
-class FolderExplorerNotifier
-    extends StateNotifier<AsyncValue<FolderExplorerState>> {
-  FolderExplorerNotifier({
+class ExplorerNotifier extends StateNotifier<AsyncValue<ExplorerState>> {
+  ExplorerNotifier({
     required this.folderRepository,
     required this.itemRepository,
     this.config = const FolderExplorerConfig(),
+    this.data = const FolderExplorerData(),
   }) : super(const AsyncValue.loading()) {
     _load(
       sort: config.defaultSort,
       filter: config.defaultFilter,
       searchQuery: '',
       config: config,
+      data: data,
     );
   }
 
   final FolderExplorerConfig config;
+  final FolderExplorerData data;
 
   final FolderRepository folderRepository;
   final ItemRepository itemRepository;
@@ -35,6 +38,7 @@ class FolderExplorerNotifier
     required ElementsFilter filter,
     required String searchQuery,
     required FolderExplorerConfig config,
+    required FolderExplorerData data,
   }) async {
     try {
       if (!config.includeDeleted && config.excludeNonDeleted) {
@@ -43,34 +47,56 @@ class FolderExplorerNotifier
         );
       }
 
-      final List<FolderDetailedNode> folders =
-          filter.visibility != ElementsVisibility.itemsOnly &&
-              config.groupByFolders
-          ? await folderRepository.queryDetailedTree(
-              sort: sort,
-              filter: filter,
-              searchQuery: searchQuery,
-              folderId: config.folderId,
-              includeDeleted: config.includeDeleted,
-              excludeNonDeleted: config.excludeNonDeleted,
-            )
-          : [];
+      List<FolderDetailedNode> folders = [];
 
-      final List<ItemWithLastReview> items =
-          filter.visibility != ElementsVisibility.foldersOnly
-          ? await itemRepository.queryItems(
-              sort: sort,
-              filter: filter,
-              searchQuery: searchQuery,
-              folderId: config.folderId,
-              groupByFolders: config.groupByFolders,
-              includeDeleted: config.includeDeleted,
-              excludeNonDeleted: config.excludeNonDeleted,
-            )
-          : [];
+      if (filter.visibility != ElementsVisibility.itemsOnly &&
+          config.groupByFolders &&
+          !data.hasFolders) {
+        folders = await folderRepository.queryDetailedTree(
+          sort: sort,
+          filter: filter,
+          searchQuery: searchQuery,
+          folderId: config.folderId,
+          includeDeleted: config.includeDeleted,
+          excludeNonDeleted: config.excludeNonDeleted,
+        );
+      }
+
+      if (data.hasFolders) {
+        folders = ExplorerTransformer.filterAndSortFolders(
+          data.folders,
+          filter,
+          searchQuery,
+          sort,
+        );
+      }
+
+      List<ItemWithLastReview> items = [];
+
+      if (filter.visibility != ElementsVisibility.foldersOnly &&
+          !data.hasItems) {
+        items = await itemRepository.queryItems(
+          sort: sort,
+          filter: filter,
+          searchQuery: searchQuery,
+          folderId: config.folderId,
+          groupByFolders: config.groupByFolders,
+          includeDeleted: config.includeDeleted,
+          excludeNonDeleted: config.excludeNonDeleted,
+        );
+      }
+
+      if (data.hasItems) {
+        items = ExplorerTransformer.filterAndSortItems(
+          data.items,
+          filter,
+          searchQuery,
+          sort,
+        );
+      }
 
       state = AsyncValue.data(
-        FolderExplorerState(
+        ExplorerState(
           folders: folders,
           items: items,
           sort: sort,
@@ -93,6 +119,7 @@ class FolderExplorerNotifier
       filter: filter,
       searchQuery: searchQuery,
       config: config,
+      data: data,
     );
   }
 
@@ -106,6 +133,7 @@ class FolderExplorerNotifier
       filter: current.filter,
       searchQuery: current.searchQuery,
       config: config,
+      data: data,
     );
   }
 
@@ -119,6 +147,7 @@ class FolderExplorerNotifier
       filter: filter,
       searchQuery: current.searchQuery,
       config: config,
+      data: data,
     );
   }
 
@@ -132,6 +161,7 @@ class FolderExplorerNotifier
       filter: current.filter,
       searchQuery: searchQuery,
       config: config,
+      data: data,
     );
   }
 
@@ -145,6 +175,7 @@ class FolderExplorerNotifier
       filter: config.defaultFilter,
       searchQuery: current.searchQuery,
       config: config,
+      data: data,
     );
   }
 
@@ -158,6 +189,7 @@ class FolderExplorerNotifier
       filter: current.filter,
       searchQuery: current.searchQuery,
       config: config,
+      data: data,
     );
   }
 
@@ -171,19 +203,21 @@ class FolderExplorerNotifier
       filter: current.filter,
       searchQuery: current.searchQuery,
       config: config,
+      data: data,
     );
   }
 }
 
-final folderExplorerProvider =
+final explorerProvider =
     StateNotifierProvider.family<
-      FolderExplorerNotifier,
-      AsyncValue<FolderExplorerState>,
-      FolderExplorerConfig
-    >((ref, config) {
-      return FolderExplorerNotifier(
+      ExplorerNotifier,
+      AsyncValue<ExplorerState>,
+      FolderExplorerParams
+    >((ref, params) {
+      return ExplorerNotifier(
         folderRepository: ref.read(folderRepositoryProvider),
         itemRepository: ref.read(itemRepositoryProvider),
-        config: config,
+        config: params.config,
+        data: params.data,
       );
     });

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'folder_explorer_state.dart';
+part of 'explorer_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,20 +12,20 @@ part of 'folder_explorer_state.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$FolderExplorerState {
+mixin _$ExplorerState {
 
  List<FolderDetailedNode> get folders; List<ItemWithLastReview> get items; ElementsSort get sort; ElementsFilter get filter; String get searchQuery; bool get isLoading;
-/// Create a copy of FolderExplorerState
+/// Create a copy of ExplorerState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$FolderExplorerStateCopyWith<FolderExplorerState> get copyWith => _$FolderExplorerStateCopyWithImpl<FolderExplorerState>(this as FolderExplorerState, _$identity);
+$ExplorerStateCopyWith<ExplorerState> get copyWith => _$ExplorerStateCopyWithImpl<ExplorerState>(this as ExplorerState, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FolderExplorerState&&const DeepCollectionEquality().equals(other.folders, folders)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.sort, sort) || other.sort == sort)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExplorerState&&const DeepCollectionEquality().equals(other.folders, folders)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.sort, sort) || other.sort == sort)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
 }
 
 
@@ -34,15 +34,15 @@ int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(
 
 @override
 String toString() {
-  return 'FolderExplorerState(folders: $folders, items: $items, sort: $sort, filter: $filter, searchQuery: $searchQuery, isLoading: $isLoading)';
+  return 'ExplorerState(folders: $folders, items: $items, sort: $sort, filter: $filter, searchQuery: $searchQuery, isLoading: $isLoading)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $FolderExplorerStateCopyWith<$Res>  {
-  factory $FolderExplorerStateCopyWith(FolderExplorerState value, $Res Function(FolderExplorerState) _then) = _$FolderExplorerStateCopyWithImpl;
+abstract mixin class $ExplorerStateCopyWith<$Res>  {
+  factory $ExplorerStateCopyWith(ExplorerState value, $Res Function(ExplorerState) _then) = _$ExplorerStateCopyWithImpl;
 @useResult
 $Res call({
  List<FolderDetailedNode> folders, List<ItemWithLastReview> items, ElementsSort sort, ElementsFilter filter, String searchQuery, bool isLoading
@@ -53,14 +53,14 @@ $Res call({
 
 }
 /// @nodoc
-class _$FolderExplorerStateCopyWithImpl<$Res>
-    implements $FolderExplorerStateCopyWith<$Res> {
-  _$FolderExplorerStateCopyWithImpl(this._self, this._then);
+class _$ExplorerStateCopyWithImpl<$Res>
+    implements $ExplorerStateCopyWith<$Res> {
+  _$ExplorerStateCopyWithImpl(this._self, this._then);
 
-  final FolderExplorerState _self;
-  final $Res Function(FolderExplorerState) _then;
+  final ExplorerState _self;
+  final $Res Function(ExplorerState) _then;
 
-/// Create a copy of FolderExplorerState
+/// Create a copy of ExplorerState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? folders = null,Object? items = null,Object? sort = null,Object? filter = null,Object? searchQuery = null,Object? isLoading = null,}) {
   return _then(_self.copyWith(
@@ -77,8 +77,8 @@ as bool,
 }
 
 
-/// Adds pattern-matching-related methods to [FolderExplorerState].
-extension FolderExplorerStatePatterns on FolderExplorerState {
+/// Adds pattern-matching-related methods to [ExplorerState].
+extension ExplorerStatePatterns on ExplorerState {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -91,10 +91,10 @@ extension FolderExplorerStatePatterns on FolderExplorerState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _FolderExplorerState value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ExplorerState value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _FolderExplorerState() when $default != null:
+case _ExplorerState() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -113,10 +113,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _FolderExplorerState value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ExplorerState value)  $default,){
 final _that = this;
 switch (_that) {
-case _FolderExplorerState():
+case _ExplorerState():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -134,10 +134,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _FolderExplorerState value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ExplorerState value)?  $default,){
 final _that = this;
 switch (_that) {
-case _FolderExplorerState() when $default != null:
+case _ExplorerState() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -157,7 +157,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<FolderDetailedNode> folders,  List<ItemWithLastReview> items,  ElementsSort sort,  ElementsFilter filter,  String searchQuery,  bool isLoading)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _FolderExplorerState() when $default != null:
+case _ExplorerState() when $default != null:
 return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQuery,_that.isLoading);case _:
   return orElse();
 
@@ -178,7 +178,7 @@ return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQu
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<FolderDetailedNode> folders,  List<ItemWithLastReview> items,  ElementsSort sort,  ElementsFilter filter,  String searchQuery,  bool isLoading)  $default,) {final _that = this;
 switch (_that) {
-case _FolderExplorerState():
+case _ExplorerState():
 return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQuery,_that.isLoading);case _:
   throw StateError('Unexpected subclass');
 
@@ -198,7 +198,7 @@ return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQu
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<FolderDetailedNode> folders,  List<ItemWithLastReview> items,  ElementsSort sort,  ElementsFilter filter,  String searchQuery,  bool isLoading)?  $default,) {final _that = this;
 switch (_that) {
-case _FolderExplorerState() when $default != null:
+case _ExplorerState() when $default != null:
 return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQuery,_that.isLoading);case _:
   return null;
 
@@ -210,8 +210,8 @@ return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQu
 /// @nodoc
 
 
-class _FolderExplorerState implements FolderExplorerState {
-  const _FolderExplorerState({final  List<FolderDetailedNode> folders = const [], final  List<ItemWithLastReview> items = const [], this.sort = const ElementsSort(), this.filter = const ElementsFilter(), this.searchQuery = '', this.isLoading = false}): _folders = folders,_items = items;
+class _ExplorerState implements ExplorerState {
+  const _ExplorerState({final  List<FolderDetailedNode> folders = const [], final  List<ItemWithLastReview> items = const [], this.sort = const ElementsSort(), this.filter = const ElementsFilter(), this.searchQuery = '', this.isLoading = false}): _folders = folders,_items = items;
   
 
  final  List<FolderDetailedNode> _folders;
@@ -233,17 +233,17 @@ class _FolderExplorerState implements FolderExplorerState {
 @override@JsonKey() final  String searchQuery;
 @override@JsonKey() final  bool isLoading;
 
-/// Create a copy of FolderExplorerState
+/// Create a copy of ExplorerState
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$FolderExplorerStateCopyWith<_FolderExplorerState> get copyWith => __$FolderExplorerStateCopyWithImpl<_FolderExplorerState>(this, _$identity);
+_$ExplorerStateCopyWith<_ExplorerState> get copyWith => __$ExplorerStateCopyWithImpl<_ExplorerState>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FolderExplorerState&&const DeepCollectionEquality().equals(other._folders, _folders)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.sort, sort) || other.sort == sort)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExplorerState&&const DeepCollectionEquality().equals(other._folders, _folders)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.sort, sort) || other.sort == sort)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading));
 }
 
 
@@ -252,15 +252,15 @@ int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(
 
 @override
 String toString() {
-  return 'FolderExplorerState(folders: $folders, items: $items, sort: $sort, filter: $filter, searchQuery: $searchQuery, isLoading: $isLoading)';
+  return 'ExplorerState(folders: $folders, items: $items, sort: $sort, filter: $filter, searchQuery: $searchQuery, isLoading: $isLoading)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$FolderExplorerStateCopyWith<$Res> implements $FolderExplorerStateCopyWith<$Res> {
-  factory _$FolderExplorerStateCopyWith(_FolderExplorerState value, $Res Function(_FolderExplorerState) _then) = __$FolderExplorerStateCopyWithImpl;
+abstract mixin class _$ExplorerStateCopyWith<$Res> implements $ExplorerStateCopyWith<$Res> {
+  factory _$ExplorerStateCopyWith(_ExplorerState value, $Res Function(_ExplorerState) _then) = __$ExplorerStateCopyWithImpl;
 @override @useResult
 $Res call({
  List<FolderDetailedNode> folders, List<ItemWithLastReview> items, ElementsSort sort, ElementsFilter filter, String searchQuery, bool isLoading
@@ -271,17 +271,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$FolderExplorerStateCopyWithImpl<$Res>
-    implements _$FolderExplorerStateCopyWith<$Res> {
-  __$FolderExplorerStateCopyWithImpl(this._self, this._then);
+class __$ExplorerStateCopyWithImpl<$Res>
+    implements _$ExplorerStateCopyWith<$Res> {
+  __$ExplorerStateCopyWithImpl(this._self, this._then);
 
-  final _FolderExplorerState _self;
-  final $Res Function(_FolderExplorerState) _then;
+  final _ExplorerState _self;
+  final $Res Function(_ExplorerState) _then;
 
-/// Create a copy of FolderExplorerState
+/// Create a copy of ExplorerState
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? folders = null,Object? items = null,Object? sort = null,Object? filter = null,Object? searchQuery = null,Object? isLoading = null,}) {
-  return _then(_FolderExplorerState(
+  return _then(_ExplorerState(
 folders: null == folders ? _self._folders : folders // ignore: cast_nullable_to_non_nullable
 as List<FolderDetailedNode>,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
 as List<ItemWithLastReview>,sort: null == sort ? _self.sort : sort // ignore: cast_nullable_to_non_nullable
