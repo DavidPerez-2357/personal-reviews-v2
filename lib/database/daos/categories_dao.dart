@@ -67,7 +67,7 @@ class CategoriesDao extends DatabaseAccessor<AppDatabase>
   }
 
   /* Category with stats */
-  Stream<List<CategoryWithStatsRow>> watchAllWithStats(bool isDeleted) {
+  Future<List<CategoryWithStatsRow>> getAllWithStats(bool isDeleted) {
     final categoryAlias = alias(categories, 'c');
     final itemAlias = alias(items, 'i');
 
@@ -87,6 +87,6 @@ class CategoriesDao extends DatabaseAccessor<AppDatabase>
       final category = row.readTable(categoryAlias);
       final itemCount = row.read(itemAlias.id.count()) ?? 0;
       return CategoryWithStatsRow(category: category, itemCount: itemCount);
-    }).watch();
+    }).get();
   }
 }

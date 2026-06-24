@@ -66,9 +66,9 @@ class CategoryRepository {
   }
 
   /* Category with stats */
-  Stream<List<CategoryWithStats>> watchAllWithStats(bool isDeleted) {
+  Future<List<CategoryWithStats>> getAllWithStats(bool isDeleted) {
     return _categoriesDao
-        .watchAllWithStats(isDeleted)
-        .map((dtos) => CategoryWithStatsMapper.fromRows(dtos));
+        .getAllWithStats(isDeleted)
+        .then((dtos) => CategoryWithStatsMapper.fromRows(dtos));
   }
 }
