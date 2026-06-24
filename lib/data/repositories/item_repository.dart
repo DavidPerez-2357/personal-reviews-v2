@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/elements_sort.dart';
 import 'package:personal_reviews/data/mappers/item_mapper.dart';
@@ -74,10 +73,6 @@ class ItemRepository {
   }) async {
     // Replace searchQuery spaces with % for SQL LIKE query
     searchQuery = searchQuery.trim().replaceAll(' ', '%');
-
-    debugPrint(
-      'ItemRepository.queryItems: sort=$sort, filter=$filter, searchQuery=$searchQuery, folderId=$folderId, groupByFolders=$groupByFolders, includeDeleted=$includeDeleted, excludeNonDeleted=$excludeNonDeleted',
-    );
 
     final rows = await _itemsDao.queryItems(
       sort: sort,
