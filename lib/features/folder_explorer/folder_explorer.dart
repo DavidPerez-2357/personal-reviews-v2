@@ -1,4 +1,5 @@
-import 'package:personal_reviews/features/folder_explorer/providers/folder_explorer_provider.dart';
+import 'package:personal_reviews/domain/explorer/explorer_data_provider.dart';
+import 'package:personal_reviews/domain/models/folder.dart';
 import 'package:personal_reviews/features/folder_explorer/components/elements_control.dart';
 import 'package:personal_reviews/shared/components/app_empty_state.dart';
 import 'package:personal_reviews/shared/components/folder_card.dart';
@@ -10,32 +11,50 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
 class FolderExplorer extends ConsumerWidget {
-  // Build empty state base config
   const FolderExplorer({
     super.key,
+    this.folderPath = const [],
     this.config = const FolderExplorerConfig(),
+    this.data = const FolderExplorerData(),
+    this.onRefresh,
     this.emptyState,
+    this.onDataLoaded,
   });
 
+  final List<FolderDetailedNode> folderPath;
   final FolderExplorerConfig config;
+  final FolderExplorerData data;
   final AppEmptyState? emptyState;
+  final VoidCallback? onRefresh;
+  final ValueChanged<FolderExplorerData>? onDataLoaded;
+
+  FolderExplorerParams get params =>
+      FolderExplorerParams(config: config, data: data);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final effectiveEmptyState = emptyState ?? buildEmptyState(config: config);
 
-    final explorer = ref.watch(folderExplorerProvider(config));
+    final explorer = ref.watch(explorerProvider(params));
+
+    Future<void> handleRefresh() {
+      if (onRefresh != null) {
+        return Future.sync(onRefresh!);
+      }
+
+      return ref.read(explorerProvider(params).notifier).refresh();
+    }
 
     onFilterApplied(ElementsFilter newFilter) {
-      ref.read(folderExplorerProvider(config).notifier).setFilter(newFilter);
+      ref.read(explorerProvider(params).notifier).setFilter(newFilter);
     }
 
     onSortApplied(ElementsSort newSort) {
-      ref.read(folderExplorerProvider(config).notifier).setSort(newSort);
+      ref.read(explorerProvider(params).notifier).setSort(newSort);
     }
 
     bool areFiltersApplied(ElementsFilter filter) {
-      return filter.compare(config.defaultFilter) == false;
+      return !filter.compare(config.defaultFilter);
     }
 
     bool searchQueryIsEmpty(String searchQuery) {
@@ -48,67 +67,89 @@ class FolderExplorer extends ConsumerWidget {
       error: (error, stackTrace) => Center(child: Text(error.toString())),
 
       data: (state) {
-        return state.folders.isEmpty &&
-                state.items.isEmpty &&
-                !areFiltersApplied(state.filter) &&
-                searchQueryIsEmpty(state.searchQuery)
-            ? ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 60),
-                    child: effectiveEmptyState,
+        final isEmptyState = state.folders.isEmpty && state.items.isEmpty;
+
+        final areAnyFiltersApplied =
+            areFiltersApplied(state.filter) ||
+            !searchQueryIsEmpty(state.searchQuery);
+
+        if (isEmptyState && !areAnyFiltersApplied) {
+          return RefreshIndicator(
+            onRefresh: () => handleRefresh(),
+            child: ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: effectiveEmptyState,
+                ),
+              ],
+            ),
+          );
+        }
+
+        if (onDataLoaded != null && !areAnyFiltersApplied) {
+          onDataLoaded!(
+            FolderExplorerData(
+              hasFolders: config.groupByFolders,
+              hasItems: true,
+              folders: state.folders,
+              items: state.items,
+            ),
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: () => handleRefresh(),
+          child: ListView(
+            children: [
+              if (config.showSearch || config.showSort || config.showFilter)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: ElementsControls(
+                    config: config,
+                    elementsFilter: state.filter,
+                    elementsSort: state.sort,
+
+                    onSearchChanged: (value) {
+                      ref
+                          .read(explorerProvider(params).notifier)
+                          .setSearchQuery(value);
+                    },
+
+                    onSortApplied: onSortApplied,
+                    onFilterApplied: onFilterApplied,
                   ),
-                ],
-              )
-            : ListView(
-                children: [
-                  if (config.showSearch || config.showSort || config.showFilter)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: ElementsControls(
-                        config: config,
-                        elementsFilter: state.filter,
-                        elementsSort: state.sort,
+                ),
 
-                        onSearchChanged: (value) {
-                          ref
-                              .read(folderExplorerProvider(config).notifier)
-                              .setSearchQuery(value);
-                        },
-
-                        onSortApplied: onSortApplied,
-                        onFilterApplied: onFilterApplied,
-                      ),
-                    ),
-
-                  if (state.folders.isEmpty && state.items.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 60),
-                      child: buildEmptyStateWithFiltersApplied(
-                        config: config,
-                        filter: state.filter,
-                        searchQuery: state.searchQuery,
-                      ),
-                    ),
-
-                  ...state.folders.map(
-                    (folder) => Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: FolderCard(folder: folder),
-                    ),
+              if (state.folders.isEmpty && state.items.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: buildEmptyStateWithFiltersApplied(
+                    config: config,
+                    filter: state.filter,
+                    searchQuery: state.searchQuery,
                   ),
+                ),
 
-                  ...state.items.map(
-                    (item) => Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: ItemCard(item: item),
-                    ),
-                  ),
+              ...state.folders.map(
+                (folder) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: FolderCard(folder: folder, folderPath: folderPath),
+                ),
+              ),
 
-                  if (state.folders.isNotEmpty || state.items.isNotEmpty)
-                    const SizedBox(height: 60),
-                ],
-              );
+              ...state.items.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: ItemCard(item: item),
+                ),
+              ),
+
+              if (state.folders.isNotEmpty || state.items.isNotEmpty)
+                const SizedBox(height: 60),
+            ],
+          ),
+        );
       },
     );
   }
