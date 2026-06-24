@@ -49,6 +49,7 @@ class ElementsFilter {
   bool compare(ElementsFilter other) {
     return visibility == other.visibility &&
         categoryIds.toSet().containsAll(other.categoryIds) &&
+        other.categoryIds.toSet().containsAll(categoryIds) &&
         minRating == other.minRating &&
         maxRating == other.maxRating;
   }
