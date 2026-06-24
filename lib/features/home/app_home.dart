@@ -1,4 +1,6 @@
 import 'package:personal_reviews/features/home/pages/view_all_categories.dart';
+import 'package:personal_reviews/features/folder_explorer/folder_explorer.dart';
+import 'package:personal_reviews/core/types/folder_explorer.dart';
 import 'package:flutter/material.dart';
 
 class AppHomeGroups extends StatefulWidget {
@@ -10,21 +12,32 @@ class AppHomeGroups extends StatefulWidget {
 
 class _AppHomeGroupsState extends State<AppHomeGroups> {
   static const int _virtualPageCount = 1000000;
+  final int _initialPage = (_virtualPageCount ~/ 2) - 2;
 
-  final PageController _controller = PageController(
-    initialPage: _virtualPageCount ~/ 2,
+  late final PageController _controller = PageController(
+    initialPage: _initialPage,
   );
 
   final Map<String, Widget> _pages = {
     'Agrupar por categorías': const ViewAllCategories(),
-    'No agrupar': const Center(child: Text('TODO: No agrupar')),
+    'Agrupar por carpetas': const Padding(
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: FolderExplorer(),
+    ),
+    'No agrupar': const Padding(
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: FolderExplorer(
+        config: FolderExplorerConfig(groupByFolders: false),
+      ),
+    ),
   };
 
-  int _currentPage = _virtualPageCount ~/ 2;
+  late int _currentPage = _initialPage;
 
   int get _realIndex => _currentPage % _pages.length;
 
   void _nextPage() {
+    FocusManager.instance.primaryFocus?.unfocus();
     _controller.nextPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -32,6 +45,7 @@ class _AppHomeGroupsState extends State<AppHomeGroups> {
   }
 
   void _previousPage() {
+    FocusManager.instance.primaryFocus?.unfocus();
     _controller.previousPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -51,6 +65,7 @@ class _AppHomeGroupsState extends State<AppHomeGroups> {
         Expanded(
           child: PageView.builder(
             controller: _controller,
+            physics: const PageScrollPhysics(),
             onPageChanged: (page) {
               setState(() {
                 _currentPage = page;
