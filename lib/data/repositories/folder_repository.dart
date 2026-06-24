@@ -125,7 +125,7 @@ class FolderRepository {
         .then((folders) => FolderDetailedMapper.fromRows(folders))
         .then(
           (foldersWithDetails) =>
-              FolderDetailedNode.buildFolderTree(foldersWithDetails),
+              FolderDetailedNode.buildFolderTree(foldersWithDetails, folderId),
         );
   }
 }

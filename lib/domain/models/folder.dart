@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:personal_reviews/domain/models/item.dart';
 
@@ -105,6 +106,7 @@ abstract class FolderDetailedNode with _$FolderDetailedNode {
 
   static List<FolderDetailedNode> buildFolderTree(
     List<FolderDetailed> folders,
+    int? parentId,
   ) {
     final childrenByParent = <int?, List<FolderDetailed>>{};
 
@@ -126,7 +128,7 @@ abstract class FolderDetailedNode with _$FolderDetailedNode {
       }).toList();
     }
 
-    return buildNodes(null);
+    return buildNodes(parentId);
   }
 
   List<int> getAllFolderIds() {
@@ -153,6 +155,38 @@ abstract class FolderDetailedNode with _$FolderDetailedNode {
     }
 
     return null;
+  }
+
+  static List<FolderDetailedNode> findPath(
+    List<FolderDetailedNode> nodes,
+    int targetId,
+  ) {
+    final path = <FolderDetailedNode>[];
+
+    bool dfs(FolderDetailedNode node) {
+      path.add(node);
+
+      if (node.folder.id == targetId) {
+        return true;
+      }
+
+      for (final child in node.children) {
+        if (dfs(child)) {
+          return true;
+        }
+      }
+
+      path.removeLast();
+      return false;
+    }
+
+    for (final root in nodes) {
+      if (dfs(root)) {
+        return List.unmodifiable(path);
+      }
+    }
+
+    return const [];
   }
 
   int get totalItemCount {
