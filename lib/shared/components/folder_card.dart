@@ -1,5 +1,6 @@
 import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/domain/models/folder.dart';
+import 'package:personal_reviews/features/folder_items/folder_items.dart';
 import 'package:personal_reviews/style/theme/app_spacing.dart';
 import 'package:personal_reviews/style/theme/app_border.dart';
 import 'package:flutter/material.dart';
@@ -40,67 +41,83 @@ Widget buildFolderImage(FolderDetailedNode folder, BuildContext context) {
 
 class FolderCard extends StatelessWidget {
   final FolderDetailedNode folder;
+  final List<FolderDetailedNode> folderPath;
 
-  const FolderCard({super.key, required this.folder});
+  const FolderCard({super.key, required this.folder, required this.folderPath});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.sm),
-      decoration: BoxDecoration(
-        borderRadius: AppRadius.mdBorder,
-        color: context.colors.surfaceContainerLow,
-        border: Border.all(
-          color: context.colors.surfaceContainerHighest,
-          width: 1,
-        ),
-      ),
-      child: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 32),
-                child: Row(
-                  children: [
-                    buildFolderImage(folder, context),
-
-                    const SizedBox(width: 16),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          folder.folder.name,
-                          style: context.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${folder.totalItemCount} reseñas',
-                          style: context.textTheme.bodySmall?.copyWith(
-                            color: context.colors.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          Align(
-            alignment: Alignment.topRight,
-            child: Icon(
-              Icons.folder_outlined,
-              size: 20,
-              color: context.colors.onSurfaceVariant.withValues(alpha: 0.5),
+    return GestureDetector(
+      onTap: () {
+        // Go to the folder items page
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            settings: RouteSettings(name: 'folder_items/${folder.folder.id}'),
+            builder: (context) => FolderItems(
+              folder: folder,
+              folderPath: [...folderPath, folder],
             ),
           ),
-        ],
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(AppSpacing.sm),
+        decoration: BoxDecoration(
+          borderRadius: AppRadius.mdBorder,
+          color: context.colors.surfaceContainerLow,
+          border: Border.all(
+            color: context.colors.surfaceContainerHighest,
+            width: 1,
+          ),
+        ),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 32),
+                  child: Row(
+                    children: [
+                      buildFolderImage(folder, context),
+
+                      const SizedBox(width: 16),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            folder.folder.name,
+                            style: context.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${folder.totalItemCount} reseñas',
+                            style: context.textTheme.bodySmall?.copyWith(
+                              color: context.colors.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            Align(
+              alignment: Alignment.topRight,
+              child: Icon(
+                Icons.folder_outlined,
+                size: 20,
+                color: context.colors.onSurfaceVariant.withValues(alpha: 0.5),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
