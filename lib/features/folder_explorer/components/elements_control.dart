@@ -71,8 +71,8 @@ class _ElementsControlsState extends ConsumerState<ElementsControls> {
 
     _showSortSheet(
       context,
-      widget.config.defaultSort,
       widget.elementsSort,
+      widget.config.defaultSort,
       widget.onSortApplied,
     );
   }
