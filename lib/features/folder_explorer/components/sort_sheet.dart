@@ -34,7 +34,11 @@ class ElementsSortSheetState extends State<ElementsSortSheet> {
 
   void _onFieldSelected(ElementsSortField field) {
     setState(() {
-      _selectedField = field;
+      if (_selectedField == field) {
+        _selectedField = null;
+      } else {
+        _selectedField = field;
+      }
     });
   }
 

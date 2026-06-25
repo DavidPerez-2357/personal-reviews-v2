@@ -2,6 +2,7 @@ import 'package:personal_reviews/core/constants/category_icons.dart';
 import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/core/types/folder_explorer.dart';
+import 'package:personal_reviews/core/utils/colors.dart';
 import 'package:personal_reviews/domain/models/category.dart';
 import 'package:flutter/material.dart';
 
@@ -113,6 +114,12 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
                     _selectedCategoryIds.remove(categoryId);
                   });
                 },
+
+                removeAllCategories: () {
+                  setState(() {
+                    _selectedCategoryIds.clear();
+                  });
+                },
               ),
             ],
 
@@ -178,37 +185,6 @@ class _FilterChip extends StatelessWidget {
         color: selected ? context.colors.onSecondary : context.colors.onSurface,
       ),
       label: Text(label),
-    );
-  }
-}
-
-class _CategoryFilterChip extends StatelessWidget {
-  const _CategoryFilterChip({
-    required this.category,
-    required this.selected,
-    required this.onSelected,
-  });
-
-  final CategoryDomain category;
-  final bool selected;
-  final ValueChanged<bool> onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return ChoiceChip(
-      selected: selected,
-      onSelected: (value) {
-        FocusManager.instance.primaryFocus?.unfocus();
-
-        onSelected(value);
-      },
-      avatar: Icon(
-        getCategoryIconData(category.icon),
-        size: 18,
-        color: Colors.white,
-      ),
-      label: Text(category.name),
-      selectedColor: category.color.toColor().withValues(alpha: 0.6),
     );
   }
 }
@@ -313,12 +289,14 @@ class _CategoryFilter extends StatelessWidget {
     required this.selectedCategoryIds,
     required this.onCategorySelected,
     required this.onCategoryDeselected,
+    required this.removeAllCategories,
   });
 
   final List<CategoryDomain> allCategories;
   final List<int> selectedCategoryIds;
   final ValueChanged<int> onCategorySelected;
   final ValueChanged<int> onCategoryDeselected;
+  final VoidCallback removeAllCategories;
 
   @override
   Widget build(BuildContext context) {
@@ -327,7 +305,7 @@ class _CategoryFilter extends StatelessWidget {
       spacing: 4,
       children: [
         Text(
-          'Categorías (${selectedCategoryIds.length})',
+          'Categorías ${selectedCategoryIds.isNotEmpty ? "(${selectedCategoryIds.length})" : ""}',
           style: context.textTheme.titleSmall,
         ),
 
@@ -340,6 +318,12 @@ class _CategoryFilter extends StatelessWidget {
                 child: Row(
                   spacing: 8,
                   children: [
+                    ChoiceChip(
+                      label: const Text('Todas'),
+                      selectedColor: context.colors.secondaryContainer,
+                      selected: selectedCategoryIds.isEmpty,
+                      onSelected: (isSelected) => removeAllCategories(),
+                    ),
                     for (var category in allCategories)
                       _CategoryFilterChip(
                         category: category,
@@ -357,6 +341,37 @@ class _CategoryFilter extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class _CategoryFilterChip extends StatelessWidget {
+  const _CategoryFilterChip({
+    required this.category,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final CategoryDomain category;
+  final bool selected;
+  final ValueChanged<bool> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChoiceChip(
+      selected: selected,
+      onSelected: (value) {
+        FocusManager.instance.primaryFocus?.unfocus();
+
+        onSelected(value);
+      },
+      avatar: Icon(
+        getCategoryIconData(category.icon),
+        size: 18,
+        color: Colors.white,
+      ),
+      label: Text(category.name, style: TextStyle(color: Colors.white)),
+      selectedColor: category.color.toColor().withValues(alpha: 0.6),
     );
   }
 }
