@@ -110,9 +110,6 @@ class FolderRepository {
     bool includeDeleted = false,
     bool excludeNonDeleted = false,
   }) {
-    // Replace searrchQuery spaces with % for SQL LIKE query
-    searchQuery = searchQuery.trim().replaceAll(' ', '%');
-
     return _foldersDao
         .queryFolders(
           sort: sort,

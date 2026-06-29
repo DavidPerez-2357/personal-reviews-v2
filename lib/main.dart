@@ -9,8 +9,8 @@ void main() async {
 
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-  //AppDatabase database = AppDatabase();
-  //database.deleteDatabase();
+  // AppDatabase database = AppDatabase();
+  // database.deleteDatabase();
 
   // Set the system UI overlay style to make the status bar and navigation bar transparent
   SystemChrome.setSystemUIOverlayStyle(

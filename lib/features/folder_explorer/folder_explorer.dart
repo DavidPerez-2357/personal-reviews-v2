@@ -87,16 +87,25 @@ class FolderExplorer extends ConsumerWidget {
           );
         }
 
-        if (onDataLoaded != null && !areAnyFiltersApplied) {
-          onDataLoaded!(
-            FolderExplorerData(
-              hasFolders: config.groupByFolders,
-              hasItems: true,
-              folders: state.folders,
-              items: state.items,
-            ),
-          );
-        }
+        /* Data loaded callback */
+        ref.listen(explorerProvider(params), (_, next) {
+          if (onDataLoaded == null) return;
+
+          next.whenData((state) {
+            final areAnyFiltersApplied =
+                !state.filter.compare(config.defaultFilter) ||
+                state.searchQuery.isNotEmpty;
+            if (areAnyFiltersApplied) return;
+            onDataLoaded!(
+              FolderExplorerData(
+                hasFolders: config.groupByFolders,
+                hasItems: true,
+                folders: state.folders,
+                items: state.items,
+              ),
+            );
+          });
+        });
 
         return RefreshIndicator(
           onRefresh: () => handleRefresh(),

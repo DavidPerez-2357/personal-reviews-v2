@@ -27,6 +27,8 @@ class ExplorerNotifier extends StateNotifier<AsyncValue<ExplorerState>> {
     );
   }
 
+  int _requestId = 0;
+
   final FolderExplorerConfig config;
   final FolderExplorerData data;
 
@@ -40,6 +42,11 @@ class ExplorerNotifier extends StateNotifier<AsyncValue<ExplorerState>> {
     required FolderExplorerConfig config,
     required FolderExplorerData data,
   }) async {
+    final requestId = ++_requestId;
+
+    state = const AsyncLoading();
+    searchQuery = searchQuery.trim();
+
     try {
       if (!config.includeDeleted && config.excludeNonDeleted) {
         throw Exception(
@@ -95,7 +102,12 @@ class ExplorerNotifier extends StateNotifier<AsyncValue<ExplorerState>> {
         );
       }
 
-      state = AsyncValue.data(
+      // Guard against race conditions
+      if (requestId != _requestId) {
+        return;
+      }
+
+      state = AsyncData(
         ExplorerState(
           folders: folders,
           items: items,
@@ -105,7 +117,11 @@ class ExplorerNotifier extends StateNotifier<AsyncValue<ExplorerState>> {
         ),
       );
     } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      if (requestId != _requestId) {
+        return;
+      }
+
+      state = AsyncError(e, st);
     }
   }
 

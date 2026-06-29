@@ -18,6 +18,9 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
         : OrderingMode.desc;
 
     switch (sort.field) {
+      case ElementsSortField.creation:
+        return OrderingTerm(expression: folders.id, mode: sortOrder);
+
       case ElementsSortField.name:
         return OrderingTerm(expression: folders.name, mode: sortOrder);
 

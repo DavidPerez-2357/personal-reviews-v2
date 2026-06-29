@@ -59,6 +59,7 @@ class _FolderElementsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 8,
       children: [
         if (folder.folder.parentId != null)
@@ -102,7 +103,7 @@ class _FolderHeader extends StatelessWidget {
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       spacing: 16,
       children: [
         imagePath == null || !File(imagePath).existsSync()
@@ -161,24 +162,28 @@ class _FolderBreadcrumbs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Wrap(
+      spacing: 4,
+      runSpacing: 4,
+      crossAxisAlignment: WrapCrossAlignment.start,
+      alignment: WrapAlignment.start,
       children: [
         for (final ancestor in folderPath)
-          if (ancestor.folder.id != folder.folder.id) ...[
-            InkWell(
-              onTap: () {
-                Navigator.popUntil(
-                  context,
-                  (route) =>
-                      route.settings.name ==
-                      'folder_items/${ancestor.folder.id}',
-                );
-              },
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(minHeight: 30),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Center(
+          if (ancestor.folder.id != folder.folder.id)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.popUntil(
+                      context,
+                      (route) =>
+                          route.settings.name ==
+                          'folder_items/${ancestor.folder.id}',
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
                       ancestor.folder.name,
                       style: context.textTheme.bodyMedium?.copyWith(
@@ -187,15 +192,13 @@ class _FolderBreadcrumbs extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 16,
+                  color: context.colors.onSurfaceVariant,
+                ),
+              ],
             ),
-
-            Icon(
-              Icons.chevron_right_rounded,
-              size: 16,
-              color: context.colors.onSurfaceVariant,
-            ),
-          ],
       ],
     );
   }

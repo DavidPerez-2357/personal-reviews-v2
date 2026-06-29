@@ -16,13 +16,8 @@ class FolderMapper {
     );
   }
 
-  static List<FolderDomain> fromRows(
-    List<Folder> rows, {
-    List<int>? reviewCounts,
-  }) {
-    return rows.asMap().entries.map((entry) {
-      return fromRow(entry.value);
-    }).toList();
+  static List<FolderDomain> fromRows(List<Folder> rows) {
+    return rows.map((row) => fromRow(row)).toList();
   }
 }
 
@@ -31,7 +26,7 @@ class FolderDetailedMapper {
     return FolderDetailed(
       folder: FolderMapper.fromRow(row.folder),
       itemCount: row.itemCount,
-      previewImages: [],
+      previewImages: row.previewImages,
     );
   }
 

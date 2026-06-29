@@ -46,9 +46,18 @@ abstract class FolderNode with _$FolderNode {
   }) = _FolderNode;
 
   static List<FolderNode> buildFolderTree(List<FolderDomain> folders) {
-    final Map<int, FolderNode> folderMap = {
-      for (var folder in folders)
-        folder.id: FolderNode(
+    final childrenByParent = <int?, List<FolderDomain>>{};
+
+    for (final folder in folders) {
+      childrenByParent.putIfAbsent(folder.parentId, () => []);
+      childrenByParent[folder.parentId]!.add(folder);
+    }
+
+    List<FolderNode> buildNodes(int? parentId) {
+      final children = childrenByParent[parentId] ?? const [];
+
+      return children.map((folder) {
+        return FolderNode(
           id: folder.id,
           name: folder.name,
           categoryId: folder.categoryId,
@@ -57,23 +66,12 @@ abstract class FolderNode with _$FolderNode {
           isDeleted: folder.isDeleted,
           deletedAt: folder.deletedAt,
           parentId: folder.parentId,
-        ),
-    };
-
-    final List<FolderNode> rootFolders = [];
-
-    for (var folder in folderMap.values) {
-      if (folder.parentId != null) {
-        final parent = folderMap[folder.parentId!];
-        if (parent != null) {
-          parent.children.add(folder);
-        }
-      } else {
-        rootFolders.add(folder);
-      }
+          children: buildNodes(folder.id),
+        );
+      }).toList();
     }
 
-    return rootFolders;
+    return buildNodes(null);
   }
 
   FolderNode? findNodeById(int id) {

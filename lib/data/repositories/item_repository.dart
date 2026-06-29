@@ -71,9 +71,6 @@ class ItemRepository {
     bool includeDeleted = false,
     bool excludeNonDeleted = false,
   }) async {
-    // Replace searchQuery spaces with % for SQL LIKE query
-    searchQuery = searchQuery.trim().replaceAll(' ', '%');
-
     final rows = await _itemsDao.queryItems(
       sort: sort,
       filter: filter,

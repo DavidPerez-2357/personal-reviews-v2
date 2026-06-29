@@ -14,6 +14,5 @@ abstract class ExplorerState with _$ExplorerState {
     @Default(ElementsSort()) ElementsSort sort,
     @Default(ElementsFilter()) ElementsFilter filter,
     @Default('') String searchQuery,
-    @Default(false) bool isLoading,
   }) = _ExplorerState;
 }

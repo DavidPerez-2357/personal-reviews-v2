@@ -1,8 +1,7 @@
 import 'package:personal_reviews/core/constants/category_icons.dart';
-import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
+import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/folder_explorer.dart';
-import 'package:personal_reviews/core/utils/colors.dart';
 import 'package:personal_reviews/domain/models/category.dart';
 import 'package:flutter/material.dart';
 

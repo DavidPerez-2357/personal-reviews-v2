@@ -44,13 +44,10 @@ class _ViewAllCategoriesState extends ConsumerState<ViewAllCategories> {
       },
       child: categoriesAsync.when(
         data: (categories) => categories.isEmpty
-            ? const _EmptyCategoriesView()
+            ? _EmptyCategoriesView()
             : _CategoriesGrid(categories: categories),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, _) => const _EmptyCategoriesView(
-          title: 'Error al cargar categorías',
-          message: 'No pudimos obtener la información. Inténtalo nuevamente.',
-        ),
+        error: (_, _) => _EmptyCategoriesView(),
       ),
     );
   }
@@ -92,14 +89,6 @@ class _CategoriesGrid extends StatelessWidget {
 }
 
 class _EmptyCategoriesView extends StatelessWidget {
-  final String title;
-  final String message;
-
-  const _EmptyCategoriesView({
-    this.title = 'Aún no hay categorías',
-    this.message = 'Cuando se creen categorías, aparecerán aquí.',
-  });
-
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -109,8 +98,8 @@ class _EmptyCategoriesView extends StatelessWidget {
           height: 500,
           child: AppEmptyState(
             icon: Icons.category_rounded,
-            title: title,
-            message: message,
+            title: 'Aún no hay categorías',
+            message: 'Cuando se creen categorías, aparecerán aquí.',
           ),
         ),
       ],
