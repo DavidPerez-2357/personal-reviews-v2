@@ -1,13 +1,15 @@
 import 'package:personal_reviews/core/types/sort.dart';
 
-enum ElementsSortField { name, date, rating }
+enum ElementsSortField { creation, name, date, rating }
 
 class ElementsSort {
-  bool get isActive => field != null;
-  final ElementsSortField? field;
+  final ElementsSortField field;
   final SortType type;
 
-  const ElementsSort({this.field, this.type = SortType.ASC});
+  const ElementsSort({
+    this.field = ElementsSortField.creation,
+    this.type = SortType.ASC,
+  });
 
   ElementsSort copyWith({ElementsSortField? field, SortType? type}) {
     return ElementsSort(field: field ?? this.field, type: type ?? this.type);

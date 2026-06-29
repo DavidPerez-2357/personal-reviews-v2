@@ -21,7 +21,7 @@ class ElementsSortSheet extends StatefulWidget {
 }
 
 class ElementsSortSheetState extends State<ElementsSortSheet> {
-  late ElementsSortField? _selectedField;
+  late ElementsSortField _selectedField;
   late SortType _sortType;
 
   @override
@@ -34,11 +34,7 @@ class ElementsSortSheetState extends State<ElementsSortSheet> {
 
   void _onFieldSelected(ElementsSortField field) {
     setState(() {
-      if (_selectedField == field) {
-        _selectedField = null;
-      } else {
-        _selectedField = field;
-      }
+      _selectedField = field;
     });
   }
 
@@ -82,6 +78,13 @@ class ElementsSortSheetState extends State<ElementsSortSheet> {
               spacing: 8,
               runSpacing: 8,
               children: [
+                _SortChip(
+                  label: 'Creación',
+                  icon: Icons.flare,
+                  selected: _selectedField == ElementsSortField.creation,
+                  onSelected: (_) =>
+                      _onFieldSelected(ElementsSortField.creation),
+                ),
                 _SortChip(
                   label: 'Nombre',
                   icon: Icons.sort_by_alpha_rounded,

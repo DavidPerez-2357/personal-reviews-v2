@@ -28,6 +28,8 @@ class ExplorerTransformer {
     List<FolderDetailedNode> sortedFolders = List.from(folders);
     sortedFolders.sort((a, b) {
       switch (sort.field) {
+        case ElementsSortField.creation:
+          return a.folder.id.compareTo(b.folder.id);
         case ElementsSortField.name:
           return a.folder.name.compareTo(b.folder.name);
         case ElementsSortField.date:
@@ -63,12 +65,12 @@ class ExplorerTransformer {
 
       // min and max rating filters
       if (item.lastReview != null &&
-          item.lastReview!.rating <= filter.minRating) {
+          item.lastReview!.rating < filter.minRating) {
         return false;
       }
 
       if (item.lastReview != null &&
-          item.lastReview!.rating >= filter.maxRating) {
+          item.lastReview!.rating > filter.maxRating) {
         return false;
       }
 
@@ -83,16 +85,18 @@ class ExplorerTransformer {
     List<ItemWithLastReview> sortedItems = List.from(items);
     sortedItems.sort((a, b) {
       switch (sort.field) {
+        case ElementsSortField.creation:
+          return a.item.id.compareTo(b.item.id);
         case ElementsSortField.name:
           return a.item.name.compareTo(b.item.name);
         case ElementsSortField.date:
-          return a.item.createdAt.compareTo(b.item.createdAt);
+          return a.item.createdAt.compareTo(
+            b.lastReview?.createdAt ?? DateTime(9999, 12, 31),
+          );
         case ElementsSortField.rating:
           final aRating = a.lastReview?.rating ?? 0;
           final bRating = b.lastReview?.rating ?? 0;
           return aRating.compareTo(bRating);
-        default:
-          return a.item.id.compareTo(b.item.id);
       }
     });
     if (sort.type == SortType.DESC) {

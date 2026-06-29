@@ -1,17 +1,16 @@
-import 'dart:async';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:personal_reviews/core/types/folder_explorer.dart';
-import 'package:personal_reviews/core/types/sort.dart';
-import 'package:personal_reviews/core/types/elements_filter.dart';
-import 'package:personal_reviews/core/types/elements_sort.dart';
-import 'package:personal_reviews/core/extensions/theme_context.dart';
-import 'package:flutter/material.dart';
-import 'package:personal_reviews/domain/models/category.dart';
+import 'package:personal_reviews/features/folder_explorer/providers/categories_provider.dart';
 import 'package:personal_reviews/features/folder_explorer/components/filter_sheet.dart';
 import 'package:personal_reviews/features/folder_explorer/components/sort_sheet.dart';
-import 'package:personal_reviews/features/folder_explorer/providers/categories_provider.dart';
+import 'package:personal_reviews/core/extensions/theme_context.dart';
+import 'package:personal_reviews/core/types/folder_explorer.dart';
+import 'package:personal_reviews/core/types/elements_filter.dart';
+import 'package:personal_reviews/core/types/elements_sort.dart';
+import 'package:personal_reviews/domain/models/category.dart';
 import 'package:personal_reviews/style/theme/app_border.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:personal_reviews/core/types/sort.dart';
+import 'package:flutter/material.dart';
+import 'dart:async';
 
 class ElementsControls extends ConsumerStatefulWidget {
   const ElementsControls({
@@ -130,7 +129,9 @@ class _ElementsControlsState extends ConsumerState<ElementsControls> {
                   child: _SortButton(
                     sort: widget.elementsSort,
                     onPressed: onSortPressed,
-                    isActive: widget.elementsSort.isActive,
+                    isActive: !widget.elementsSort.compare(
+                      widget.config.defaultSort,
+                    ),
                   ),
                 ),
 
@@ -179,7 +180,7 @@ class _SortButton extends StatelessWidget {
       onPressed: onPressed,
       icon: Icon(
         size: 23,
-        sort.field == null
+        !isActive
             ? Icons.sort_rounded
             : (sort.type == SortType.ASC
                   ? Icons.arrow_upward_rounded

@@ -12,23 +12,24 @@ part 'items_dao.g.dart';
 class ItemsDao extends DatabaseAccessor<AppDatabase> with _$ItemsDaoMixin {
   ItemsDao(super.attachedDatabase);
 
-  OrderingTerm _getOrderingTerm(ElementsSort sort) {
-    final sortOrder = sort.type == SortType.ASC
-        ? OrderingMode.asc
-        : OrderingMode.desc;
+  OrderClauseGenerator<Items> _getOrderingClause(ElementsSort sort) {
+    final isAsc = sort.type == SortType.ASC;
 
     switch (sort.field) {
+      case ElementsSortField.creation:
+        return (t) => OrderingTerm(
+          expression: t.id,
+          mode: isAsc ? OrderingMode.asc : OrderingMode.desc,
+        );
+
       case ElementsSortField.name:
-        return OrderingTerm(expression: items.name, mode: sortOrder);
-
-      case ElementsSortField.date:
-        return OrderingTerm(expression: items.createdAt, mode: sortOrder);
-
-      case ElementsSortField.rating:
-        return OrderingTerm(expression: reviews.rating, mode: sortOrder);
+        return (t) => OrderingTerm(
+          expression: t.name,
+          mode: isAsc ? OrderingMode.asc : OrderingMode.desc,
+        );
 
       default:
-        return OrderingTerm(expression: items.id, mode: OrderingMode.asc);
+        return (t) => OrderingTerm(expression: t.id, mode: OrderingMode.asc);
     }
   }
 
@@ -101,15 +102,11 @@ class ItemsDao extends DatabaseAccessor<AppDatabase> with _$ItemsDaoMixin {
     bool excludeNonDeleted = false,
   }) async {
     /* Sort */
-    final OrderingTerm ordering = _getOrderingTerm(sort);
+    final ordering = _getOrderingClause(sort);
 
     /* Filter */
     final categoriesAllowedFilter = filter.categoryIds.isNotEmpty
         ? items.categoryId.isIn(filter.categoryIds)
-        : const Constant(true);
-
-    final ratingRange = filter.minRating != 0 || filter.maxRating != 10
-        ? reviews.rating.isBetweenValues(filter.minRating, filter.maxRating)
         : const Constant(true);
 
     /* Search */
@@ -134,6 +131,81 @@ class ItemsDao extends DatabaseAccessor<AppDatabase> with _$ItemsDaoMixin {
         ? items.isDeleted.equals(true)
         : const Constant(true);
 
+    /* Query */
+    final itemsRows =
+        await (select(items)
+              ..where(
+                (tbl) =>
+                    categoriesAllowedFilter &
+                    searchFilter &
+                    groupByFoldersFilter &
+                    includeDeletedFilter &
+                    excludeNonDeletedFilter,
+              )
+              ..orderBy([ordering]))
+            .get();
+
+    final itemIds = itemsRows.map((item) => item.id).toList();
+
+    /* Get latest reviews for the items */
+    final latestReviewsByItemId = await _getLatestReviewsByItemIds(
+      itemIds,
+      includeDeleted,
+      excludeNonDeleted,
+    );
+
+    /* Map items to ItemWithLastReviewRow */
+    final result = itemsRows
+        .map(
+          (item) => ItemWithLastReviewRow(
+            item: item,
+            lastReview: latestReviewsByItemId[item.id],
+          ),
+        )
+        .where((row) {
+          final rating = row.lastReview?.rating ?? 0;
+          final ratingRange =
+              rating >= filter.minRating && rating <= filter.maxRating;
+          return ratingRange;
+        })
+        .toList();
+
+    /* Sort by rating if needed */
+    if (sort.field == ElementsSortField.rating) {
+      result.sort((a, b) {
+        final ratingA = a.lastReview?.rating ?? 0;
+        final ratingB = b.lastReview?.rating ?? 0;
+
+        return sort.type == SortType.ASC
+            ? ratingA.compareTo(ratingB)
+            : ratingB.compareTo(ratingA);
+      });
+    }
+
+    /* Sort by review date if needed */
+    if (sort.field == ElementsSortField.date) {
+      result.sort((a, b) {
+        final dateA = a.lastReview?.createdAt ?? DateTime(9999, 12, 31);
+        final dateB = b.lastReview?.createdAt ?? DateTime(9999, 12, 31);
+
+        return sort.type == SortType.ASC
+            ? dateA.compareTo(dateB)
+            : dateB.compareTo(dateA);
+      });
+    }
+
+    return result;
+  }
+
+  Future<Map<int, Review>> _getLatestReviewsByItemIds(
+    List<int> itemIds,
+    bool includeDeleted,
+    bool excludeNonDeleted,
+  ) async {
+    if (itemIds.isEmpty) {
+      return {};
+    }
+
     final includeDeletedReviewsFilter = includeDeleted
         ? const Constant(true)
         : reviews.isDeleted.equals(false);
@@ -142,40 +214,24 @@ class ItemsDao extends DatabaseAccessor<AppDatabase> with _$ItemsDaoMixin {
         ? reviews.isDeleted.equals(true)
         : const Constant(true);
 
-    /* Query */
-    final query =
-        select(items).join([
-            leftOuterJoin(
-              reviews,
-              reviews.itemId.equalsExp(items.id) &
-                  includeDeletedReviewsFilter &
-                  excludeNonDeletedReviewsFilter,
-            ),
-          ])
-          ..where(
-            categoriesAllowedFilter &
-                ratingRange &
-                searchFilter &
-                groupByFoldersFilter &
-                includeDeletedFilter &
-                excludeNonDeletedFilter,
-          )
-          ..orderBy([ordering])
-          ..groupBy([items.id]);
+    final allReviews =
+        await (select(reviews)
+              ..where(
+                (r) =>
+                    r.itemId.isIn(itemIds) &
+                    includeDeletedReviewsFilter &
+                    excludeNonDeletedReviewsFilter,
+              )
+              ..orderBy([
+                (r) => OrderingTerm.desc(r.createdAt),
+                (r) => OrderingTerm.desc(r.id),
+              ]))
+            .get();
 
-    final rows = await query.get();
+    final result = <int, Review>{};
 
-    final List<ItemWithLastReviewRow> result = [];
-
-    for (final row in rows) {
-      final item = row.readTable(items);
-
-      result.add(
-        ItemWithLastReviewRow(
-          item: item,
-          lastReview: row.readTableOrNull(reviews),
-        ),
-      );
+    for (final review in allReviews) {
+      result.putIfAbsent(review.itemId, () => review);
     }
 
     return result;
