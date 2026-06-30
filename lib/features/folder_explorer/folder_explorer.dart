@@ -1,15 +1,15 @@
-import 'package:personal_reviews/domain/explorer/explorer_data_provider.dart';
-import 'package:personal_reviews/domain/models/folder.dart';
 import 'package:personal_reviews/features/folder_explorer/components/elements_control.dart';
+import 'package:personal_reviews/domain/explorer/explorer_data_provider.dart';
 import 'package:personal_reviews/shared/components/app_empty_state.dart';
+import 'package:personal_reviews/shared/components/skeleton_card.dart';
 import 'package:personal_reviews/shared/components/folder_card.dart';
 import 'package:personal_reviews/shared/components/item_card.dart';
 import 'package:personal_reviews/core/types/folder_explorer.dart';
 import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/elements_sort.dart';
+import 'package:personal_reviews/domain/models/folder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:personal_reviews/shared/components/skeleton_card.dart';
 
 class FolderExplorer extends ConsumerWidget {
   const FolderExplorer({
@@ -34,13 +34,9 @@ class FolderExplorer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final effectiveEmptyState = emptyState ?? buildEmptyState(config: config);
 
-    final explorer = ref.watch(explorerProvider(params));
-
-    final notifier = ref.read(explorerProvider(params).notifier);
-    final previous = notifier.previousState;
-
-    int prevFolderCount = previous?.folders.length ?? 0;
-    int prevItemCount = previous?.items.length ?? 4;
+    final provider = explorerProvider(params);
+    final explorer = ref.watch(provider);
+    final notifier = ref.read(provider.notifier);
 
     Future<void> handleRefresh() {
       if (onRefresh != null) {
@@ -71,11 +67,22 @@ class FolderExplorer extends ConsumerWidget {
       child: explorer.when(
         loading: () => FolderExplorerSkeleton(
           config: config,
-          folderCount: prevFolderCount,
-          itemCount: prevItemCount,
+          folderCount: 0,
+          itemCount: 0,
         ),
 
-        error: (error, stackTrace) => Center(child: Text(error.toString())),
+        error: (error, stackTrace) => ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 60),
+              child: AppEmptyState(
+                icon: Icons.star_rounded,
+                title: 'No hay elementos para mostrar',
+                message: 'Parece que hubo un error al cargar los elementos.',
+              ),
+            ),
+          ],
+        ),
 
         data: (state) {
           final isEmptyState = state.folders.isEmpty && state.items.isEmpty;

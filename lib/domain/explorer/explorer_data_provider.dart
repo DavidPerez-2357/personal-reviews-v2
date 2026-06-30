@@ -12,8 +12,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
 class ExplorerNotifier extends StateNotifier<AsyncValue<ExplorerState>> {
-  ExplorerState? _previousState;
-
   ExplorerNotifier({
     required this.folderRepository,
     required this.itemRepository,
@@ -37,8 +35,6 @@ class ExplorerNotifier extends StateNotifier<AsyncValue<ExplorerState>> {
   final FolderRepository folderRepository;
   final ItemRepository itemRepository;
 
-  ExplorerState? get previousState => _previousState;
-
   Future<void> _load({
     required ElementsSort sort,
     required ElementsFilter filter,
@@ -47,8 +43,6 @@ class ExplorerNotifier extends StateNotifier<AsyncValue<ExplorerState>> {
     required FolderExplorerData data,
   }) async {
     final requestId = ++_requestId;
-
-    _previousState = state.value;
 
     //state = const AsyncLoading();
     searchQuery = searchQuery.trim();
