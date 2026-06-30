@@ -76,7 +76,7 @@ class ElementsSortSheetState extends State<ElementsSortSheet> {
 
             Wrap(
               spacing: 8,
-              runSpacing: 8,
+              runSpacing: 2,
               children: [
                 _SortChip(
                   label: 'Creación',

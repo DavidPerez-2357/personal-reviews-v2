@@ -60,14 +60,16 @@ class _FolderElementsList extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 8,
+      spacing: 4,
       children: [
         if (folder.folder.parentId != null)
           _FolderBreadcrumbs(folderPath: folderPath, folder: folder),
 
+        if (folder.folder.parentId != null) const SizedBox(),
+
         _FolderHeader(folder: folder),
 
-        SizedBox(height: 2),
+        const SizedBox(height: 8),
 
         Divider(
           height: 1,
@@ -75,7 +77,7 @@ class _FolderElementsList extends StatelessWidget {
           color: context.colors.onSurfaceVariant.withValues(alpha: 0.3),
         ),
 
-        SizedBox(height: 2),
+        const SizedBox(height: 8),
 
         Expanded(
           child: FolderExplorer(
@@ -103,7 +105,8 @@ class _FolderHeader extends StatelessWidget {
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+
       spacing: 16,
       children: [
         imagePath == null || !File(imagePath).existsSync()
@@ -183,7 +186,10 @@ class _FolderBreadcrumbs extends StatelessWidget {
                     );
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
                     child: Text(
                       ancestor.folder.name,
                       style: context.textTheme.bodyMedium?.copyWith(

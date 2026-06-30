@@ -208,7 +208,7 @@ class _VisibilityFilter extends StatelessWidget {
 
         Wrap(
           spacing: 8,
-          runSpacing: 8,
+          runSpacing: 2,
           children: [
             _FilterChip(
               context: context,
