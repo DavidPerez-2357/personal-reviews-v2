@@ -21,6 +21,7 @@ class ElementsControls extends ConsumerStatefulWidget {
     required this.onSearchChanged,
     required this.onSortApplied,
     required this.onFilterApplied,
+    this.isEnabled = true,
   });
 
   final FolderExplorerConfig config;
@@ -31,6 +32,8 @@ class ElementsControls extends ConsumerStatefulWidget {
   final ValueChanged<String> onSearchChanged;
   final ValueChanged<ElementsSort> onSortApplied;
   final ValueChanged<ElementsFilter> onFilterApplied;
+
+  final bool isEnabled;
 
   @override
   ConsumerState<ElementsControls> createState() => _ElementsControlsState();
@@ -98,67 +101,71 @@ class _ElementsControlsState extends ConsumerState<ElementsControls> {
         ? ref.watch(categoriesProvider).value ?? const <CategoryDomain>[]
         : const <CategoryDomain>[];
 
-    return Column(
-      spacing: 5,
-      children: [
-        SizedBox(
-          height: 50,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: 10,
-            children: [
-              // Search bar
-              if (widget.config.showSearch)
-                Expanded(
-                  child: SearchBar(
-                    leading: Icon(
-                      Icons.search_rounded,
-                      size: 23,
-                      color: context.colors.onSurfaceVariant,
-                    ),
-                    hintText: 'Buscar...',
-                    onChanged: _onSearchChanged,
-                  ),
-                ),
-
-              // Sort button
-              if (widget.config.showSort)
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: _SortButton(
-                    sort: widget.elementsSort,
-                    onPressed: onSortPressed,
-                    isActive: !widget.elementsSort.compare(
-                      widget.config.defaultSort,
+    return IgnorePointer(
+      ignoring: !widget.isEnabled,
+      child: Column(
+        spacing: 5,
+        children: [
+          SizedBox(
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 10,
+              children: [
+                // Search bar
+                if (widget.config.showSearch)
+                  Expanded(
+                    child: SearchBar(
+                      leading: Icon(
+                        Icons.search_rounded,
+                        size: 23,
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      hintText: 'Buscar...',
+                      onChanged: _onSearchChanged,
                     ),
                   ),
-                ),
 
-              // Filter button
-              if (widget.config.showFilter)
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: _FilterButton(
-                    filter: widget.elementsFilter,
-                    onPressed: () => onFilterPressed(categories),
-                    isActive: _isFilterActive(widget.elementsFilter),
+                // Sort button
+                if (widget.config.showSort)
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: _SortButton(
+                      sort: widget.elementsSort,
+                      onPressed: onSortPressed,
+                      isActive: !widget.elementsSort.compare(
+                        widget.config.defaultSort,
+                      ),
+                    ),
                   ),
-                ),
-            ],
-          ),
-        ),
 
-        // Active filters list
-        if (widget.config.showFilter && _isFilterActive(widget.elementsFilter))
-          _ActiveFiltersList(
-            allCategories: categories,
-            filter: widget.elementsFilter,
-            showCategoriesFilter: widget.config.showCategoriesFilter,
-            onResetFiltersPressed: onResetFiltersPressed,
-            onFilterPressed: () => onFilterPressed(categories),
+                // Filter button
+                if (widget.config.showFilter)
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: _FilterButton(
+                      filter: widget.elementsFilter,
+                      onPressed: () => onFilterPressed(categories),
+                      isActive: _isFilterActive(widget.elementsFilter),
+                    ),
+                  ),
+              ],
+            ),
           ),
-      ],
+
+          // Active filters list
+          if (widget.config.showFilter &&
+              _isFilterActive(widget.elementsFilter))
+            _ActiveFiltersList(
+              allCategories: categories,
+              filter: widget.elementsFilter,
+              showCategoriesFilter: widget.config.showCategoriesFilter,
+              onResetFiltersPressed: onResetFiltersPressed,
+              onFilterPressed: () => onFilterPressed(categories),
+            ),
+        ],
+      ),
     );
   }
 }

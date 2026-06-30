@@ -9,6 +9,7 @@ import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/elements_sort.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_reviews/shared/components/skeleton_card.dart';
 
 class FolderExplorer extends ConsumerWidget {
   const FolderExplorer({
@@ -18,7 +19,6 @@ class FolderExplorer extends ConsumerWidget {
     this.data = const FolderExplorerData(),
     this.onRefresh,
     this.emptyState,
-    this.onDataLoaded,
   });
 
   final List<FolderDetailedNode> folderPath;
@@ -26,7 +26,6 @@ class FolderExplorer extends ConsumerWidget {
   final FolderExplorerData data;
   final AppEmptyState? emptyState;
   final VoidCallback? onRefresh;
-  final ValueChanged<FolderExplorerData>? onDataLoaded;
 
   FolderExplorerParams get params =>
       FolderExplorerParams(config: config, data: data);
@@ -37,20 +36,26 @@ class FolderExplorer extends ConsumerWidget {
 
     final explorer = ref.watch(explorerProvider(params));
 
+    final notifier = ref.read(explorerProvider(params).notifier);
+    final previous = notifier.previousState;
+
+    int prevFolderCount = previous?.folders.length ?? 0;
+    int prevItemCount = previous?.items.length ?? 4;
+
     Future<void> handleRefresh() {
       if (onRefresh != null) {
         return Future.sync(onRefresh!);
       }
 
-      return ref.read(explorerProvider(params).notifier).refresh();
+      return notifier.refresh();
     }
 
     onFilterApplied(ElementsFilter newFilter) {
-      ref.read(explorerProvider(params).notifier).setFilter(newFilter);
+      notifier.setFilter(newFilter);
     }
 
     onSortApplied(ElementsSort newSort) {
-      ref.read(explorerProvider(params).notifier).setSort(newSort);
+      notifier.setSort(newSort);
     }
 
     bool areFiltersApplied(ElementsFilter filter) {
@@ -61,75 +66,56 @@ class FolderExplorer extends ConsumerWidget {
       return searchQuery.isEmpty;
     }
 
-    return explorer.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
+    return RefreshIndicator(
+      onRefresh: () => handleRefresh(),
+      child: explorer.when(
+        loading: () => FolderExplorerSkeleton(
+          config: config,
+          folderCount: prevFolderCount,
+          itemCount: prevItemCount,
+        ),
 
-      error: (error, stackTrace) => Center(child: Text(error.toString())),
+        error: (error, stackTrace) => Center(child: Text(error.toString())),
 
-      data: (state) {
-        final isEmptyState = state.folders.isEmpty && state.items.isEmpty;
+        data: (state) {
+          final isEmptyState = state.folders.isEmpty && state.items.isEmpty;
 
-        final areAnyFiltersApplied =
-            areFiltersApplied(state.filter) ||
-            !searchQueryIsEmpty(state.searchQuery);
+          final areAnyFiltersApplied =
+              areFiltersApplied(state.filter) ||
+              !searchQueryIsEmpty(state.searchQuery);
 
-        if (isEmptyState && !areAnyFiltersApplied) {
-          return RefreshIndicator(
-            onRefresh: () => handleRefresh(),
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 60),
-                  child: effectiveEmptyState,
-                ),
-              ],
-            ),
-          );
-        }
-
-        /* Data loaded callback */
-        ref.listen(explorerProvider(params), (_, next) {
-          if (onDataLoaded == null) return;
-
-          next.whenData((state) {
-            final areAnyFiltersApplied =
-                !state.filter.compare(config.defaultFilter) ||
-                state.searchQuery.isNotEmpty;
-            if (areAnyFiltersApplied) return;
-            onDataLoaded!(
-              FolderExplorerData(
-                hasFolders: config.groupByFolders,
-                hasItems: true,
-                folders: state.folders,
-                items: state.items,
+          if (isEmptyState && !areAnyFiltersApplied) {
+            return RefreshIndicator(
+              onRefresh: () => handleRefresh(),
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 60),
+                    child: effectiveEmptyState,
+                  ),
+                ],
               ),
             );
-          });
-        });
+          }
+          return ExplorerList(
+            hasAnyElements: state.folders.isNotEmpty || state.items.isNotEmpty,
 
-        return RefreshIndicator(
-          onRefresh: () => handleRefresh(),
-          child: ListView(
+            controls: ElementsControls(
+              config: config,
+              elementsFilter: state.filter,
+              elementsSort: state.sort,
+
+              onSearchChanged: (value) {
+                ref
+                    .read(explorerProvider(params).notifier)
+                    .setSearchQuery(value);
+              },
+
+              onSortApplied: onSortApplied,
+              onFilterApplied: onFilterApplied,
+            ),
+
             children: [
-              if (config.showSearch || config.showSort || config.showFilter)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: ElementsControls(
-                    config: config,
-                    elementsFilter: state.filter,
-                    elementsSort: state.sort,
-
-                    onSearchChanged: (value) {
-                      ref
-                          .read(explorerProvider(params).notifier)
-                          .setSearchQuery(value);
-                    },
-
-                    onSortApplied: onSortApplied,
-                    onFilterApplied: onFilterApplied,
-                  ),
-                ),
-
               if (state.folders.isEmpty && state.items.isEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 60),
@@ -142,6 +128,7 @@ class FolderExplorer extends ConsumerWidget {
 
               ...state.folders.map(
                 (folder) => Padding(
+                  key: ValueKey('folder-${folder.folder.id}'),
                   padding: const EdgeInsets.only(bottom: 12),
                   child: FolderCard(folder: folder, folderPath: folderPath),
                 ),
@@ -149,17 +136,15 @@ class FolderExplorer extends ConsumerWidget {
 
               ...state.items.map(
                 (item) => Padding(
+                  key: ValueKey('item-${item.item.id}'),
                   padding: const EdgeInsets.only(bottom: 12),
                   child: ItemCard(item: item),
                 ),
               ),
-
-              if (state.folders.isNotEmpty || state.items.isNotEmpty)
-                const SizedBox(height: 60),
             ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -195,4 +180,82 @@ AppEmptyState buildEmptyStateWithFiltersApplied({
     message:
         'Intenta cambiar los filtros o restablecerlos para ver todos $keyWordArticle $keyWord',
   );
+}
+
+class ExplorerList extends StatelessWidget {
+  const ExplorerList({
+    super.key,
+    required this.controls,
+    required this.children,
+    this.hasAnyElements = true,
+  });
+
+  final Widget controls;
+  final List<Widget> children;
+  final bool hasAnyElements;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        Padding(padding: const EdgeInsets.only(bottom: 15), child: controls),
+        ...children,
+
+        if (hasAnyElements) const SizedBox(height: 60),
+      ],
+    );
+  }
+}
+
+class FolderExplorerSkeleton extends StatelessWidget {
+  const FolderExplorerSkeleton({
+    super.key,
+    this.config = const FolderExplorerConfig(),
+    this.folderCount = 2,
+    this.itemCount = 4,
+  });
+
+  final FolderExplorerConfig config;
+  final int folderCount;
+  final int itemCount;
+
+  // Debug the number of skeleton cards displayed
+  void initState() {
+    debugPrint(
+      'FolderExplorerSkeleton: folderCount=$folderCount, itemCount=$itemCount',
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    initState();
+    return ExplorerList(
+      controls: ElementsControls(
+        isEnabled: false,
+        config: config,
+        elementsFilter: config.defaultFilter,
+        elementsSort: config.defaultSort,
+        onSearchChanged: (_) {},
+        onSortApplied: (_) {},
+        onFilterApplied: (_) {},
+      ),
+      children: [
+        ...List.generate(
+          folderCount,
+          (_) => const Padding(
+            padding: EdgeInsets.only(bottom: 12),
+            child: SkeletonFolderCard(),
+          ),
+        ),
+
+        ...List.generate(
+          itemCount,
+          (_) => const Padding(
+            padding: EdgeInsets.only(bottom: 12),
+            child: SkeletonItemCard(),
+          ),
+        ),
+      ],
+    );
+  }
 }
