@@ -8,7 +8,7 @@ class ElementsSort {
 
   const ElementsSort({
     this.field = ElementsSortField.creation,
-    this.type = SortType.ASC,
+    this.type = SortType.DESC,
   });
 
   ElementsSort copyWith({ElementsSortField? field, SortType? type}) {
