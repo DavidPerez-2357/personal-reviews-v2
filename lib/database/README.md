@@ -9,6 +9,7 @@ Aqui vive la configuracion de Drift, el esquema de SQLite, los DAOs y las tablas
 database/
   app_database.dart
   daos/
+  models/
   schemas/
   tables/
 ```
@@ -29,6 +30,15 @@ Ejemplos:
 - obtener reviews por item
 - leer tablas relacionadas
 - ejecutar operaciones de escritura transaccionales
+
+## `models/`
+Modelos relacionados con la base de datos pero que no son tablas ni DAOs.
+Pueden ser estructuras auxiliares para representar resultados de consultas complejas, combinaciones de tablas o datos de migracion.
+
+Ejemplos:
+- resultado de un join entre varias tablas
+- datos de una tabla con la cuenta de registros relacionados
+- datos de una tabla con estadisticas de otras tablas
 
 ### `tables/`
 Definicion de las tablas de SQLite usando Drift.

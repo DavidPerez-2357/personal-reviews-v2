@@ -22,7 +22,13 @@ class SecondaryLayout extends StatelessWidget {
     final Color onSurfaceColor = context.colors.onSurface;
     final SafeArea body = SafeArea(
       child: Padding(
-        padding: EdgeInsets.all(AppSpacing.pagePadding),
+        // Padding all except bottom
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.pagePadding,
+          AppSpacing.pagePadding,
+          AppSpacing.pagePadding,
+          0,
+        ),
         child: child,
       ),
     );

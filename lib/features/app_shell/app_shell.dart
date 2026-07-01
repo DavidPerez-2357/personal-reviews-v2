@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:personal_reviews/core/types/page_config.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/features/app_shell/components/main_appbar.dart';
+import 'package:personal_reviews/features/home/app_home.dart';
+import 'package:personal_reviews/style/theme/app_spacing.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -18,10 +20,7 @@ class _AppShellState extends State<AppShell> {
       title: 'Resumen',
       child: Center(child: Text('Resumen')),
     ),
-    PageConfig(
-      title: 'Reseñas',
-      child: Center(child: Text('Reseñas')),
-    ),
+    PageConfig(title: 'Reseñas', child: AppHomeGroups(), scrollable: false),
     PageConfig(
       title: 'Ajustes',
       child: Center(child: Text('Ajustes')),
@@ -34,7 +33,12 @@ class _AppShellState extends State<AppShell> {
 
     Widget body = SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.pagePadding,
+          AppSpacing.pagePadding,
+          AppSpacing.pagePadding,
+          0,
+        ),
         child: currentPage.child,
       ),
     );

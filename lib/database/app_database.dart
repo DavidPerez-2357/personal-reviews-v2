@@ -4,6 +4,7 @@ import 'package:drift/native.dart';
 import 'package:drift/drift.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'package:personal_reviews/core/constants/category_icons.dart';
 
 import 'package:personal_reviews/database/daos/categories_dao.dart';
 import 'package:personal_reviews/database/daos/folders_dao.dart';
@@ -19,23 +20,23 @@ import 'package:personal_reviews/database/tables/review_images_table.dart';
 
 part 'app_database.g.dart';
 
-/// Base de datos principal.
+/// Principal database class for the app, using Drift as ORM and SQLite as storage.
 ///
-/// Arquitectura recomendada:
-/// - Drift como ORM/query builder
-/// - SQLite nativo
-/// - Migraciones gestionadas por Drift
-/// - DAOs para acceso a datos
-/// - Modelos de dominio separados de las rows Drift
+/// Recommended architecture:
+/// - Drift as ORM/query builder
+/// - Native SQLite
+/// - Migrations managed by Drift
+/// - DAOs for data access
+/// - Domain models separate from Drift rows
 ///
-/// NO usar:
+/// NOT USE:
 /// - rawQuery()
-/// - strings SQL repartidos por la app
-/// - singleton global estático
+/// - SQL strings in the app (use DAOs and Drift's query builder instead)
+/// - global static singleton
 ///
-/// Recomendado:
-/// - Inyectar esta clase con Riverpod/GetIt
-/// - Mantener lógica SQL dentro de DAOs
+/// Recommended architecture:
+/// - Inyect this class with Riverpod/GetIt
+/// - Keep SQL logic inside DAOs
 @DriftDatabase(
   tables: [Categories, Folders, Items, Reviews, ReviewImages],
   daos: [CategoriesDao, ReviewImagesDao, ItemsDao, FoldersDao, ReviewsDao],
@@ -48,14 +49,12 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 1;
 
-  // TODO: DAOs
-
-  /// Apertura lazy.
+  /// Lazy aperture
   ///
-  /// Ventajas:
-  /// - no bloquea startup
-  /// - inicialización async limpia
-  /// - permite setup SQLite antes de abrir
+  /// Advantages:
+  /// - Not blocking app startup
+  /// - Clean async initialization
+  /// - Allows SQLite setup before opening
   static LazyDatabase _openConnection() {
     return LazyDatabase(() async {
       final documentsDirectory = await getApplicationDocumentsDirectory();
@@ -95,8 +94,7 @@ class AppDatabase extends _$AppDatabase {
       },
 
       onUpgrade: (Migrator m, int from, int to) async {
-        // Aquí se gestionan las migraciones entre versiones.
-        // Ejemplo:
+        // Here you can define migrations between versions. For example:
         // if (from < 2) {
         //   await m.addColumn(items, items.newColumn);
         // }
@@ -115,30 +113,208 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<void> _seedInitialData() async {
+    // Check if used icons still exists
+    final validIcons = presetCategories.keys.toSet();
+    final usedIcons = {"book", "restaurant", "movie", "gamepad"};
+    final missingIcons = usedIcons.difference(validIcons);
+    if (missingIcons.isNotEmpty) {
+      throw Exception(
+        'Error: Missing preset icons: ${missingIcons.join(", ")}. Please update the presetCategories map.',
+      );
+    }
+
     await batch((batch) {
       batch.insertAll(categories, [
         CategoriesCompanion.insert(
           name: 'Libros',
           color: 'preset:green',
-          icon: '--',
+          icon: 'book',
         ),
 
         CategoriesCompanion.insert(
           name: 'Comida',
           color: 'preset:orange',
-          icon: '--',
+          icon: 'restaurant',
         ),
 
         CategoriesCompanion.insert(
-          name: 'Paises',
+          name: 'Peliculas',
           color: 'preset:blue',
-          icon: '--',
+          icon: 'movie',
         ),
 
         CategoriesCompanion.insert(
           name: 'Videojuegos',
           color: 'preset:purple',
-          icon: '--',
+          icon: 'gamepad',
+        ),
+      ]);
+    });
+
+    // TODO: Quitar datos de prueba
+    await batch((batch) {
+      batch.insertAll(folders, [
+        // Category 1 - Libros
+        FoldersCompanion.insert(name: 'Novelas', categoryId: 1),
+
+        FoldersCompanion.insert(
+          name: 'Fantasía',
+          categoryId: 1,
+          parentId: const Value(1),
+        ),
+
+        FoldersCompanion.insert(
+          name: 'Brandon Sanderson',
+          categoryId: 1,
+          parentId: const Value(2),
+        ),
+
+        FoldersCompanion.insert(
+          name: 'Tolkien',
+          categoryId: 1,
+          parentId: const Value(2),
+        ),
+
+        FoldersCompanion.insert(
+          name: 'Ciencia Ficción',
+          categoryId: 1,
+          parentId: const Value(1),
+        ),
+
+        FoldersCompanion.insert(name: 'Desarrollo Personal', categoryId: 1),
+
+        // Category 2 - Comida
+        FoldersCompanion.insert(name: 'Recetas', categoryId: 2),
+
+        FoldersCompanion.insert(
+          name: 'Italianas',
+          categoryId: 2,
+          parentId: const Value(7),
+        ),
+
+        FoldersCompanion.insert(
+          name: 'Asiáticas',
+          categoryId: 2,
+          imagePath: const Value('folders/asiatic_food.jpg'),
+        ),
+
+        FoldersCompanion.insert(name: 'Restaurantes', categoryId: 2),
+      ]);
+    });
+
+    await batch((batch) {
+      batch.insertAll(items, [
+        // Novelas (id 1)
+        ItemsCompanion.insert(
+          name: 'El nombre del viento',
+          categoryId: 1,
+          folderId: const Value(1),
+        ),
+
+        // Fantasía (id 2)
+        ItemsCompanion.insert(
+          name: 'Mistborn',
+          categoryId: 1,
+          folderId: const Value(2),
+        ),
+
+        ItemsCompanion.insert(
+          name: 'El Archivo de las Tormentas',
+          categoryId: 1,
+          folderId: const Value(2),
+        ),
+
+        // Brandon Sanderson (id 3)
+        ItemsCompanion.insert(
+          name: 'El Imperio Final',
+          categoryId: 1,
+          folderId: const Value(3),
+        ),
+
+        ItemsCompanion.insert(
+          name: 'Palabras Radiantes',
+          categoryId: 1,
+          folderId: const Value(3),
+        ),
+
+        // Tolkien (id 4)
+        ItemsCompanion.insert(
+          name: 'El Hobbit',
+          categoryId: 1,
+          folderId: const Value(4),
+        ),
+
+        ItemsCompanion.insert(
+          name: 'El Señor de los Anillos',
+          categoryId: 1,
+          folderId: const Value(4),
+        ),
+
+        // Ciencia Ficción (id 5)
+        ItemsCompanion.insert(name: 'Dune', categoryId: 1),
+
+        // Desarrollo Personal (id 6)
+        ItemsCompanion.insert(name: 'Hábitos Atómicos', categoryId: 1),
+
+        // Recetas (id 7)
+        ItemsCompanion.insert(name: 'Pizza Casera', categoryId: 2),
+
+        // Italianas (id 8)
+        ItemsCompanion.insert(name: 'Lasagna', categoryId: 2),
+
+        ItemsCompanion.insert(name: 'Risotto', categoryId: 2),
+
+        // Asiáticas (id 9)
+        ItemsCompanion.insert(name: 'Ramen', categoryId: 2),
+
+        ItemsCompanion.insert(name: 'Sushi', categoryId: 2),
+
+        // Restaurantes (id 10)
+        ItemsCompanion.insert(name: 'Restaurante Japonés', categoryId: 2),
+      ]);
+
+      // Añadir reviews de ejemplo
+      batch.insertAll(reviews, [
+        ReviewsCompanion.insert(
+          itemId: 6,
+          rating: Value(5),
+          comment:
+              'Una novela increíble, con un mundo fascinante y personajes memorables.',
+        ),
+
+        ReviewsCompanion.insert(
+          itemId: 8,
+          rating: Value(4),
+          comment:
+              'Me encantó, aunque algunos personajes podrían haberse desarrollado más.',
+        ),
+
+        ReviewsCompanion.insert(
+          itemId: 7,
+          rating: Value(5),
+          comment:
+              '¡La mejor pizza casera que he hecho! La receta es fácil de seguir y el resultado es delicioso.',
+        ),
+
+        ReviewsCompanion.insert(
+          itemId: 9,
+          rating: Value(4),
+          comment:
+              'El ramen quedó muy sabroso, aunque me hubiera gustado un poco más de picante.',
+        ),
+
+        ReviewsCompanion.insert(
+          itemId: 10,
+          rating: Value(3),
+          comment:
+              'El ambiente del restaurante es agradable, pero la comida no cumplió mis expectativas.',
+        ),
+
+        ReviewsCompanion.insert(
+          itemId: 5,
+          rating: Value(7),
+          comment:
+              'Dune es una obra maestra de la ciencia ficción, con un mundo complejo y una historia épica.',
         ),
       ]);
     });

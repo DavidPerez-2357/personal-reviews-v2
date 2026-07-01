@@ -1,5 +1,6 @@
+import 'package:personal_reviews/database/models/category_rows.dart';
 import 'package:personal_reviews/database/app_database.dart';
-import 'package:personal_reviews/domain/models/category/category.dart';
+import 'package:personal_reviews/domain/models/category.dart';
 
 class CategoryMapper {
   static CategoryDomain fromRow(Category row) {
@@ -15,6 +16,19 @@ class CategoryMapper {
   }
 
   static List<CategoryDomain> fromRows(List<Category> rows) {
+    return rows.map((row) => fromRow(row)).toList();
+  }
+}
+
+class CategoryWithStatsMapper {
+  static CategoryWithStats fromRow(CategoryWithStatsRow row) {
+    return CategoryWithStats(
+      category: CategoryMapper.fromRow(row.category),
+      itemCount: row.itemCount,
+    );
+  }
+
+  static List<CategoryWithStats> fromRows(List<CategoryWithStatsRow> rows) {
     return rows.map((row) => fromRow(row)).toList();
   }
 }

@@ -8,6 +8,7 @@ La idea es evitar duplicar UI, mantener consistente el estilo de la app y separa
 ```text
 shared/
   components/
+  errors/
   layouts/
   presentation/
   widgets/
@@ -25,6 +26,17 @@ Ejemplos:
 - un bloque de UI que combina varios widgets pequenos
 
 No deberian contener logica de dominio de una feature concreta. Si la logica describe reglas del negocio de una pantalla o caso de uso, debe vivir en la feature o en la capa de dominio correspondiente.
+
+### `errors/`
+Definicion de errores y excepciones comunes.
+Aqui pueden vivir clases de error que se usan en varias features o que representan fallos comunes en la app, como errores de validacion, de red o de acceso a datos.
+El objetivo es centralizar la definicion de errores para evitar duplicacion y mantener un manejo consistente de fallos en toda la app.
+
+Ejemplos:
+- errores de validacion de formularios
+- excepciones de red o de acceso a datos
+- errores de base de datos o de infraestructura
+
 
 ### `layouts/`
 Contenedores de pagina y estructuras reutilizables.

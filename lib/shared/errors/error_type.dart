@@ -1,0 +1,16 @@
+enum ErrorType {
+  validation,
+  network,
+  storage,
+  database,
+  critical,
+  authentication,
+  authorization,
+  timeout,
+  notFound,
+  conflict,
+  rateLimit,
+  parse,
+  dependency,
+  unknown,
+}

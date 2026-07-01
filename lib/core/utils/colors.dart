@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 String colorToHex(Color color) {
-  return color.toString().replaceAll('Color(0x', '#').replaceAll(')', '');
+  final rgb = color.toARGB32() & 0x00FFFFFF;
+  return '#${rgb.toRadixString(16).padLeft(6, '0').toUpperCase()}';
 }
 
 Color hexStringToColor(String hex) {

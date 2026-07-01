@@ -1,9 +1,11 @@
 import 'package:drift/drift.dart';
+import 'package:personal_reviews/database/models/category_rows.dart';
 import 'package:personal_reviews/database/app_database.dart';
 import 'package:personal_reviews/database/tables/categories_table.dart';
+import 'package:personal_reviews/database/tables/items_table.dart';
 part 'categories_dao.g.dart';
 
-@DriftAccessor(tables: [Categories])
+@DriftAccessor(tables: [Categories, Items])
 class CategoriesDao extends DatabaseAccessor<AppDatabase>
     with _$CategoriesDaoMixin {
   CategoriesDao(super.attachedDatabase);
@@ -62,5 +64,29 @@ class CategoriesDao extends DatabaseAccessor<AppDatabase>
           ),
         )
         .then((rowsAffected) => rowsAffected > 0);
+  }
+
+  /* Category with stats */
+  Future<List<CategoryWithStatsRow>> getAllWithStats(bool isDeleted) {
+    final categoryAlias = alias(categories, 'c');
+    final itemAlias = alias(items, 'i');
+
+    final query =
+        select(categoryAlias).join([
+            leftOuterJoin(
+              itemAlias,
+              itemAlias.categoryId.equalsExp(categoryAlias.id) &
+                  itemAlias.isDeleted.equals(false),
+            ),
+          ])
+          ..where(categoryAlias.isDeleted.equals(isDeleted))
+          ..addColumns([itemAlias.id.count()])
+          ..groupBy([categoryAlias.id]);
+
+    return query.map((row) {
+      final category = row.readTable(categoryAlias);
+      final itemCount = row.read(itemAlias.id.count()) ?? 0;
+      return CategoryWithStatsRow(category: category, itemCount: itemCount);
+    }).get();
   }
 }

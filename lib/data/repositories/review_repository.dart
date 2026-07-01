@@ -2,7 +2,7 @@ import 'package:personal_reviews/data/mappers/review_mapper.dart';
 import 'package:personal_reviews/database/app_database.dart';
 import 'package:personal_reviews/database/daos/review_images_dao.dart';
 import 'package:personal_reviews/database/daos/reviews_dao.dart';
-import 'package:personal_reviews/domain/models/review/review.dart';
+import 'package:personal_reviews/domain/models/review.dart';
 
 class ReviewRepository {
   final ReviewsDao _reviewsDao;

@@ -7,7 +7,12 @@ Aqui deberian vivir las pantallas, flujos, componentes y logica especifica de ca
 
 ```text
 features/
-  app_shell/
+  feature_name/
+    providers/
+    components/
+    widgets/
+    pages/
+    feature_name.dart
 ```
 
 ## Que va en cada carpeta

@@ -1,6 +1,6 @@
 import 'package:personal_reviews/data/mappers/category_mapper.dart';
 import 'package:personal_reviews/database/daos/categories_dao.dart';
-import 'package:personal_reviews/domain/models/category/category.dart';
+import 'package:personal_reviews/domain/models/category.dart';
 
 class CategoryRepository {
   final CategoriesDao _categoriesDao;
@@ -63,5 +63,12 @@ class CategoryRepository {
 
   Future<bool> restoreById(int id) {
     return _categoriesDao.setDeletedById(id, false);
+  }
+
+  /* Category with stats */
+  Future<List<CategoryWithStats>> getAllWithStats(bool isDeleted) {
+    return _categoriesDao
+        .getAllWithStats(isDeleted)
+        .then((dtos) => CategoryWithStatsMapper.fromRows(dtos));
   }
 }
