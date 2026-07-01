@@ -6,7 +6,7 @@ import 'package:personal_reviews/style/theme/app_border.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-Widget buildFolderImage(FolderDetailedNode folder, BuildContext context) {
+Widget buildFolderImage(FolderDetailed folder, BuildContext context) {
   final imagePath = folder.folder.imagePath;
 
   // If the image path is empty and the folder doesn't have items with images
@@ -40,8 +40,8 @@ Widget buildFolderImage(FolderDetailedNode folder, BuildContext context) {
 }
 
 class FolderCard extends StatelessWidget {
-  final FolderDetailedNode folder;
-  final List<FolderDetailedNode> folderPath;
+  final FolderDetailed folder;
+  final List<FolderDetailed> folderPath;
 
   const FolderCard({super.key, required this.folder, required this.folderPath});
 
@@ -95,7 +95,7 @@ class FolderCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '${folder.totalItemCount} reseñas',
+                            '${folder.itemCount} reseñas',
                             style: context.textTheme.bodySmall?.copyWith(
                               color: context.colors.onSurfaceVariant,
                             ),

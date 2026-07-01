@@ -9,7 +9,7 @@ part 'explorer_state.freezed.dart';
 @freezed
 abstract class ExplorerState with _$ExplorerState {
   const factory ExplorerState({
-    @Default([]) List<FolderDetailedNode> folders,
+    @Default([]) List<FolderDetailed> folders,
     @Default([]) List<ItemWithLastReview> items,
     @Default(ElementsSort()) ElementsSort sort,
     @Default(ElementsFilter()) ElementsFilter filter,

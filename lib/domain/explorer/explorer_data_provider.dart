@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:personal_reviews/domain/explorer/explorer_state.dart';
 import 'package:personal_reviews/data/repositories/folder_repository.dart';
 import 'package:personal_reviews/data/repositories/item_repository.dart';
@@ -54,12 +55,12 @@ class ExplorerNotifier extends StateNotifier<AsyncValue<ExplorerState>> {
         );
       }
 
-      List<FolderDetailedNode> folders = [];
+      List<FolderDetailed> folders = [];
 
       if (filter.visibility != ElementsVisibility.itemsOnly &&
           config.groupByFolders &&
           !data.hasFolders) {
-        folders = await folderRepository.queryDetailedTree(
+        folders = await folderRepository.queryDetailed(
           sort: sort,
           filter: filter,
           searchQuery: searchQuery,
@@ -68,6 +69,10 @@ class ExplorerNotifier extends StateNotifier<AsyncValue<ExplorerState>> {
           excludeNonDeleted: config.excludeNonDeleted,
         );
       }
+
+      debugPrint(
+        'Queried ${folders.length} folders with sort: $sort, filter: $filter, searchQuery: "$searchQuery", folderId: ${config.folderId}, includeDeleted: ${config.includeDeleted}, excludeNonDeleted: ${config.excludeNonDeleted}',
+      );
 
       if (data.hasFolders) {
         folders = ExplorerTransformer.filterAndSortFolders(

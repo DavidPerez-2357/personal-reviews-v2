@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ExplorerState {
 
- List<FolderDetailedNode> get folders; List<ItemWithLastReview> get items; ElementsSort get sort; ElementsFilter get filter; String get searchQuery;
+ List<FolderDetailed> get folders; List<ItemWithLastReview> get items; ElementsSort get sort; ElementsFilter get filter; String get searchQuery;
 /// Create a copy of ExplorerState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $ExplorerStateCopyWith<$Res>  {
   factory $ExplorerStateCopyWith(ExplorerState value, $Res Function(ExplorerState) _then) = _$ExplorerStateCopyWithImpl;
 @useResult
 $Res call({
- List<FolderDetailedNode> folders, List<ItemWithLastReview> items, ElementsSort sort, ElementsFilter filter, String searchQuery
+ List<FolderDetailed> folders, List<ItemWithLastReview> items, ElementsSort sort, ElementsFilter filter, String searchQuery
 });
 
 
@@ -65,7 +65,7 @@ class _$ExplorerStateCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? folders = null,Object? items = null,Object? sort = null,Object? filter = null,Object? searchQuery = null,}) {
   return _then(_self.copyWith(
 folders: null == folders ? _self.folders : folders // ignore: cast_nullable_to_non_nullable
-as List<FolderDetailedNode>,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
+as List<FolderDetailed>,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
 as List<ItemWithLastReview>,sort: null == sort ? _self.sort : sort // ignore: cast_nullable_to_non_nullable
 as ElementsSort,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
 as ElementsFilter,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
@@ -154,7 +154,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<FolderDetailedNode> folders,  List<ItemWithLastReview> items,  ElementsSort sort,  ElementsFilter filter,  String searchQuery)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<FolderDetailed> folders,  List<ItemWithLastReview> items,  ElementsSort sort,  ElementsFilter filter,  String searchQuery)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ExplorerState() when $default != null:
 return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQuery);case _:
@@ -175,7 +175,7 @@ return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQu
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<FolderDetailedNode> folders,  List<ItemWithLastReview> items,  ElementsSort sort,  ElementsFilter filter,  String searchQuery)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<FolderDetailed> folders,  List<ItemWithLastReview> items,  ElementsSort sort,  ElementsFilter filter,  String searchQuery)  $default,) {final _that = this;
 switch (_that) {
 case _ExplorerState():
 return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQuery);case _:
@@ -195,7 +195,7 @@ return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQu
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<FolderDetailedNode> folders,  List<ItemWithLastReview> items,  ElementsSort sort,  ElementsFilter filter,  String searchQuery)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<FolderDetailed> folders,  List<ItemWithLastReview> items,  ElementsSort sort,  ElementsFilter filter,  String searchQuery)?  $default,) {final _that = this;
 switch (_that) {
 case _ExplorerState() when $default != null:
 return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQuery);case _:
@@ -210,11 +210,11 @@ return $default(_that.folders,_that.items,_that.sort,_that.filter,_that.searchQu
 
 
 class _ExplorerState implements ExplorerState {
-  const _ExplorerState({final  List<FolderDetailedNode> folders = const [], final  List<ItemWithLastReview> items = const [], this.sort = const ElementsSort(), this.filter = const ElementsFilter(), this.searchQuery = ''}): _folders = folders,_items = items;
+  const _ExplorerState({final  List<FolderDetailed> folders = const [], final  List<ItemWithLastReview> items = const [], this.sort = const ElementsSort(), this.filter = const ElementsFilter(), this.searchQuery = ''}): _folders = folders,_items = items;
   
 
- final  List<FolderDetailedNode> _folders;
-@override@JsonKey() List<FolderDetailedNode> get folders {
+ final  List<FolderDetailed> _folders;
+@override@JsonKey() List<FolderDetailed> get folders {
   if (_folders is EqualUnmodifiableListView) return _folders;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_folders);
@@ -261,7 +261,7 @@ abstract mixin class _$ExplorerStateCopyWith<$Res> implements $ExplorerStateCopy
   factory _$ExplorerStateCopyWith(_ExplorerState value, $Res Function(_ExplorerState) _then) = __$ExplorerStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<FolderDetailedNode> folders, List<ItemWithLastReview> items, ElementsSort sort, ElementsFilter filter, String searchQuery
+ List<FolderDetailed> folders, List<ItemWithLastReview> items, ElementsSort sort, ElementsFilter filter, String searchQuery
 });
 
 
@@ -281,7 +281,7 @@ class __$ExplorerStateCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? folders = null,Object? items = null,Object? sort = null,Object? filter = null,Object? searchQuery = null,}) {
   return _then(_ExplorerState(
 folders: null == folders ? _self._folders : folders // ignore: cast_nullable_to_non_nullable
-as List<FolderDetailedNode>,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
+as List<FolderDetailed>,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
 as List<ItemWithLastReview>,sort: null == sort ? _self.sort : sort // ignore: cast_nullable_to_non_nullable
 as ElementsSort,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
 as ElementsFilter,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable

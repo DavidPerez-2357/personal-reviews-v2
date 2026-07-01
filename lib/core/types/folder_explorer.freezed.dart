@@ -301,7 +301,7 @@ as ElementsSort,
 /// @nodoc
 mixin _$FolderExplorerData {
 
- bool get hasFolders; bool get hasItems; List<FolderDetailedNode> get folders; List<ItemWithLastReview> get items;
+ bool get hasFolders; bool get hasItems; List<FolderDetailed> get folders; List<ItemWithLastReview> get items;
 /// Create a copy of FolderExplorerData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -332,7 +332,7 @@ abstract mixin class $FolderExplorerDataCopyWith<$Res>  {
   factory $FolderExplorerDataCopyWith(FolderExplorerData value, $Res Function(FolderExplorerData) _then) = _$FolderExplorerDataCopyWithImpl;
 @useResult
 $Res call({
- bool hasFolders, bool hasItems, List<FolderDetailedNode> folders, List<ItemWithLastReview> items
+ bool hasFolders, bool hasItems, List<FolderDetailed> folders, List<ItemWithLastReview> items
 });
 
 
@@ -354,7 +354,7 @@ class _$FolderExplorerDataCopyWithImpl<$Res>
 hasFolders: null == hasFolders ? _self.hasFolders : hasFolders // ignore: cast_nullable_to_non_nullable
 as bool,hasItems: null == hasItems ? _self.hasItems : hasItems // ignore: cast_nullable_to_non_nullable
 as bool,folders: null == folders ? _self.folders : folders // ignore: cast_nullable_to_non_nullable
-as List<FolderDetailedNode>,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
+as List<FolderDetailed>,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
 as List<ItemWithLastReview>,
   ));
 }
@@ -440,7 +440,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool hasFolders,  bool hasItems,  List<FolderDetailedNode> folders,  List<ItemWithLastReview> items)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool hasFolders,  bool hasItems,  List<FolderDetailed> folders,  List<ItemWithLastReview> items)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FolderExplorerData() when $default != null:
 return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case _:
@@ -461,7 +461,7 @@ return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case 
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool hasFolders,  bool hasItems,  List<FolderDetailedNode> folders,  List<ItemWithLastReview> items)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool hasFolders,  bool hasItems,  List<FolderDetailed> folders,  List<ItemWithLastReview> items)  $default,) {final _that = this;
 switch (_that) {
 case _FolderExplorerData():
 return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case _:
@@ -481,7 +481,7 @@ return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case 
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool hasFolders,  bool hasItems,  List<FolderDetailedNode> folders,  List<ItemWithLastReview> items)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool hasFolders,  bool hasItems,  List<FolderDetailed> folders,  List<ItemWithLastReview> items)?  $default,) {final _that = this;
 switch (_that) {
 case _FolderExplorerData() when $default != null:
 return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case _:
@@ -496,13 +496,13 @@ return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case 
 
 
 class _FolderExplorerData implements FolderExplorerData {
-  const _FolderExplorerData({this.hasFolders = false, this.hasItems = false, final  List<FolderDetailedNode> folders = const [], final  List<ItemWithLastReview> items = const []}): _folders = folders,_items = items;
+  const _FolderExplorerData({this.hasFolders = false, this.hasItems = false, final  List<FolderDetailed> folders = const [], final  List<ItemWithLastReview> items = const []}): _folders = folders,_items = items;
   
 
 @override@JsonKey() final  bool hasFolders;
 @override@JsonKey() final  bool hasItems;
- final  List<FolderDetailedNode> _folders;
-@override@JsonKey() List<FolderDetailedNode> get folders {
+ final  List<FolderDetailed> _folders;
+@override@JsonKey() List<FolderDetailed> get folders {
   if (_folders is EqualUnmodifiableListView) return _folders;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_folders);
@@ -546,7 +546,7 @@ abstract mixin class _$FolderExplorerDataCopyWith<$Res> implements $FolderExplor
   factory _$FolderExplorerDataCopyWith(_FolderExplorerData value, $Res Function(_FolderExplorerData) _then) = __$FolderExplorerDataCopyWithImpl;
 @override @useResult
 $Res call({
- bool hasFolders, bool hasItems, List<FolderDetailedNode> folders, List<ItemWithLastReview> items
+ bool hasFolders, bool hasItems, List<FolderDetailed> folders, List<ItemWithLastReview> items
 });
 
 
@@ -568,7 +568,7 @@ class __$FolderExplorerDataCopyWithImpl<$Res>
 hasFolders: null == hasFolders ? _self.hasFolders : hasFolders // ignore: cast_nullable_to_non_nullable
 as bool,hasItems: null == hasItems ? _self.hasItems : hasItems // ignore: cast_nullable_to_non_nullable
 as bool,folders: null == folders ? _self._folders : folders // ignore: cast_nullable_to_non_nullable
-as List<FolderDetailedNode>,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
+as List<FolderDetailed>,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
 as List<ItemWithLastReview>,
   ));
 }

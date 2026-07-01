@@ -5,8 +5,8 @@ import 'package:personal_reviews/domain/models/folder.dart';
 import 'package:personal_reviews/domain/models/item.dart';
 
 class ExplorerTransformer {
-  static List<FolderDetailedNode> filterFolders(
-    List<FolderDetailedNode> folders,
+  static List<FolderDetailed> filterFolders(
+    List<FolderDetailed> folders,
     ElementsFilter filter,
     String searchQuery,
   ) {
@@ -21,11 +21,11 @@ class ExplorerTransformer {
     }).toList();
   }
 
-  static List<FolderDetailedNode> sortFolders(
-    List<FolderDetailedNode> folders,
+  static List<FolderDetailed> sortFolders(
+    List<FolderDetailed> folders,
     ElementsSort sort,
   ) {
-    List<FolderDetailedNode> sortedFolders = List.from(folders);
+    List<FolderDetailed> sortedFolders = List.from(folders);
     sortedFolders.sort((a, b) {
       switch (sort.field) {
         case ElementsSortField.creation:
@@ -100,8 +100,8 @@ class ExplorerTransformer {
     return sortedItems;
   }
 
-  static List<FolderDetailedNode> filterAndSortFolders(
-    List<FolderDetailedNode> folders,
+  static List<FolderDetailed> filterAndSortFolders(
+    List<FolderDetailed> folders,
     ElementsFilter filter,
     String searchQuery,
     ElementsSort sort,

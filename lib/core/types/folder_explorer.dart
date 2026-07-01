@@ -32,7 +32,7 @@ abstract class FolderExplorerData with _$FolderExplorerData {
   const factory FolderExplorerData({
     @Default(false) bool hasFolders,
     @Default(false) bool hasItems,
-    @Default([]) List<FolderDetailedNode> folders,
+    @Default([]) List<FolderDetailed> folders,
     @Default([]) List<ItemWithLastReview> items,
   }) = _FolderExplorerData;
 }

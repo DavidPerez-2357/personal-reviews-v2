@@ -21,7 +21,7 @@ class FolderExplorer extends ConsumerWidget {
     this.emptyState,
   });
 
-  final List<FolderDetailedNode> folderPath;
+  final List<FolderDetailed> folderPath;
   final FolderExplorerConfig config;
   final FolderExplorerData data;
   final AppEmptyState? emptyState;
