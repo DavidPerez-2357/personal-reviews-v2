@@ -97,9 +97,8 @@ class _ElementsControlsState extends ConsumerState<ElementsControls> {
 
   @override
   Widget build(BuildContext context) {
-    final categories = widget.config.showCategoriesFilter
-        ? ref.watch(categoriesProvider).value ?? const <CategoryDomain>[]
-        : const <CategoryDomain>[];
+    final categories =
+        ref.watch(categoriesProvider).value ?? const <CategoryDomain>[];
 
     return IgnorePointer(
       ignoring: !widget.isEnabled,

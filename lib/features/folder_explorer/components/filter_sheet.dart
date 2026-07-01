@@ -4,6 +4,7 @@ import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/folder_explorer.dart';
 import 'package:personal_reviews/domain/models/category.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_reviews/style/theme/app_border.dart';
 
 class ElementsFilterSheet extends StatefulWidget {
   const ElementsFilterSheet({
@@ -66,6 +67,19 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
     });
   }
 
+  CategoryDomain? _getCategoryById(int categoryId) {
+    debugPrint('Getting category name for id: $categoryId');
+    if (widget.allCategories.isEmpty) {
+      debugPrint('All categories list is empty');
+      return null;
+    }
+
+    final category = widget.allCategories.firstWhere(
+      (category) => category.id == categoryId,
+    );
+    return category;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -76,7 +90,33 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 18,
           children: [
-            Text('Filtrar', style: context.textTheme.titleLarge),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 12,
+              children: [
+                Text('Filtrar', style: context.textTheme.titleLarge),
+
+                if (!widget.config.groupByFolders)
+                  InfoChip(
+                    label: 'Sin carpetas',
+                    icon: Icons.folder_off_rounded,
+                  ),
+
+                if (!widget.config.showCategoriesFilter &&
+                    widget.config.defaultFilter.categoryIds.isNotEmpty &&
+                    _getCategoryById(
+                          widget.config.defaultFilter.categoryIds.first,
+                        ) !=
+                        null)
+                  // Category chip
+                  CategoryInfoChip(
+                    category: _getCategoryById(
+                      widget.config.defaultFilter.categoryIds.first,
+                    )!,
+                  ),
+              ],
+            ),
 
             if (widget.config.showVisibilityFilter &&
                 widget.config.groupByFolders)
@@ -358,6 +398,12 @@ class _CategoryFilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChoiceChip(
+      // Change border
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.red, width: 1.5),
+        borderRadius: AppRadius.mdBorder,
+      ),
+
       selected: selected,
       onSelected: (value) {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -371,6 +417,41 @@ class _CategoryFilterChip extends StatelessWidget {
       ),
       label: Text(category.name, style: TextStyle(color: Colors.white)),
       selectedColor: category.color.toColor().withValues(alpha: 0.6),
+    );
+  }
+}
+
+class InfoChip extends StatelessWidget {
+  const InfoChip({super.key, required this.label, required this.icon});
+
+  final String label;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+      avatar: Icon(icon, size: 15, color: context.colors.onSurfaceVariant),
+      label: Text(
+        label,
+        style: context.textTheme.bodySmall?.copyWith(
+          color: context.colors.onSurfaceVariant,
+        ),
+      ),
+      backgroundColor: Colors.transparent,
+    );
+  }
+}
+
+class CategoryInfoChip extends StatelessWidget {
+  const CategoryInfoChip({super.key, required this.category});
+
+  final CategoryDomain category;
+
+  @override
+  Widget build(BuildContext context) {
+    return InfoChip(
+      label: category.name,
+      icon: getCategoryIconData(category.icon),
     );
   }
 }
