@@ -65,11 +65,7 @@ class FolderExplorer extends ConsumerWidget {
     return RefreshIndicator(
       onRefresh: () => handleRefresh(),
       child: explorer.when(
-        loading: () => FolderExplorerSkeleton(
-          config: config,
-          folderCount: 0,
-          itemCount: 0,
-        ),
+        loading: () => FolderExplorerSkeleton(config: config),
 
         error: (error, stackTrace) => ListView(
           children: [
@@ -77,8 +73,8 @@ class FolderExplorer extends ConsumerWidget {
               padding: const EdgeInsets.only(top: 60),
               child: AppEmptyState(
                 icon: Icons.star_rounded,
-                title: 'No hay elementos para mostrar',
-                message: 'Parece que hubo un error al cargar los elementos.',
+                title: 'Error al cargar los elementos',
+                message: 'Intenta recargar la página deslizando hacia abajo.',
               ),
             ),
           ],
@@ -92,18 +88,17 @@ class FolderExplorer extends ConsumerWidget {
               !searchQueryIsEmpty(state.searchQuery);
 
           if (isEmptyState && !areAnyFiltersApplied) {
-            return RefreshIndicator(
-              onRefresh: () => handleRefresh(),
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 60),
-                    child: effectiveEmptyState,
-                  ),
-                ],
-              ),
+            return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: effectiveEmptyState,
+                ),
+              ],
             );
           }
+
           return ExplorerList(
             hasAnyElements: state.folders.isNotEmpty || state.items.isNotEmpty,
 
@@ -156,6 +151,7 @@ class FolderExplorer extends ConsumerWidget {
   }
 }
 
+/* Build default empty state for the folder explorer, when no elements are found and no filters are applied */
 AppEmptyState buildEmptyState({required FolderExplorerConfig config}) {
   return AppEmptyState(
     icon: Icons.star_rounded,
@@ -168,6 +164,7 @@ AppEmptyState buildEmptyState({required FolderExplorerConfig config}) {
   );
 }
 
+/* Build empty state for the folder explorer, when no elements are found and filters are applied */
 AppEmptyState buildEmptyStateWithFiltersApplied({
   required FolderExplorerConfig config,
   required ElementsFilter filter,
@@ -189,6 +186,10 @@ AppEmptyState buildEmptyStateWithFiltersApplied({
   );
 }
 
+/* default structure of the folder explorer:
+  - controls (search, sort, filter)
+  - list of elements (folders and items) / Empty state if no elements are found
+  */
 class ExplorerList extends StatelessWidget {
   const ExplorerList({
     super.key,
@@ -214,6 +215,7 @@ class ExplorerList extends StatelessWidget {
   }
 }
 
+/* Skeleton state for the folder explorer, when loading elements */
 class FolderExplorerSkeleton extends StatelessWidget {
   const FolderExplorerSkeleton({
     super.key,

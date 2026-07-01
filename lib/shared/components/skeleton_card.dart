@@ -22,54 +22,56 @@ class SkeletonItemCard extends StatelessWidget {
               width: 1,
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 32),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: AppRadius.smBorder,
-                        color: context.colors.surfaceContainerLow,
-                      ),
-                      child: Icon(
-                        Icons.star_rounded,
-                        color: context.colors.onSurfaceVariant.withValues(
-                          alpha: 0.5,
+          child: Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 32),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: AppRadius.smBorder,
+                          color: context.colors.surfaceContainerLow,
                         ),
-                      ),
-                    ),
-
-                    const SizedBox(width: 16),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 16,
-                          width: 180,
-                          decoration: BoxDecoration(
-                            color: colors.surfaceContainer,
-                            borderRadius: BorderRadius.circular(4),
+                        child: Icon(
+                          Icons.star_rounded,
+                          color: context.colors.onSurfaceVariant.withValues(
+                            alpha: 0.5,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        RatingDisplay(
-                          rating: 0,
-                          size: 18,
-                          fillColor: context.colors.primary,
-                          emptyColor: context.colors.surfaceContainerHighest,
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+
+                      const SizedBox(width: 16),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 16,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: colors.surfaceContainer,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          RatingDisplay(
+                            rating: 0,
+                            size: 18,
+                            fillColor: context.colors.primary,
+                            emptyColor: context.colors.surfaceContainerHighest,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
 
@@ -108,54 +110,56 @@ class SkeletonFolderCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 32),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: colors.onSurfaceVariant.withValues(alpha: 0.1),
-                        borderRadius: AppRadius.smBorder,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 32),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: colors.onSurfaceVariant.withValues(alpha: 0.1),
+                          borderRadius: AppRadius.smBorder,
+                        ),
+                        child: Icon(
+                          Icons.folder_outlined,
+                          color: colors.onSurfaceVariant.withValues(alpha: 0.5),
+                        ),
                       ),
-                      child: Icon(
-                        Icons.folder_outlined,
-                        color: colors.onSurfaceVariant.withValues(alpha: 0.5),
-                      ),
-                    ),
 
-                    const SizedBox(width: 16),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 16,
-                          width: 180,
-                          decoration: BoxDecoration(
-                            color: colors.surfaceContainer,
-                            borderRadius: BorderRadius.circular(4),
+                      const SizedBox(width: 16),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 16,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: colors.surfaceContainer,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Container(
-                          height: 12,
-                          width: 60,
-                          decoration: BoxDecoration(
-                            color: colors.surfaceContainer,
-                            borderRadius: BorderRadius.circular(4),
+                          const SizedBox(height: 4),
+                          Container(
+                            height: 12,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              color: colors.surfaceContainer,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
 
           Align(

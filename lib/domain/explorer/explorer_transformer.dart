@@ -64,13 +64,8 @@ class ExplorerTransformer {
       }
 
       // min and max rating filters
-      if (item.lastReview != null &&
-          item.lastReview!.rating < filter.minRating) {
-        return false;
-      }
-
-      if (item.lastReview != null &&
-          item.lastReview!.rating > filter.maxRating) {
+      final rating = item.lastReview?.rating ?? 0;
+      if (rating < filter.minRating || rating > filter.maxRating) {
         return false;
       }
 
@@ -90,9 +85,9 @@ class ExplorerTransformer {
         case ElementsSortField.name:
           return a.item.name.compareTo(b.item.name);
         case ElementsSortField.date:
-          return a.item.createdAt.compareTo(
-            b.lastReview?.createdAt ?? DateTime(9999, 12, 31),
-          );
+          final dateA = a.lastReview?.createdAt ?? DateTime(9999, 12, 31);
+          final dateB = b.lastReview?.createdAt ?? DateTime(9999, 12, 31);
+          return dateA.compareTo(dateB);
         case ElementsSortField.rating:
           final aRating = a.lastReview?.rating ?? 0;
           final bRating = b.lastReview?.rating ?? 0;
