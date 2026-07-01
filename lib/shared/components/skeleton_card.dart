@@ -22,31 +22,31 @@ class SkeletonItemCard extends StatelessWidget {
               width: 1,
             ),
           ),
-          child: Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 32),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          borderRadius: AppRadius.smBorder,
-                          color: context.colors.surfaceContainerLow,
-                        ),
-                        child: Icon(
-                          Icons.star_rounded,
-                          color: context.colors.onSurfaceVariant.withValues(
-                            alpha: 0.5,
-                          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 32),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: AppRadius.smBorder,
+                        color: context.colors.surfaceContainerLow,
+                      ),
+                      child: Icon(
+                        Icons.star_rounded,
+                        color: context.colors.onSurfaceVariant.withValues(
+                          alpha: 0.5,
                         ),
                       ),
+                    ),
 
-                      const SizedBox(width: 16),
-                      Column(
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -67,11 +67,11 @@ class SkeletonItemCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
 
@@ -110,29 +110,29 @@ class SkeletonFolderCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 32),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: colors.onSurfaceVariant.withValues(alpha: 0.1),
-                          borderRadius: AppRadius.smBorder,
-                        ),
-                        child: Icon(
-                          Icons.folder_outlined,
-                          color: colors.onSurfaceVariant.withValues(alpha: 0.5),
-                        ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 32),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: colors.onSurfaceVariant.withValues(alpha: 0.1),
+                        borderRadius: AppRadius.smBorder,
                       ),
+                      child: Icon(
+                        Icons.folder_outlined,
+                        color: colors.onSurfaceVariant.withValues(alpha: 0.5),
+                      ),
+                    ),
 
-                      const SizedBox(width: 16),
-                      Column(
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -155,11 +155,11 @@ class SkeletonFolderCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
 
           Align(
