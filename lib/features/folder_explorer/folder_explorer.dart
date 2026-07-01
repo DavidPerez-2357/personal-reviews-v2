@@ -72,7 +72,7 @@ class FolderExplorer extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(top: 60),
               child: AppEmptyState(
-                icon: Icons.star_rounded,
+                icon: Icons.error_outline_rounded,
                 title: 'Error al cargar los elementos',
                 message: 'Intenta recargar la página deslizando hacia abajo.',
               ),
