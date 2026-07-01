@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:personal_reviews/database/tables/folder_trees_table.dart';
 import 'package:personal_reviews/database/tables/folders_table.dart';
 import 'package:personal_reviews/database/models/folder_rows.dart';
@@ -201,7 +200,7 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
       return rows.map((row) {
         final folder = row.readTable(folders);
         final itemCount = row.read(items.id.count(distinct: true)) ?? 0;
-        
+
         return FolderDetailedRow(
           folder: folder,
           itemCount: itemCount,
