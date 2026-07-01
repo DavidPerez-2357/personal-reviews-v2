@@ -11,10 +11,12 @@ import 'dart:io';
 class FolderItems extends StatelessWidget {
   const FolderItems({
     super.key,
+    required this.config,
     required this.folder,
     required this.folderPath,
   });
 
+  final FolderExplorerConfig config;
   final FolderDetailed folder;
   final List<FolderDetailed> folderPath;
 
@@ -24,7 +26,11 @@ class FolderItems extends StatelessWidget {
       title: 'Ver carpeta',
       actions: _buildMenuActions(folder.folder.id),
       scrollable: false,
-      child: _FolderElementsList(folder: folder, folderPath: folderPath),
+      child: _FolderElementsList(
+        folder: folder,
+        folderPath: folderPath,
+        config: config,
+      ),
     );
   }
 }
@@ -50,10 +56,15 @@ List<MenuAction> _buildMenuActions(int folderId) {
 }
 
 class _FolderElementsList extends StatelessWidget {
-  const _FolderElementsList({required this.folder, required this.folderPath});
+  const _FolderElementsList({
+    required this.folder,
+    required this.folderPath,
+    required this.config,
+  });
 
   final FolderDetailed folder;
   final List<FolderDetailed> folderPath;
+  final FolderExplorerConfig config;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +93,7 @@ class _FolderElementsList extends StatelessWidget {
         Expanded(
           child: FolderExplorer(
             folderPath: folderPath,
-            config: FolderExplorerConfig(folderId: folder.folder.id),
+            config: config.copyWith(folderId: folder.folder.id),
           ),
         ),
       ],

@@ -1,4 +1,5 @@
 import 'package:personal_reviews/core/extensions/theme_context.dart';
+import 'package:personal_reviews/core/types/folder_explorer.dart';
 import 'package:personal_reviews/domain/models/folder.dart';
 import 'package:personal_reviews/features/folder_items/folder_items.dart';
 import 'package:personal_reviews/style/theme/app_spacing.dart';
@@ -41,9 +42,15 @@ Widget buildFolderImage(FolderDetailed folder, BuildContext context) {
 
 class FolderCard extends StatelessWidget {
   final FolderDetailed folder;
+  final FolderExplorerConfig folderExplorerConfig;
   final List<FolderDetailed> folderPath;
 
-  const FolderCard({super.key, required this.folder, required this.folderPath});
+  const FolderCard({
+    super.key,
+    required this.folder,
+    required this.folderExplorerConfig,
+    required this.folderPath,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +64,7 @@ class FolderCard extends StatelessWidget {
             builder: (context) => FolderItems(
               folder: folder,
               folderPath: [...folderPath, folder],
+              config: folderExplorerConfig,
             ),
           ),
         );
