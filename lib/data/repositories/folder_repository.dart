@@ -30,28 +30,21 @@ class FolderRepository {
         .map((folders) => FolderMapper.fromRows(folders));
   }
 
-  Future<int> create({
-    required String name,
-    required int categoryId,
-    int? parentId,
-    String? imagePath,
-  }) async {
-    final folderId = await _foldersDao.create(
-      name: name,
-      categoryId: categoryId,
-      parentId: parentId,
-      imagePath: imagePath,
-    );
-
-    await _folderTreesDao.insertFolderTree(folderId, parentId);
-
-    return folderId;
+  Future<int> create({required String name, int? parentId, String? imagePath}) {
+    return _foldersDao.transaction(() async {
+      final folderId = await _foldersDao.create(
+        name: name,
+        parentId: parentId,
+        imagePath: imagePath,
+      );
+      await _folderTreesDao.insertFolderTree(folderId, parentId);
+      return folderId;
+    });
   }
 
   Future<bool> updateById(
     int id, {
     required String name,
-    required int categoryId,
     int? parentId,
     String? imagePath,
   }) {

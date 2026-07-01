@@ -10,4 +10,7 @@ class FolderTrees extends Table {
       integer().references(Folders, #id, onDelete: KeyAction.cascade)();
 
   IntColumn get depth => integer().withDefault(const Constant(0))();
+
+  @override
+  Set<Column> get primaryKey => {descendantId, ancestorId};
 }

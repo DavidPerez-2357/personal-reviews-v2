@@ -8,18 +8,18 @@ class FolderTreesDao extends DatabaseAccessor<AppDatabase>
     with _$FolderTreesDaoMixin {
   FolderTreesDao(super.attachedDatabase);
 
-  /// Get all successors of a folder, including the folder itself.
-  Future<List<FolderTree>> getByDescendantId(int descendantId) {
+  /// Get the folder and all its parent folders. D -> D, C, B, A
+  Future<List<FolderTree>> getByDescendantId(int folderId) {
     return (select(
       folderTrees,
-    )..where((tbl) => tbl.descendantId.equals(descendantId))).get();
+    )..where((tbl) => tbl.descendantId.equals(folderId))).get();
   }
 
-  /// Get all predecessors of a folder, including the folder itself.
-  Future<List<FolderTree>> getByAncestorId(int ancestorId) {
+  /// Get the folder and all its child folders. D -> D, E, F, G
+  Future<List<FolderTree>> getByAncestorId(int folderId) {
     return (select(
       folderTrees,
-    )..where((tbl) => tbl.ancestorId.equals(ancestorId))).get();
+    )..where((tbl) => tbl.ancestorId.equals(folderId))).get();
   }
 
   Future<List<int>> getIdsByAncestorId(int ancestorId) async {

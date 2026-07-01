@@ -987,7 +987,7 @@ class $FolderTreesTable extends FolderTrees
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {descendantId, ancestorId};
   @override
   FolderTree map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';

@@ -86,12 +86,7 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
     )..where((t) => t.isDeleted.equals(isDeleted))).watch();
   }
 
-  Future<int> create({
-    required String name,
-    required int categoryId,
-    int? parentId,
-    String? imagePath,
-  }) {
+  Future<int> create({required String name, int? parentId, String? imagePath}) {
     return into(folders).insert(
       FoldersCompanion.insert(
         name: name,
