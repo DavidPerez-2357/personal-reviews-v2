@@ -1,13 +1,16 @@
+import 'package:flutter/material.dart';
 import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/elements_sort.dart';
 import 'package:personal_reviews/data/mappers/folder_mapper.dart';
+import 'package:personal_reviews/database/daos/folder_trees_dao.dart';
 import 'package:personal_reviews/database/daos/folders_dao.dart';
 import 'package:personal_reviews/domain/models/folder.dart';
 
 class FolderRepository {
   final FoldersDao _foldersDao;
+  final FolderTreesDao _folderTreesDao;
 
-  FolderRepository(this._foldersDao);
+  FolderRepository(this._foldersDao, this._folderTreesDao);
 
   Future<List<FolderDomain>> getAll(bool isDeleted) {
     return _foldersDao
@@ -21,12 +24,6 @@ class FolderRepository {
         .then((folder) => folder != null ? FolderMapper.fromRow(folder) : null);
   }
 
-  Future<List<FolderDomain>> getByCategoryId(int categoryId, bool isDeleted) {
-    return _foldersDao
-        .getByCategoryId(categoryId, isDeleted)
-        .then((folders) => FolderMapper.fromRows(folders));
-  }
-
   Stream<List<FolderDomain>> watchAll(bool isDeleted) {
     return _foldersDao
         .watchAll(isDeleted)
@@ -38,13 +35,17 @@ class FolderRepository {
     required int categoryId,
     int? parentId,
     String? imagePath,
-  }) {
-    return _foldersDao.create(
+  }) async {
+    final folderId = await _foldersDao.create(
       name: name,
       categoryId: categoryId,
       parentId: parentId,
       imagePath: imagePath,
     );
+
+    await _folderTreesDao.insertFolderTree(folderId, parentId);
+
+    return folderId;
   }
 
   Future<bool> updateById(
@@ -57,7 +58,6 @@ class FolderRepository {
     return _foldersDao.updateById(
       id,
       name: name,
-      categoryId: categoryId,
       parentId: parentId,
       imagePath: imagePath,
     );
@@ -71,38 +71,7 @@ class FolderRepository {
     return _foldersDao.setDeletedById(id, false);
   }
 
-  /* folder tree methods */
-  Future<List<FolderNode>> getAllAsTree() {
-    return _foldersDao
-        .getAll(false)
-        .then((folders) => FolderMapper.fromRows(folders))
-        .then((folderDomains) => FolderNode.buildFolderTree(folderDomains));
-  }
-
-  Future<List<FolderNode>> getTreeByCategoryId(int categoryId) {
-    return _foldersDao
-        .getByCategoryId(categoryId, false)
-        .then((folders) => FolderMapper.fromRows(folders))
-        .then((folderDomains) => FolderNode.buildFolderTree(folderDomains));
-  }
-
-  Future<FolderNode?> getAllWithTreeById(int id) async {
-    final folder = await _foldersDao.getById(id);
-    if (folder == null) return null;
-
-    final folderMap = await getTreeByCategoryId(folder.categoryId);
-
-    for (var root in folderMap) {
-      final found = root.findNodeById(id);
-      if (found != null) {
-        return found;
-      }
-    }
-
-    return null;
-  }
-
-  Future<List<FolderDetailedNode>> queryDetailedTree({
+  Future<List<FolderDetailed>> queryDetailed({
     required ElementsSort sort,
     required ElementsFilter filter,
     String searchQuery = '',
@@ -110,6 +79,9 @@ class FolderRepository {
     bool includeDeleted = false,
     bool excludeNonDeleted = false,
   }) {
+    debugPrint(
+      'Querying detailed folders with sort: $sort, filter: $filter, searchQuery: "$searchQuery", folderId: $folderId, includeDeleted: $includeDeleted, excludeNonDeleted: $excludeNonDeleted',
+    );
     return _foldersDao
         .queryFolders(
           sort: sort,
@@ -119,10 +91,6 @@ class FolderRepository {
           includeDeleted: includeDeleted,
           excludeNonDeleted: excludeNonDeleted,
         )
-        .then((folders) => FolderDetailedMapper.fromRows(folders))
-        .then(
-          (foldersWithDetails) =>
-              FolderDetailedNode.buildFolderTree(foldersWithDetails, folderId),
-        );
+        .then((folders) => FolderDetailedMapper.fromRows(folders));
   }
 }

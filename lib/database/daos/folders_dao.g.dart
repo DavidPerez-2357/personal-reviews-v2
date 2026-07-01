@@ -4,8 +4,9 @@ part of 'folders_dao.dart';
 
 // ignore_for_file: type=lint
 mixin _$FoldersDaoMixin on DatabaseAccessor<AppDatabase> {
-  $CategoriesTable get categories => attachedDatabase.categories;
   $FoldersTable get folders => attachedDatabase.folders;
+  $FolderTreesTable get folderTrees => attachedDatabase.folderTrees;
+  $CategoriesTable get categories => attachedDatabase.categories;
   $ItemsTable get items => attachedDatabase.items;
   FoldersDaoManager get managers => FoldersDaoManager(this);
 }
@@ -13,10 +14,12 @@ mixin _$FoldersDaoMixin on DatabaseAccessor<AppDatabase> {
 class FoldersDaoManager {
   final _$FoldersDaoMixin _db;
   FoldersDaoManager(this._db);
-  $$CategoriesTableTableManager get categories =>
-      $$CategoriesTableTableManager(_db.attachedDatabase, _db.categories);
   $$FoldersTableTableManager get folders =>
       $$FoldersTableTableManager(_db.attachedDatabase, _db.folders);
+  $$FolderTreesTableTableManager get folderTrees =>
+      $$FolderTreesTableTableManager(_db.attachedDatabase, _db.folderTrees);
+  $$CategoriesTableTableManager get categories =>
+      $$CategoriesTableTableManager(_db.attachedDatabase, _db.categories);
   $$ItemsTableTableManager get items =>
       $$ItemsTableTableManager(_db.attachedDatabase, _db.items);
 }

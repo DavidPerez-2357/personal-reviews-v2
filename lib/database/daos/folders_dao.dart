@@ -1,14 +1,16 @@
-import 'package:personal_reviews/core/types/elements_filter.dart';
+import 'package:flutter/material.dart';
+import 'package:personal_reviews/database/tables/folder_trees_table.dart';
 import 'package:personal_reviews/database/tables/folders_table.dart';
 import 'package:personal_reviews/database/models/folder_rows.dart';
 import 'package:personal_reviews/database/tables/items_table.dart';
+import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/elements_sort.dart';
 import 'package:personal_reviews/database/app_database.dart';
 import 'package:personal_reviews/core/types/sort.dart';
 import 'package:drift/drift.dart';
 part 'folders_dao.g.dart';
 
-@DriftAccessor(tables: [Folders, Items])
+@DriftAccessor(tables: [Folders, FolderTrees, Items])
 class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
   FoldersDao(super.attachedDatabase);
 
@@ -32,6 +34,39 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
     }
   }
 
+  /* Filtering methods for queryFolders */
+  Expression<bool> _buildCategoryFilter(ElementsFilter filter) {
+    if (filter.categoryIds.isEmpty) {
+      return const Constant(true);
+    }
+
+    return items.categoryId.isIn(filter.categoryIds);
+  }
+
+  Expression<bool> _buildSearchFilter(String searchQuery) {
+    return searchQuery.isNotEmpty
+        ? folders.name.like('%$searchQuery%')
+        : const Constant(true);
+  }
+
+  Expression<bool> _buildFolderIdFilter(int? folderId) {
+    return folderId != null
+        ? folders.parentId.equals(folderId)
+        : folders.parentId.isNull();
+  }
+
+  Expression<bool> _buildIncludeDeletedFilter(bool includeDeleted) {
+    return includeDeleted
+        ? const Constant(true)
+        : folders.isDeleted.equals(false);
+  }
+
+  Expression<bool> _buildExcludeNonDeletedFilter(bool excludeNonDeleted) {
+    return excludeNonDeleted
+        ? folders.isDeleted.equals(true)
+        : const Constant(true);
+  }
+
   Future<List<Folder>> getAll(bool isDeleted) {
     return (select(folders)..where((t) => t.isDeleted.equals(isDeleted))).get();
   }
@@ -44,14 +79,6 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
     return (select(folders).join(
       [innerJoin(Items(), Items().folderId.equalsExp(Folders().id))],
     )).get().then((rows) => rows.map((row) => row.readTable(folders)).toList());
-  }
-
-  Future<List<Folder>> getByCategoryId(int categoryId, bool isDeleted) {
-    return (select(folders)..where(
-          (t) =>
-              t.categoryId.equals(categoryId) & t.isDeleted.equals(isDeleted),
-        ))
-        .get();
   }
 
   Stream<List<Folder>> watchAll(bool isDeleted) {
@@ -69,7 +96,6 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
     return into(folders).insert(
       FoldersCompanion.insert(
         name: name,
-        categoryId: categoryId,
         parentId: Value(parentId),
         imagePath: Value(imagePath),
       ),
@@ -79,7 +105,6 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
   Future<bool> updateById(
     int id, {
     required String name,
-    required int categoryId,
     int? parentId,
     String? imagePath,
   }) {
@@ -87,7 +112,6 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
         .write(
           FoldersCompanion(
             name: Value(name),
-            categoryId: Value(categoryId),
             parentId: Value(parentId),
             imagePath: Value(imagePath),
           ),
@@ -143,52 +167,30 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
     int? folderId,
     bool includeDeleted = false,
     bool excludeNonDeleted = false,
-  }) {
-    /* Sort */
-    OrderingTerm ordering = _getOrderingTerm(sort);
-
-    /* Filter */
-    final categoryFilter = filter.categoryIds.isNotEmpty
-        ? folders.categoryId.isIn(filter.categoryIds)
-        : const Constant(true);
-
-    /* Search */
-    final searchFilter = searchQuery.isNotEmpty
-        ? folders.name.like('%$searchQuery%')
-        : const Constant(true);
-
-    /* Other options */
-    final folderIdFilter = folderId != null
-        ? folders.parentId.equals(folderId)
-        : const Constant(true);
-
-    final includeDeletedFilter = includeDeleted
-        ? const Constant(true)
-        : folders.isDeleted.equals(false);
-
-    final excludeNonDeletedFilter = excludeNonDeleted
-        ? folders.isDeleted.equals(true)
-        : const Constant(true);
-
+  }) async {
     /* Query */
     final query =
         select(folders).join([
             leftOuterJoin(
+              folderTrees,
+              folderTrees.ancestorId.equalsExp(folders.id),
+            ),
+            leftOuterJoin(
               items,
-              items.folderId.equalsExp(folders.id) &
+              items.folderId.equalsExp(folderTrees.descendantId) &
                   items.isDeleted.equals(false),
             ),
           ])
-          ..addColumns([items.id.count()])
+          ..addColumns([items.id.count(distinct: true)])
           ..where(
-            includeDeletedFilter &
-                excludeNonDeletedFilter &
-                categoryFilter &
-                searchFilter &
-                folderIdFilter,
+            _buildCategoryFilter(filter) &
+                _buildSearchFilter(searchQuery) &
+                _buildFolderIdFilter(folderId) &
+                _buildIncludeDeletedFilter(includeDeleted) &
+                _buildExcludeNonDeletedFilter(excludeNonDeleted),
           )
           ..groupBy([folders.id])
-          ..orderBy([ordering]);
+          ..orderBy([_getOrderingTerm(sort)]);
 
     final rows = query.get();
 
@@ -198,7 +200,8 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
 
       return rows.map((row) {
         final folder = row.readTable(folders);
-        final itemCount = row.read(items.id.count()) ?? 0;
+        final itemCount = row.read(items.id.count(distinct: true)) ?? 0;
+        
         return FolderDetailedRow(
           folder: folder,
           itemCount: itemCount,

@@ -5,14 +5,17 @@ import 'package:drift/drift.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:personal_reviews/core/constants/category_icons.dart';
+import 'package:personal_reviews/data/repositories/folder_repository.dart';
 
 import 'package:personal_reviews/database/daos/categories_dao.dart';
+import 'package:personal_reviews/database/daos/folder_trees_dao.dart';
 import 'package:personal_reviews/database/daos/folders_dao.dart';
 import 'package:personal_reviews/database/daos/items_dao.dart';
 import 'package:personal_reviews/database/daos/review_images_dao.dart';
 import 'package:personal_reviews/database/daos/reviews_dao.dart';
 
 import 'package:personal_reviews/database/tables/categories_table.dart';
+import 'package:personal_reviews/database/tables/folder_trees_table.dart';
 import 'package:personal_reviews/database/tables/folders_table.dart';
 import 'package:personal_reviews/database/tables/items_table.dart';
 import 'package:personal_reviews/database/tables/reviews_table.dart';
@@ -38,8 +41,15 @@ part 'app_database.g.dart';
 /// - Inyect this class with Riverpod/GetIt
 /// - Keep SQL logic inside DAOs
 @DriftDatabase(
-  tables: [Categories, Folders, Items, Reviews, ReviewImages],
-  daos: [CategoriesDao, ReviewImagesDao, ItemsDao, FoldersDao, ReviewsDao],
+  tables: [Categories, Folders, FolderTrees, Items, Reviews, ReviewImages],
+  daos: [
+    CategoriesDao,
+    ReviewImagesDao,
+    ItemsDao,
+    FoldersDao,
+    FolderTreesDao,
+    ReviewsDao,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -152,55 +162,92 @@ class AppDatabase extends _$AppDatabase {
     });
 
     // TODO: Quitar datos de prueba
-    await batch((batch) {
+    /*await batch((batch) {
       batch.insertAll(folders, [
         // Category 1 - Libros
-        FoldersCompanion.insert(name: 'Novelas', categoryId: 1),
+        FoldersCompanion.insert(name: 'Novelas'),
 
-        FoldersCompanion.insert(
-          name: 'Fantasía',
-          categoryId: 1,
-          parentId: const Value(1),
-        ),
+        FoldersCompanion.insert(name: 'Fantasía', parentId: const Value(1)),
 
         FoldersCompanion.insert(
           name: 'Brandon Sanderson',
-          categoryId: 1,
           parentId: const Value(2),
         ),
 
-        FoldersCompanion.insert(
-          name: 'Tolkien',
-          categoryId: 1,
-          parentId: const Value(2),
-        ),
+        FoldersCompanion.insert(name: 'Tolkien', parentId: const Value(2)),
 
         FoldersCompanion.insert(
           name: 'Ciencia Ficción',
-          categoryId: 1,
           parentId: const Value(1),
         ),
 
-        FoldersCompanion.insert(name: 'Desarrollo Personal', categoryId: 1),
+        FoldersCompanion.insert(name: 'Desarrollo Personal'),
 
         // Category 2 - Comida
-        FoldersCompanion.insert(name: 'Recetas', categoryId: 2),
+        FoldersCompanion.insert(name: 'Recetas'),
 
-        FoldersCompanion.insert(
-          name: 'Italianas',
-          categoryId: 2,
-          parentId: const Value(7),
-        ),
+        FoldersCompanion.insert(name: 'Italianas', parentId: const Value(7)),
 
         FoldersCompanion.insert(
           name: 'Asiáticas',
-          categoryId: 2,
           imagePath: const Value('folders/asiatic_food.jpg'),
         ),
 
-        FoldersCompanion.insert(name: 'Restaurantes', categoryId: 2),
+        FoldersCompanion.insert(name: 'Restaurantes'),
       ]);
-    });
+    });*/
+
+    await FolderRepository(
+      foldersDao,
+      folderTreesDao,
+    ).create(name: 'Novelas', categoryId: 1);
+
+    await FolderRepository(
+      foldersDao,
+      folderTreesDao,
+    ).create(name: 'Fantasía', categoryId: 1, parentId: 1);
+
+    await FolderRepository(
+      foldersDao,
+      folderTreesDao,
+    ).create(name: 'Brandon Sanderson', categoryId: 1, parentId: 2);
+
+    await FolderRepository(
+      foldersDao,
+      folderTreesDao,
+    ).create(name: 'Tolkien', categoryId: 1, parentId: 2);
+
+    await FolderRepository(
+      foldersDao,
+      folderTreesDao,
+    ).create(name: 'Ciencia Ficción', categoryId: 1, parentId: 1);
+
+    await FolderRepository(
+      foldersDao,
+      folderTreesDao,
+    ).create(name: 'Desarrollo Personal', categoryId: 1);
+
+    await FolderRepository(
+      foldersDao,
+      folderTreesDao,
+    ).create(name: 'Recetas', categoryId: 2);
+
+    await FolderRepository(
+      foldersDao,
+      folderTreesDao,
+    ).create(name: 'Italianas', categoryId: 2, parentId: 7);
+
+    await FolderRepository(foldersDao, folderTreesDao).create(
+      name: 'Asiáticas',
+      categoryId: 2,
+      parentId: 7,
+      imagePath: 'folders/asiatic_food.jpg',
+    );
+
+    await FolderRepository(
+      foldersDao,
+      folderTreesDao,
+    ).create(name: 'Restaurantes', categoryId: 2);
 
     await batch((batch) {
       batch.insertAll(items, [
@@ -250,6 +297,12 @@ class AppDatabase extends _$AppDatabase {
           folderId: const Value(4),
         ),
 
+        ItemsCompanion.insert(
+          name: 'El Señor de los Anillos',
+          categoryId: 2,
+          folderId: const Value(4),
+        ),
+
         // Ciencia Ficción (id 5)
         ItemsCompanion.insert(name: 'Dune', categoryId: 1),
 
@@ -277,9 +330,15 @@ class AppDatabase extends _$AppDatabase {
       batch.insertAll(reviews, [
         ReviewsCompanion.insert(
           itemId: 6,
-          rating: Value(5),
+          rating: Value(10),
           comment:
               'Una novela increíble, con un mundo fascinante y personajes memorables.',
+        ),
+
+        ReviewsCompanion.insert(
+          itemId: 6,
+          rating: Value(1),
+          comment: 'Una novela malisima.',
         ),
 
         ReviewsCompanion.insert(

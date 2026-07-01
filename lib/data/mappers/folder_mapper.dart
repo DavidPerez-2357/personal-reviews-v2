@@ -7,7 +7,6 @@ class FolderMapper {
     return FolderDomain(
       id: row.id,
       name: row.name,
-      categoryId: row.categoryId,
       parentId: row.parentId,
       imagePath: row.imagePath,
       createdAt: row.createdAt,

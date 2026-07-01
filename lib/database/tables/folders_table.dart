@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:personal_reviews/database/tables/categories_table.dart';
 
 @TableIndex(
   name: 'folders_index',
@@ -18,8 +17,6 @@ class Folders extends Table {
   IntColumn get parentId => integer().nullable().references(
     Folders,
     #id,
-    onDelete: KeyAction.setNull,
+    onDelete: KeyAction.cascade,
   )();
-  IntColumn get categoryId =>
-      integer().references(Categories, #id, onDelete: KeyAction.setNull)();
 }
