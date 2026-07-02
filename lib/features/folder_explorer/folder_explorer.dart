@@ -21,7 +21,7 @@ class FolderExplorer extends ConsumerWidget {
     this.emptyState,
   });
 
-  final List<FolderDetailedNode> folderPath;
+  final List<FolderDetailed> folderPath;
   final FolderExplorerConfig config;
   final FolderExplorerData data;
   final AppEmptyState? emptyState;
@@ -132,7 +132,11 @@ class FolderExplorer extends ConsumerWidget {
                 (folder) => Padding(
                   key: ValueKey('folder-${folder.folder.id}'),
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: FolderCard(folder: folder, folderPath: folderPath),
+                  child: FolderCard(
+                    folder: folder,
+                    folderPath: folderPath,
+                    folderExplorerConfig: config,
+                  ),
                 ),
               ),
 
@@ -228,16 +232,8 @@ class FolderExplorerSkeleton extends StatelessWidget {
   final int folderCount;
   final int itemCount;
 
-  // Debug the number of skeleton cards displayed
-  void initState() {
-    debugPrint(
-      'FolderExplorerSkeleton: folderCount=$folderCount, itemCount=$itemCount',
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    initState();
     return ExplorerList(
       controls: ElementsControls(
         isEnabled: false,

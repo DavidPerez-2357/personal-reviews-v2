@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/elements_sort.dart';
+import 'package:personal_reviews/core/types/rating.dart';
 import 'package:personal_reviews/domain/models/folder.dart';
 import 'package:personal_reviews/domain/models/item.dart';
 part 'folder_explorer.freezed.dart';
@@ -21,6 +22,11 @@ abstract class FolderExplorerConfig with _$FolderExplorerConfig {
     @Default(true) bool showCategoriesFilter,
     @Default(true) bool showVisibilityFilter,
 
+    @Default(defaultRatingConverter) RatingConverter convertRating,
+    @Default(defaultRatingConverterToStr)
+    RatingConverterToStr convertRatingToStr,
+    @Default(defaultRatingConverterToDB) RatingConverterToDB convertRatingToDB,
+
     /* Default filter and sort */
     @Default(ElementsFilter()) ElementsFilter defaultFilter,
     @Default(ElementsSort()) ElementsSort defaultSort,
@@ -32,7 +38,7 @@ abstract class FolderExplorerData with _$FolderExplorerData {
   const factory FolderExplorerData({
     @Default(false) bool hasFolders,
     @Default(false) bool hasItems,
-    @Default([]) List<FolderDetailedNode> folders,
+    @Default([]) List<FolderDetailed> folders,
     @Default([]) List<ItemWithLastReview> items,
   }) = _FolderExplorerData;
 }

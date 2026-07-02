@@ -97,9 +97,8 @@ class _ElementsControlsState extends ConsumerState<ElementsControls> {
 
   @override
   Widget build(BuildContext context) {
-    final categories = widget.config.showCategoriesFilter
-        ? ref.watch(categoriesProvider).value ?? const <CategoryDomain>[]
-        : const <CategoryDomain>[];
+    final categories =
+        ref.watch(categoriesProvider).value ?? const <CategoryDomain>[];
 
     return IgnorePointer(
       ignoring: !widget.isEnabled,
@@ -163,6 +162,7 @@ class _ElementsControlsState extends ConsumerState<ElementsControls> {
               showCategoriesFilter: widget.config.showCategoriesFilter,
               onResetFiltersPressed: onResetFiltersPressed,
               onFilterPressed: () => onFilterPressed(categories),
+              config: widget.config,
             ),
         ],
       ),
@@ -261,11 +261,13 @@ class _ActiveFiltersList extends StatelessWidget {
     required this.filter,
     required this.onResetFiltersPressed,
     required this.onFilterPressed,
+    required this.config,
   });
 
   final List<CategoryDomain> allCategories;
   final bool showCategoriesFilter;
   final ElementsFilter filter;
+  final FolderExplorerConfig config;
   final VoidCallback onResetFiltersPressed;
   final VoidCallback onFilterPressed;
 
@@ -299,7 +301,7 @@ class _ActiveFiltersList extends StatelessWidget {
                 if (filter.isRatingActive())
                   _FilterChip(
                     label:
-                        '${filter.minRating == 0 ? '0.0' : '${filter.minRating / 2}'} - ${filter.maxRating == 0 ? '0.0' : '${filter.maxRating / 2}'} ★',
+                        '${config.convertRatingToStr(filter.minRating)} - ${config.convertRatingToStr(filter.maxRating)} ★',
                     onTap: onFilterPressed,
                   ),
 

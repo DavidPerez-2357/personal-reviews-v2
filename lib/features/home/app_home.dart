@@ -12,7 +12,7 @@ class AppHomeGroups extends StatefulWidget {
 
 class _AppHomeGroupsState extends State<AppHomeGroups> {
   static const int _virtualPageCount = 1000000;
-  final int _initialPage = (_virtualPageCount ~/ 2) - 2;
+  final int _initialPage = (_virtualPageCount ~/ 2) - 1;
 
   late final PageController _controller = PageController(
     initialPage: _initialPage,

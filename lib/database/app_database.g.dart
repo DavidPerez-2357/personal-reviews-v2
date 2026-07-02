@@ -531,21 +531,7 @@ class $FoldersTable extends Folders with TableInfo<$FoldersTable, Folder> {
     type: DriftSqlType.int,
     requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES folders (id) ON DELETE SET NULL',
-    ),
-  );
-  static const VerificationMeta _categoryIdMeta = const VerificationMeta(
-    'categoryId',
-  );
-  @override
-  late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
-    'category_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES categories (id) ON DELETE SET NULL',
+      'REFERENCES folders (id) ON DELETE CASCADE',
     ),
   );
   @override
@@ -557,7 +543,6 @@ class $FoldersTable extends Folders with TableInfo<$FoldersTable, Folder> {
     isDeleted,
     deletedAt,
     parentId,
-    categoryId,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -612,14 +597,6 @@ class $FoldersTable extends Folders with TableInfo<$FoldersTable, Folder> {
         parentId.isAcceptableOrUnknown(data['parent_id']!, _parentIdMeta),
       );
     }
-    if (data.containsKey('category_id')) {
-      context.handle(
-        _categoryIdMeta,
-        categoryId.isAcceptableOrUnknown(data['category_id']!, _categoryIdMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_categoryIdMeta);
-    }
     return context;
   }
 
@@ -657,10 +634,6 @@ class $FoldersTable extends Folders with TableInfo<$FoldersTable, Folder> {
         DriftSqlType.int,
         data['${effectivePrefix}parent_id'],
       ),
-      categoryId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}category_id'],
-      )!,
     );
   }
 
@@ -678,7 +651,6 @@ class Folder extends DataClass implements Insertable<Folder> {
   final bool isDeleted;
   final DateTime? deletedAt;
   final int? parentId;
-  final int categoryId;
   const Folder({
     required this.id,
     required this.name,
@@ -687,7 +659,6 @@ class Folder extends DataClass implements Insertable<Folder> {
     required this.isDeleted,
     this.deletedAt,
     this.parentId,
-    required this.categoryId,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -705,7 +676,6 @@ class Folder extends DataClass implements Insertable<Folder> {
     if (!nullToAbsent || parentId != null) {
       map['parent_id'] = Variable<int>(parentId);
     }
-    map['category_id'] = Variable<int>(categoryId);
     return map;
   }
 
@@ -724,7 +694,6 @@ class Folder extends DataClass implements Insertable<Folder> {
       parentId: parentId == null && nullToAbsent
           ? const Value.absent()
           : Value(parentId),
-      categoryId: Value(categoryId),
     );
   }
 
@@ -741,7 +710,6 @@ class Folder extends DataClass implements Insertable<Folder> {
       isDeleted: serializer.fromJson<bool>(json['isDeleted']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
       parentId: serializer.fromJson<int?>(json['parentId']),
-      categoryId: serializer.fromJson<int>(json['categoryId']),
     );
   }
   @override
@@ -755,7 +723,6 @@ class Folder extends DataClass implements Insertable<Folder> {
       'isDeleted': serializer.toJson<bool>(isDeleted),
       'deletedAt': serializer.toJson<DateTime?>(deletedAt),
       'parentId': serializer.toJson<int?>(parentId),
-      'categoryId': serializer.toJson<int>(categoryId),
     };
   }
 
@@ -767,7 +734,6 @@ class Folder extends DataClass implements Insertable<Folder> {
     bool? isDeleted,
     Value<DateTime?> deletedAt = const Value.absent(),
     Value<int?> parentId = const Value.absent(),
-    int? categoryId,
   }) => Folder(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -776,7 +742,6 @@ class Folder extends DataClass implements Insertable<Folder> {
     isDeleted: isDeleted ?? this.isDeleted,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
     parentId: parentId.present ? parentId.value : this.parentId,
-    categoryId: categoryId ?? this.categoryId,
   );
   Folder copyWithCompanion(FoldersCompanion data) {
     return Folder(
@@ -787,9 +752,6 @@ class Folder extends DataClass implements Insertable<Folder> {
       isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
       parentId: data.parentId.present ? data.parentId.value : this.parentId,
-      categoryId: data.categoryId.present
-          ? data.categoryId.value
-          : this.categoryId,
     );
   }
 
@@ -802,8 +764,7 @@ class Folder extends DataClass implements Insertable<Folder> {
           ..write('createdAt: $createdAt, ')
           ..write('isDeleted: $isDeleted, ')
           ..write('deletedAt: $deletedAt, ')
-          ..write('parentId: $parentId, ')
-          ..write('categoryId: $categoryId')
+          ..write('parentId: $parentId')
           ..write(')'))
         .toString();
   }
@@ -817,7 +778,6 @@ class Folder extends DataClass implements Insertable<Folder> {
     isDeleted,
     deletedAt,
     parentId,
-    categoryId,
   );
   @override
   bool operator ==(Object other) =>
@@ -829,8 +789,7 @@ class Folder extends DataClass implements Insertable<Folder> {
           other.createdAt == this.createdAt &&
           other.isDeleted == this.isDeleted &&
           other.deletedAt == this.deletedAt &&
-          other.parentId == this.parentId &&
-          other.categoryId == this.categoryId);
+          other.parentId == this.parentId);
 }
 
 class FoldersCompanion extends UpdateCompanion<Folder> {
@@ -841,7 +800,6 @@ class FoldersCompanion extends UpdateCompanion<Folder> {
   final Value<bool> isDeleted;
   final Value<DateTime?> deletedAt;
   final Value<int?> parentId;
-  final Value<int> categoryId;
   const FoldersCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -850,7 +808,6 @@ class FoldersCompanion extends UpdateCompanion<Folder> {
     this.isDeleted = const Value.absent(),
     this.deletedAt = const Value.absent(),
     this.parentId = const Value.absent(),
-    this.categoryId = const Value.absent(),
   });
   FoldersCompanion.insert({
     this.id = const Value.absent(),
@@ -860,9 +817,7 @@ class FoldersCompanion extends UpdateCompanion<Folder> {
     this.isDeleted = const Value.absent(),
     this.deletedAt = const Value.absent(),
     this.parentId = const Value.absent(),
-    required int categoryId,
-  }) : name = Value(name),
-       categoryId = Value(categoryId);
+  }) : name = Value(name);
   static Insertable<Folder> custom({
     Expression<int>? id,
     Expression<String>? name,
@@ -871,7 +826,6 @@ class FoldersCompanion extends UpdateCompanion<Folder> {
     Expression<bool>? isDeleted,
     Expression<DateTime>? deletedAt,
     Expression<int>? parentId,
-    Expression<int>? categoryId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -881,7 +835,6 @@ class FoldersCompanion extends UpdateCompanion<Folder> {
       if (isDeleted != null) 'is_deleted': isDeleted,
       if (deletedAt != null) 'deleted_at': deletedAt,
       if (parentId != null) 'parent_id': parentId,
-      if (categoryId != null) 'category_id': categoryId,
     });
   }
 
@@ -893,7 +846,6 @@ class FoldersCompanion extends UpdateCompanion<Folder> {
     Value<bool>? isDeleted,
     Value<DateTime?>? deletedAt,
     Value<int?>? parentId,
-    Value<int>? categoryId,
   }) {
     return FoldersCompanion(
       id: id ?? this.id,
@@ -903,7 +855,6 @@ class FoldersCompanion extends UpdateCompanion<Folder> {
       isDeleted: isDeleted ?? this.isDeleted,
       deletedAt: deletedAt ?? this.deletedAt,
       parentId: parentId ?? this.parentId,
-      categoryId: categoryId ?? this.categoryId,
     );
   }
 
@@ -931,9 +882,6 @@ class FoldersCompanion extends UpdateCompanion<Folder> {
     if (parentId.present) {
       map['parent_id'] = Variable<int>(parentId.value);
     }
-    if (categoryId.present) {
-      map['category_id'] = Variable<int>(categoryId.value);
-    }
     return map;
   }
 
@@ -946,8 +894,282 @@ class FoldersCompanion extends UpdateCompanion<Folder> {
           ..write('createdAt: $createdAt, ')
           ..write('isDeleted: $isDeleted, ')
           ..write('deletedAt: $deletedAt, ')
-          ..write('parentId: $parentId, ')
-          ..write('categoryId: $categoryId')
+          ..write('parentId: $parentId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FolderTreesTable extends FolderTrees
+    with TableInfo<$FolderTreesTable, FolderTree> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FolderTreesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _descendantIdMeta = const VerificationMeta(
+    'descendantId',
+  );
+  @override
+  late final GeneratedColumn<int> descendantId = GeneratedColumn<int>(
+    'descendant_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES folders (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _ancestorIdMeta = const VerificationMeta(
+    'ancestorId',
+  );
+  @override
+  late final GeneratedColumn<int> ancestorId = GeneratedColumn<int>(
+    'ancestor_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES folders (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _depthMeta = const VerificationMeta('depth');
+  @override
+  late final GeneratedColumn<int> depth = GeneratedColumn<int>(
+    'depth',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [descendantId, ancestorId, depth];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'folder_trees';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FolderTree> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('descendant_id')) {
+      context.handle(
+        _descendantIdMeta,
+        descendantId.isAcceptableOrUnknown(
+          data['descendant_id']!,
+          _descendantIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_descendantIdMeta);
+    }
+    if (data.containsKey('ancestor_id')) {
+      context.handle(
+        _ancestorIdMeta,
+        ancestorId.isAcceptableOrUnknown(data['ancestor_id']!, _ancestorIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ancestorIdMeta);
+    }
+    if (data.containsKey('depth')) {
+      context.handle(
+        _depthMeta,
+        depth.isAcceptableOrUnknown(data['depth']!, _depthMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {descendantId, ancestorId};
+  @override
+  FolderTree map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FolderTree(
+      descendantId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}descendant_id'],
+      )!,
+      ancestorId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}ancestor_id'],
+      )!,
+      depth: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}depth'],
+      )!,
+    );
+  }
+
+  @override
+  $FolderTreesTable createAlias(String alias) {
+    return $FolderTreesTable(attachedDatabase, alias);
+  }
+}
+
+class FolderTree extends DataClass implements Insertable<FolderTree> {
+  final int descendantId;
+  final int ancestorId;
+  final int depth;
+  const FolderTree({
+    required this.descendantId,
+    required this.ancestorId,
+    required this.depth,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['descendant_id'] = Variable<int>(descendantId);
+    map['ancestor_id'] = Variable<int>(ancestorId);
+    map['depth'] = Variable<int>(depth);
+    return map;
+  }
+
+  FolderTreesCompanion toCompanion(bool nullToAbsent) {
+    return FolderTreesCompanion(
+      descendantId: Value(descendantId),
+      ancestorId: Value(ancestorId),
+      depth: Value(depth),
+    );
+  }
+
+  factory FolderTree.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FolderTree(
+      descendantId: serializer.fromJson<int>(json['descendantId']),
+      ancestorId: serializer.fromJson<int>(json['ancestorId']),
+      depth: serializer.fromJson<int>(json['depth']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'descendantId': serializer.toJson<int>(descendantId),
+      'ancestorId': serializer.toJson<int>(ancestorId),
+      'depth': serializer.toJson<int>(depth),
+    };
+  }
+
+  FolderTree copyWith({int? descendantId, int? ancestorId, int? depth}) =>
+      FolderTree(
+        descendantId: descendantId ?? this.descendantId,
+        ancestorId: ancestorId ?? this.ancestorId,
+        depth: depth ?? this.depth,
+      );
+  FolderTree copyWithCompanion(FolderTreesCompanion data) {
+    return FolderTree(
+      descendantId: data.descendantId.present
+          ? data.descendantId.value
+          : this.descendantId,
+      ancestorId: data.ancestorId.present
+          ? data.ancestorId.value
+          : this.ancestorId,
+      depth: data.depth.present ? data.depth.value : this.depth,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FolderTree(')
+          ..write('descendantId: $descendantId, ')
+          ..write('ancestorId: $ancestorId, ')
+          ..write('depth: $depth')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(descendantId, ancestorId, depth);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FolderTree &&
+          other.descendantId == this.descendantId &&
+          other.ancestorId == this.ancestorId &&
+          other.depth == this.depth);
+}
+
+class FolderTreesCompanion extends UpdateCompanion<FolderTree> {
+  final Value<int> descendantId;
+  final Value<int> ancestorId;
+  final Value<int> depth;
+  final Value<int> rowid;
+  const FolderTreesCompanion({
+    this.descendantId = const Value.absent(),
+    this.ancestorId = const Value.absent(),
+    this.depth = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  FolderTreesCompanion.insert({
+    required int descendantId,
+    required int ancestorId,
+    this.depth = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : descendantId = Value(descendantId),
+       ancestorId = Value(ancestorId);
+  static Insertable<FolderTree> custom({
+    Expression<int>? descendantId,
+    Expression<int>? ancestorId,
+    Expression<int>? depth,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (descendantId != null) 'descendant_id': descendantId,
+      if (ancestorId != null) 'ancestor_id': ancestorId,
+      if (depth != null) 'depth': depth,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  FolderTreesCompanion copyWith({
+    Value<int>? descendantId,
+    Value<int>? ancestorId,
+    Value<int>? depth,
+    Value<int>? rowid,
+  }) {
+    return FolderTreesCompanion(
+      descendantId: descendantId ?? this.descendantId,
+      ancestorId: ancestorId ?? this.ancestorId,
+      depth: depth ?? this.depth,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (descendantId.present) {
+      map['descendant_id'] = Variable<int>(descendantId.value);
+    }
+    if (ancestorId.present) {
+      map['ancestor_id'] = Variable<int>(ancestorId.value);
+    }
+    if (depth.present) {
+      map['depth'] = Variable<int>(depth.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FolderTreesCompanion(')
+          ..write('descendantId: $descendantId, ')
+          ..write('ancestorId: $ancestorId, ')
+          ..write('depth: $depth, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -2270,12 +2492,17 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $CategoriesTable categories = $CategoriesTable(this);
   late final $FoldersTable folders = $FoldersTable(this);
+  late final $FolderTreesTable folderTrees = $FolderTreesTable(this);
   late final $ItemsTable items = $ItemsTable(this);
   late final $ReviewsTable reviews = $ReviewsTable(this);
   late final $ReviewImagesTable reviewImages = $ReviewImagesTable(this);
   late final Index foldersIndex = Index(
     'folders_index',
-    'CREATE INDEX folders_index ON folders (category_id, parent_id, is_deleted)',
+    'CREATE INDEX folders_index ON folders (parent_id, is_deleted)',
+  );
+  late final Index folderTreesIndex = Index(
+    'folder_trees_index',
+    'CREATE INDEX folder_trees_index ON folder_trees (descendant_id, ancestor_id)',
   );
   late final Index itemsIndex = Index(
     'items_index',
@@ -2295,6 +2522,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final ItemsDao itemsDao = ItemsDao(this as AppDatabase);
   late final FoldersDao foldersDao = FoldersDao(this as AppDatabase);
+  late final FolderTreesDao folderTreesDao = FolderTreesDao(
+    this as AppDatabase,
+  );
   late final ReviewsDao reviewsDao = ReviewsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -2303,10 +2533,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     categories,
     folders,
+    folderTrees,
     items,
     reviews,
     reviewImages,
     foldersIndex,
+    folderTreesIndex,
     itemsIndex,
     reviewsIndex,
     reviewImagesIndex,
@@ -2318,14 +2550,21 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         'folders',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('folders', kind: UpdateKind.update)],
+      result: [TableUpdate('folders', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'categories',
+        'folders',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('folders', kind: UpdateKind.update)],
+      result: [TableUpdate('folder_trees', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'folders',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('folder_trees', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
@@ -2382,25 +2621,6 @@ typedef $$CategoriesTableUpdateCompanionBuilder =
 final class $$CategoriesTableReferences
     extends BaseReferences<_$AppDatabase, $CategoriesTable, Category> {
   $$CategoriesTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static MultiTypedResultKey<$FoldersTable, List<Folder>> _foldersRefsTable(
-    _$AppDatabase db,
-  ) => MultiTypedResultKey.fromTable(
-    db.folders,
-    aliasName: $_aliasNameGenerator(db.categories.id, db.folders.categoryId),
-  );
-
-  $$FoldersTableProcessedTableManager get foldersRefs {
-    final manager = $$FoldersTableTableManager(
-      $_db,
-      $_db.folders,
-    ).filter((f) => f.categoryId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_foldersRefsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
 
   static MultiTypedResultKey<$ItemsTable, List<Item>> _itemsRefsTable(
     _$AppDatabase db,
@@ -2465,31 +2685,6 @@ class $$CategoriesTableFilterComposer
     column: $table.deletedAt,
     builder: (column) => ColumnFilters(column),
   );
-
-  Expression<bool> foldersRefs(
-    Expression<bool> Function($$FoldersTableFilterComposer f) f,
-  ) {
-    final $$FoldersTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.folders,
-      getReferencedColumn: (t) => t.categoryId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$FoldersTableFilterComposer(
-            $db: $db,
-            $table: $db.folders,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 
   Expression<bool> itemsRefs(
     Expression<bool> Function($$ItemsTableFilterComposer f) f,
@@ -2592,31 +2787,6 @@ class $$CategoriesTableAnnotationComposer
   GeneratedColumn<DateTime> get deletedAt =>
       $composableBuilder(column: $table.deletedAt, builder: (column) => column);
 
-  Expression<T> foldersRefs<T extends Object>(
-    Expression<T> Function($$FoldersTableAnnotationComposer a) f,
-  ) {
-    final $$FoldersTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.folders,
-      getReferencedColumn: (t) => t.categoryId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$FoldersTableAnnotationComposer(
-            $db: $db,
-            $table: $db.folders,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-
   Expression<T> itemsRefs<T extends Object>(
     Expression<T> Function($$ItemsTableAnnotationComposer a) f,
   ) {
@@ -2656,7 +2826,7 @@ class $$CategoriesTableTableManager
           $$CategoriesTableUpdateCompanionBuilder,
           (Category, $$CategoriesTableReferences),
           Category,
-          PrefetchHooks Function({bool foldersRefs, bool itemsRefs})
+          PrefetchHooks Function({bool itemsRefs})
         > {
   $$CategoriesTableTableManager(_$AppDatabase db, $CategoriesTable table)
     : super(
@@ -2713,35 +2883,13 @@ class $$CategoriesTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({foldersRefs = false, itemsRefs = false}) {
+          prefetchHooksCallback: ({itemsRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [
-                if (foldersRefs) db.folders,
-                if (itemsRefs) db.items,
-              ],
+              explicitlyWatchedTables: [if (itemsRefs) db.items],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
-                  if (foldersRefs)
-                    await $_getPrefetchedData<
-                      Category,
-                      $CategoriesTable,
-                      Folder
-                    >(
-                      currentTable: table,
-                      referencedTable: $$CategoriesTableReferences
-                          ._foldersRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$CategoriesTableReferences(
-                            db,
-                            table,
-                            p0,
-                          ).foldersRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.categoryId == item.id),
-                      typedResults: items,
-                    ),
                   if (itemsRefs)
                     await $_getPrefetchedData<Category, $CategoriesTable, Item>(
                       currentTable: table,
@@ -2773,7 +2921,7 @@ typedef $$CategoriesTableProcessedTableManager =
       $$CategoriesTableUpdateCompanionBuilder,
       (Category, $$CategoriesTableReferences),
       Category,
-      PrefetchHooks Function({bool foldersRefs, bool itemsRefs})
+      PrefetchHooks Function({bool itemsRefs})
     >;
 typedef $$FoldersTableCreateCompanionBuilder =
     FoldersCompanion Function({
@@ -2784,7 +2932,6 @@ typedef $$FoldersTableCreateCompanionBuilder =
       Value<bool> isDeleted,
       Value<DateTime?> deletedAt,
       Value<int?> parentId,
-      required int categoryId,
     });
 typedef $$FoldersTableUpdateCompanionBuilder =
     FoldersCompanion Function({
@@ -2795,7 +2942,6 @@ typedef $$FoldersTableUpdateCompanionBuilder =
       Value<bool> isDeleted,
       Value<DateTime?> deletedAt,
       Value<int?> parentId,
-      Value<int> categoryId,
     });
 
 final class $$FoldersTableReferences
@@ -2813,25 +2959,6 @@ final class $$FoldersTableReferences
       $_db.folders,
     ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_parentIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-
-  static $CategoriesTable _categoryIdTable(_$AppDatabase db) =>
-      db.categories.createAlias(
-        $_aliasNameGenerator(db.folders.categoryId, db.categories.id),
-      );
-
-  $$CategoriesTableProcessedTableManager get categoryId {
-    final $_column = $_itemColumn<int>('category_id')!;
-
-    final manager = $$CategoriesTableTableManager(
-      $_db,
-      $_db.categories,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_categoryIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -2911,29 +3038,6 @@ class $$FoldersTableFilterComposer
           }) => $$FoldersTableFilterComposer(
             $db: $db,
             $table: $db.folders,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$CategoriesTableFilterComposer get categoryId {
-    final $$CategoriesTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.categoryId,
-      referencedTable: $db.categories,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$CategoriesTableFilterComposer(
-            $db: $db,
-            $table: $db.categories,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -3030,29 +3134,6 @@ class $$FoldersTableOrderingComposer
     );
     return composer;
   }
-
-  $$CategoriesTableOrderingComposer get categoryId {
-    final $$CategoriesTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.categoryId,
-      referencedTable: $db.categories,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$CategoriesTableOrderingComposer(
-            $db: $db,
-            $table: $db.categories,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$FoldersTableAnnotationComposer
@@ -3105,29 +3186,6 @@ class $$FoldersTableAnnotationComposer
     return composer;
   }
 
-  $$CategoriesTableAnnotationComposer get categoryId {
-    final $$CategoriesTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.categoryId,
-      referencedTable: $db.categories,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$CategoriesTableAnnotationComposer(
-            $db: $db,
-            $table: $db.categories,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
   Expression<T> itemsRefs<T extends Object>(
     Expression<T> Function($$ItemsTableAnnotationComposer a) f,
   ) {
@@ -3167,11 +3225,7 @@ class $$FoldersTableTableManager
           $$FoldersTableUpdateCompanionBuilder,
           (Folder, $$FoldersTableReferences),
           Folder,
-          PrefetchHooks Function({
-            bool parentId,
-            bool categoryId,
-            bool itemsRefs,
-          })
+          PrefetchHooks Function({bool parentId, bool itemsRefs})
         > {
   $$FoldersTableTableManager(_$AppDatabase db, $FoldersTable table)
     : super(
@@ -3193,7 +3247,6 @@ class $$FoldersTableTableManager
                 Value<bool> isDeleted = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
                 Value<int?> parentId = const Value.absent(),
-                Value<int> categoryId = const Value.absent(),
               }) => FoldersCompanion(
                 id: id,
                 name: name,
@@ -3202,7 +3255,6 @@ class $$FoldersTableTableManager
                 isDeleted: isDeleted,
                 deletedAt: deletedAt,
                 parentId: parentId,
-                categoryId: categoryId,
               ),
           createCompanionCallback:
               ({
@@ -3213,7 +3265,6 @@ class $$FoldersTableTableManager
                 Value<bool> isDeleted = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
                 Value<int?> parentId = const Value.absent(),
-                required int categoryId,
               }) => FoldersCompanion.insert(
                 id: id,
                 name: name,
@@ -3222,7 +3273,6 @@ class $$FoldersTableTableManager
                 isDeleted: isDeleted,
                 deletedAt: deletedAt,
                 parentId: parentId,
-                categoryId: categoryId,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -3232,75 +3282,60 @@ class $$FoldersTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback:
-              ({parentId = false, categoryId = false, itemsRefs = false}) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [if (itemsRefs) db.items],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (parentId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.parentId,
-                                    referencedTable: $$FoldersTableReferences
-                                        ._parentIdTable(db),
-                                    referencedColumn: $$FoldersTableReferences
-                                        ._parentIdTable(db)
-                                        .id,
-                                  )
-                                  as T;
-                        }
-                        if (categoryId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.categoryId,
-                                    referencedTable: $$FoldersTableReferences
-                                        ._categoryIdTable(db),
-                                    referencedColumn: $$FoldersTableReferences
-                                        ._categoryIdTable(db)
-                                        .id,
-                                  )
-                                  as T;
-                        }
+          prefetchHooksCallback: ({parentId = false, itemsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (itemsRefs) db.items],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (parentId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.parentId,
+                                referencedTable: $$FoldersTableReferences
+                                    ._parentIdTable(db),
+                                referencedColumn: $$FoldersTableReferences
+                                    ._parentIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
 
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (itemsRefs)
-                        await $_getPrefetchedData<Folder, $FoldersTable, Item>(
-                          currentTable: table,
-                          referencedTable: $$FoldersTableReferences
-                              ._itemsRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$FoldersTableReferences(db, table, p0).itemsRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.folderId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                    ];
+                    return state;
                   },
-                );
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (itemsRefs)
+                    await $_getPrefetchedData<Folder, $FoldersTable, Item>(
+                      currentTable: table,
+                      referencedTable: $$FoldersTableReferences._itemsRefsTable(
+                        db,
+                      ),
+                      managerFromTypedResult: (p0) =>
+                          $$FoldersTableReferences(db, table, p0).itemsRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.folderId == item.id),
+                      typedResults: items,
+                    ),
+                ];
               },
+            );
+          },
         ),
       );
 }
@@ -3317,7 +3352,376 @@ typedef $$FoldersTableProcessedTableManager =
       $$FoldersTableUpdateCompanionBuilder,
       (Folder, $$FoldersTableReferences),
       Folder,
-      PrefetchHooks Function({bool parentId, bool categoryId, bool itemsRefs})
+      PrefetchHooks Function({bool parentId, bool itemsRefs})
+    >;
+typedef $$FolderTreesTableCreateCompanionBuilder =
+    FolderTreesCompanion Function({
+      required int descendantId,
+      required int ancestorId,
+      Value<int> depth,
+      Value<int> rowid,
+    });
+typedef $$FolderTreesTableUpdateCompanionBuilder =
+    FolderTreesCompanion Function({
+      Value<int> descendantId,
+      Value<int> ancestorId,
+      Value<int> depth,
+      Value<int> rowid,
+    });
+
+final class $$FolderTreesTableReferences
+    extends BaseReferences<_$AppDatabase, $FolderTreesTable, FolderTree> {
+  $$FolderTreesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $FoldersTable _descendantIdTable(_$AppDatabase db) =>
+      db.folders.createAlias(
+        $_aliasNameGenerator(db.folderTrees.descendantId, db.folders.id),
+      );
+
+  $$FoldersTableProcessedTableManager get descendantId {
+    final $_column = $_itemColumn<int>('descendant_id')!;
+
+    final manager = $$FoldersTableTableManager(
+      $_db,
+      $_db.folders,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_descendantIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $FoldersTable _ancestorIdTable(_$AppDatabase db) =>
+      db.folders.createAlias(
+        $_aliasNameGenerator(db.folderTrees.ancestorId, db.folders.id),
+      );
+
+  $$FoldersTableProcessedTableManager get ancestorId {
+    final $_column = $_itemColumn<int>('ancestor_id')!;
+
+    final manager = $$FoldersTableTableManager(
+      $_db,
+      $_db.folders,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_ancestorIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$FolderTreesTableFilterComposer
+    extends Composer<_$AppDatabase, $FolderTreesTable> {
+  $$FolderTreesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get depth => $composableBuilder(
+    column: $table.depth,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$FoldersTableFilterComposer get descendantId {
+    final $$FoldersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.descendantId,
+      referencedTable: $db.folders,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FoldersTableFilterComposer(
+            $db: $db,
+            $table: $db.folders,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$FoldersTableFilterComposer get ancestorId {
+    final $$FoldersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.ancestorId,
+      referencedTable: $db.folders,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FoldersTableFilterComposer(
+            $db: $db,
+            $table: $db.folders,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FolderTreesTableOrderingComposer
+    extends Composer<_$AppDatabase, $FolderTreesTable> {
+  $$FolderTreesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get depth => $composableBuilder(
+    column: $table.depth,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$FoldersTableOrderingComposer get descendantId {
+    final $$FoldersTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.descendantId,
+      referencedTable: $db.folders,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FoldersTableOrderingComposer(
+            $db: $db,
+            $table: $db.folders,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$FoldersTableOrderingComposer get ancestorId {
+    final $$FoldersTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.ancestorId,
+      referencedTable: $db.folders,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FoldersTableOrderingComposer(
+            $db: $db,
+            $table: $db.folders,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FolderTreesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FolderTreesTable> {
+  $$FolderTreesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get depth =>
+      $composableBuilder(column: $table.depth, builder: (column) => column);
+
+  $$FoldersTableAnnotationComposer get descendantId {
+    final $$FoldersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.descendantId,
+      referencedTable: $db.folders,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FoldersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.folders,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$FoldersTableAnnotationComposer get ancestorId {
+    final $$FoldersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.ancestorId,
+      referencedTable: $db.folders,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FoldersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.folders,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FolderTreesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $FolderTreesTable,
+          FolderTree,
+          $$FolderTreesTableFilterComposer,
+          $$FolderTreesTableOrderingComposer,
+          $$FolderTreesTableAnnotationComposer,
+          $$FolderTreesTableCreateCompanionBuilder,
+          $$FolderTreesTableUpdateCompanionBuilder,
+          (FolderTree, $$FolderTreesTableReferences),
+          FolderTree,
+          PrefetchHooks Function({bool descendantId, bool ancestorId})
+        > {
+  $$FolderTreesTableTableManager(_$AppDatabase db, $FolderTreesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FolderTreesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FolderTreesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FolderTreesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> descendantId = const Value.absent(),
+                Value<int> ancestorId = const Value.absent(),
+                Value<int> depth = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => FolderTreesCompanion(
+                descendantId: descendantId,
+                ancestorId: ancestorId,
+                depth: depth,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required int descendantId,
+                required int ancestorId,
+                Value<int> depth = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => FolderTreesCompanion.insert(
+                descendantId: descendantId,
+                ancestorId: ancestorId,
+                depth: depth,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$FolderTreesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({descendantId = false, ancestorId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (descendantId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.descendantId,
+                                referencedTable: $$FolderTreesTableReferences
+                                    ._descendantIdTable(db),
+                                referencedColumn: $$FolderTreesTableReferences
+                                    ._descendantIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+                    if (ancestorId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.ancestorId,
+                                referencedTable: $$FolderTreesTableReferences
+                                    ._ancestorIdTable(db),
+                                referencedColumn: $$FolderTreesTableReferences
+                                    ._ancestorIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$FolderTreesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FolderTreesTable,
+      FolderTree,
+      $$FolderTreesTableFilterComposer,
+      $$FolderTreesTableOrderingComposer,
+      $$FolderTreesTableAnnotationComposer,
+      $$FolderTreesTableCreateCompanionBuilder,
+      $$FolderTreesTableUpdateCompanionBuilder,
+      (FolderTree, $$FolderTreesTableReferences),
+      FolderTree,
+      PrefetchHooks Function({bool descendantId, bool ancestorId})
     >;
 typedef $$ItemsTableCreateCompanionBuilder =
     ItemsCompanion Function({
@@ -4616,6 +5020,8 @@ class $AppDatabaseManager {
       $$CategoriesTableTableManager(_db, _db.categories);
   $$FoldersTableTableManager get folders =>
       $$FoldersTableTableManager(_db, _db.folders);
+  $$FolderTreesTableTableManager get folderTrees =>
+      $$FolderTreesTableTableManager(_db, _db.folderTrees);
   $$ItemsTableTableManager get items =>
       $$ItemsTableTableManager(_db, _db.items);
   $$ReviewsTableTableManager get reviews =>

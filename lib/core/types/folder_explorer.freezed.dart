@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FolderExplorerConfig {
 
- bool get groupByFolders; int? get folderId; bool get includeDeleted; bool get excludeNonDeleted; bool get showSearch; bool get showSort; bool get showFilter; bool get showCategoriesFilter; bool get showVisibilityFilter; ElementsFilter get defaultFilter; ElementsSort get defaultSort;
+ bool get groupByFolders; int? get folderId; bool get includeDeleted; bool get excludeNonDeleted; bool get showSearch; bool get showSort; bool get showFilter; bool get showCategoriesFilter; bool get showVisibilityFilter; RatingConverter get convertRating; RatingConverterToStr get convertRatingToStr; RatingConverterToDB get convertRatingToDB; ElementsFilter get defaultFilter; ElementsSort get defaultSort;
 /// Create a copy of FolderExplorerConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $FolderExplorerConfigCopyWith<FolderExplorerConfig> get copyWith => _$FolderExpl
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FolderExplorerConfig&&(identical(other.groupByFolders, groupByFolders) || other.groupByFolders == groupByFolders)&&(identical(other.folderId, folderId) || other.folderId == folderId)&&(identical(other.includeDeleted, includeDeleted) || other.includeDeleted == includeDeleted)&&(identical(other.excludeNonDeleted, excludeNonDeleted) || other.excludeNonDeleted == excludeNonDeleted)&&(identical(other.showSearch, showSearch) || other.showSearch == showSearch)&&(identical(other.showSort, showSort) || other.showSort == showSort)&&(identical(other.showFilter, showFilter) || other.showFilter == showFilter)&&(identical(other.showCategoriesFilter, showCategoriesFilter) || other.showCategoriesFilter == showCategoriesFilter)&&(identical(other.showVisibilityFilter, showVisibilityFilter) || other.showVisibilityFilter == showVisibilityFilter)&&(identical(other.defaultFilter, defaultFilter) || other.defaultFilter == defaultFilter)&&(identical(other.defaultSort, defaultSort) || other.defaultSort == defaultSort));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FolderExplorerConfig&&(identical(other.groupByFolders, groupByFolders) || other.groupByFolders == groupByFolders)&&(identical(other.folderId, folderId) || other.folderId == folderId)&&(identical(other.includeDeleted, includeDeleted) || other.includeDeleted == includeDeleted)&&(identical(other.excludeNonDeleted, excludeNonDeleted) || other.excludeNonDeleted == excludeNonDeleted)&&(identical(other.showSearch, showSearch) || other.showSearch == showSearch)&&(identical(other.showSort, showSort) || other.showSort == showSort)&&(identical(other.showFilter, showFilter) || other.showFilter == showFilter)&&(identical(other.showCategoriesFilter, showCategoriesFilter) || other.showCategoriesFilter == showCategoriesFilter)&&(identical(other.showVisibilityFilter, showVisibilityFilter) || other.showVisibilityFilter == showVisibilityFilter)&&(identical(other.convertRating, convertRating) || other.convertRating == convertRating)&&(identical(other.convertRatingToStr, convertRatingToStr) || other.convertRatingToStr == convertRatingToStr)&&(identical(other.convertRatingToDB, convertRatingToDB) || other.convertRatingToDB == convertRatingToDB)&&(identical(other.defaultFilter, defaultFilter) || other.defaultFilter == defaultFilter)&&(identical(other.defaultSort, defaultSort) || other.defaultSort == defaultSort));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,groupByFolders,folderId,includeDeleted,excludeNonDeleted,showSearch,showSort,showFilter,showCategoriesFilter,showVisibilityFilter,defaultFilter,defaultSort);
+int get hashCode => Object.hash(runtimeType,groupByFolders,folderId,includeDeleted,excludeNonDeleted,showSearch,showSort,showFilter,showCategoriesFilter,showVisibilityFilter,convertRating,convertRatingToStr,convertRatingToDB,defaultFilter,defaultSort);
 
 @override
 String toString() {
-  return 'FolderExplorerConfig(groupByFolders: $groupByFolders, folderId: $folderId, includeDeleted: $includeDeleted, excludeNonDeleted: $excludeNonDeleted, showSearch: $showSearch, showSort: $showSort, showFilter: $showFilter, showCategoriesFilter: $showCategoriesFilter, showVisibilityFilter: $showVisibilityFilter, defaultFilter: $defaultFilter, defaultSort: $defaultSort)';
+  return 'FolderExplorerConfig(groupByFolders: $groupByFolders, folderId: $folderId, includeDeleted: $includeDeleted, excludeNonDeleted: $excludeNonDeleted, showSearch: $showSearch, showSort: $showSort, showFilter: $showFilter, showCategoriesFilter: $showCategoriesFilter, showVisibilityFilter: $showVisibilityFilter, convertRating: $convertRating, convertRatingToStr: $convertRatingToStr, convertRatingToDB: $convertRatingToDB, defaultFilter: $defaultFilter, defaultSort: $defaultSort)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $FolderExplorerConfigCopyWith<$Res>  {
   factory $FolderExplorerConfigCopyWith(FolderExplorerConfig value, $Res Function(FolderExplorerConfig) _then) = _$FolderExplorerConfigCopyWithImpl;
 @useResult
 $Res call({
- bool groupByFolders, int? folderId, bool includeDeleted, bool excludeNonDeleted, bool showSearch, bool showSort, bool showFilter, bool showCategoriesFilter, bool showVisibilityFilter, ElementsFilter defaultFilter, ElementsSort defaultSort
+ bool groupByFolders, int? folderId, bool includeDeleted, bool excludeNonDeleted, bool showSearch, bool showSort, bool showFilter, bool showCategoriesFilter, bool showVisibilityFilter, RatingConverter convertRating, RatingConverterToStr convertRatingToStr, RatingConverterToDB convertRatingToDB, ElementsFilter defaultFilter, ElementsSort defaultSort
 });
 
 
@@ -62,7 +62,7 @@ class _$FolderExplorerConfigCopyWithImpl<$Res>
 
 /// Create a copy of FolderExplorerConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? groupByFolders = null,Object? folderId = freezed,Object? includeDeleted = null,Object? excludeNonDeleted = null,Object? showSearch = null,Object? showSort = null,Object? showFilter = null,Object? showCategoriesFilter = null,Object? showVisibilityFilter = null,Object? defaultFilter = null,Object? defaultSort = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? groupByFolders = null,Object? folderId = freezed,Object? includeDeleted = null,Object? excludeNonDeleted = null,Object? showSearch = null,Object? showSort = null,Object? showFilter = null,Object? showCategoriesFilter = null,Object? showVisibilityFilter = null,Object? convertRating = null,Object? convertRatingToStr = null,Object? convertRatingToDB = null,Object? defaultFilter = null,Object? defaultSort = null,}) {
   return _then(_self.copyWith(
 groupByFolders: null == groupByFolders ? _self.groupByFolders : groupByFolders // ignore: cast_nullable_to_non_nullable
 as bool,folderId: freezed == folderId ? _self.folderId : folderId // ignore: cast_nullable_to_non_nullable
@@ -73,7 +73,10 @@ as bool,showSort: null == showSort ? _self.showSort : showSort // ignore: cast_n
 as bool,showFilter: null == showFilter ? _self.showFilter : showFilter // ignore: cast_nullable_to_non_nullable
 as bool,showCategoriesFilter: null == showCategoriesFilter ? _self.showCategoriesFilter : showCategoriesFilter // ignore: cast_nullable_to_non_nullable
 as bool,showVisibilityFilter: null == showVisibilityFilter ? _self.showVisibilityFilter : showVisibilityFilter // ignore: cast_nullable_to_non_nullable
-as bool,defaultFilter: null == defaultFilter ? _self.defaultFilter : defaultFilter // ignore: cast_nullable_to_non_nullable
+as bool,convertRating: null == convertRating ? _self.convertRating : convertRating // ignore: cast_nullable_to_non_nullable
+as RatingConverter,convertRatingToStr: null == convertRatingToStr ? _self.convertRatingToStr : convertRatingToStr // ignore: cast_nullable_to_non_nullable
+as RatingConverterToStr,convertRatingToDB: null == convertRatingToDB ? _self.convertRatingToDB : convertRatingToDB // ignore: cast_nullable_to_non_nullable
+as RatingConverterToDB,defaultFilter: null == defaultFilter ? _self.defaultFilter : defaultFilter // ignore: cast_nullable_to_non_nullable
 as ElementsFilter,defaultSort: null == defaultSort ? _self.defaultSort : defaultSort // ignore: cast_nullable_to_non_nullable
 as ElementsSort,
   ));
@@ -160,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool groupByFolders,  int? folderId,  bool includeDeleted,  bool excludeNonDeleted,  bool showSearch,  bool showSort,  bool showFilter,  bool showCategoriesFilter,  bool showVisibilityFilter,  ElementsFilter defaultFilter,  ElementsSort defaultSort)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool groupByFolders,  int? folderId,  bool includeDeleted,  bool excludeNonDeleted,  bool showSearch,  bool showSort,  bool showFilter,  bool showCategoriesFilter,  bool showVisibilityFilter,  RatingConverter convertRating,  RatingConverterToStr convertRatingToStr,  RatingConverterToDB convertRatingToDB,  ElementsFilter defaultFilter,  ElementsSort defaultSort)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FolderExplorerConfig() when $default != null:
-return $default(_that.groupByFolders,_that.folderId,_that.includeDeleted,_that.excludeNonDeleted,_that.showSearch,_that.showSort,_that.showFilter,_that.showCategoriesFilter,_that.showVisibilityFilter,_that.defaultFilter,_that.defaultSort);case _:
+return $default(_that.groupByFolders,_that.folderId,_that.includeDeleted,_that.excludeNonDeleted,_that.showSearch,_that.showSort,_that.showFilter,_that.showCategoriesFilter,_that.showVisibilityFilter,_that.convertRating,_that.convertRatingToStr,_that.convertRatingToDB,_that.defaultFilter,_that.defaultSort);case _:
   return orElse();
 
 }
@@ -181,10 +184,10 @@ return $default(_that.groupByFolders,_that.folderId,_that.includeDeleted,_that.e
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool groupByFolders,  int? folderId,  bool includeDeleted,  bool excludeNonDeleted,  bool showSearch,  bool showSort,  bool showFilter,  bool showCategoriesFilter,  bool showVisibilityFilter,  ElementsFilter defaultFilter,  ElementsSort defaultSort)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool groupByFolders,  int? folderId,  bool includeDeleted,  bool excludeNonDeleted,  bool showSearch,  bool showSort,  bool showFilter,  bool showCategoriesFilter,  bool showVisibilityFilter,  RatingConverter convertRating,  RatingConverterToStr convertRatingToStr,  RatingConverterToDB convertRatingToDB,  ElementsFilter defaultFilter,  ElementsSort defaultSort)  $default,) {final _that = this;
 switch (_that) {
 case _FolderExplorerConfig():
-return $default(_that.groupByFolders,_that.folderId,_that.includeDeleted,_that.excludeNonDeleted,_that.showSearch,_that.showSort,_that.showFilter,_that.showCategoriesFilter,_that.showVisibilityFilter,_that.defaultFilter,_that.defaultSort);case _:
+return $default(_that.groupByFolders,_that.folderId,_that.includeDeleted,_that.excludeNonDeleted,_that.showSearch,_that.showSort,_that.showFilter,_that.showCategoriesFilter,_that.showVisibilityFilter,_that.convertRating,_that.convertRatingToStr,_that.convertRatingToDB,_that.defaultFilter,_that.defaultSort);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +204,10 @@ return $default(_that.groupByFolders,_that.folderId,_that.includeDeleted,_that.e
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool groupByFolders,  int? folderId,  bool includeDeleted,  bool excludeNonDeleted,  bool showSearch,  bool showSort,  bool showFilter,  bool showCategoriesFilter,  bool showVisibilityFilter,  ElementsFilter defaultFilter,  ElementsSort defaultSort)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool groupByFolders,  int? folderId,  bool includeDeleted,  bool excludeNonDeleted,  bool showSearch,  bool showSort,  bool showFilter,  bool showCategoriesFilter,  bool showVisibilityFilter,  RatingConverter convertRating,  RatingConverterToStr convertRatingToStr,  RatingConverterToDB convertRatingToDB,  ElementsFilter defaultFilter,  ElementsSort defaultSort)?  $default,) {final _that = this;
 switch (_that) {
 case _FolderExplorerConfig() when $default != null:
-return $default(_that.groupByFolders,_that.folderId,_that.includeDeleted,_that.excludeNonDeleted,_that.showSearch,_that.showSort,_that.showFilter,_that.showCategoriesFilter,_that.showVisibilityFilter,_that.defaultFilter,_that.defaultSort);case _:
+return $default(_that.groupByFolders,_that.folderId,_that.includeDeleted,_that.excludeNonDeleted,_that.showSearch,_that.showSort,_that.showFilter,_that.showCategoriesFilter,_that.showVisibilityFilter,_that.convertRating,_that.convertRatingToStr,_that.convertRatingToDB,_that.defaultFilter,_that.defaultSort);case _:
   return null;
 
 }
@@ -216,7 +219,7 @@ return $default(_that.groupByFolders,_that.folderId,_that.includeDeleted,_that.e
 
 
 class _FolderExplorerConfig implements FolderExplorerConfig {
-  const _FolderExplorerConfig({this.groupByFolders = true, this.folderId, this.includeDeleted = false, this.excludeNonDeleted = false, this.showSearch = true, this.showSort = true, this.showFilter = true, this.showCategoriesFilter = true, this.showVisibilityFilter = true, this.defaultFilter = const ElementsFilter(), this.defaultSort = const ElementsSort()});
+  const _FolderExplorerConfig({this.groupByFolders = true, this.folderId, this.includeDeleted = false, this.excludeNonDeleted = false, this.showSearch = true, this.showSort = true, this.showFilter = true, this.showCategoriesFilter = true, this.showVisibilityFilter = true, this.convertRating = defaultRatingConverter, this.convertRatingToStr = defaultRatingConverterToStr, this.convertRatingToDB = defaultRatingConverterToDB, this.defaultFilter = const ElementsFilter(), this.defaultSort = const ElementsSort()});
   
 
 @override@JsonKey() final  bool groupByFolders;
@@ -228,6 +231,9 @@ class _FolderExplorerConfig implements FolderExplorerConfig {
 @override@JsonKey() final  bool showFilter;
 @override@JsonKey() final  bool showCategoriesFilter;
 @override@JsonKey() final  bool showVisibilityFilter;
+@override@JsonKey() final  RatingConverter convertRating;
+@override@JsonKey() final  RatingConverterToStr convertRatingToStr;
+@override@JsonKey() final  RatingConverterToDB convertRatingToDB;
 @override@JsonKey() final  ElementsFilter defaultFilter;
 @override@JsonKey() final  ElementsSort defaultSort;
 
@@ -241,16 +247,16 @@ _$FolderExplorerConfigCopyWith<_FolderExplorerConfig> get copyWith => __$FolderE
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FolderExplorerConfig&&(identical(other.groupByFolders, groupByFolders) || other.groupByFolders == groupByFolders)&&(identical(other.folderId, folderId) || other.folderId == folderId)&&(identical(other.includeDeleted, includeDeleted) || other.includeDeleted == includeDeleted)&&(identical(other.excludeNonDeleted, excludeNonDeleted) || other.excludeNonDeleted == excludeNonDeleted)&&(identical(other.showSearch, showSearch) || other.showSearch == showSearch)&&(identical(other.showSort, showSort) || other.showSort == showSort)&&(identical(other.showFilter, showFilter) || other.showFilter == showFilter)&&(identical(other.showCategoriesFilter, showCategoriesFilter) || other.showCategoriesFilter == showCategoriesFilter)&&(identical(other.showVisibilityFilter, showVisibilityFilter) || other.showVisibilityFilter == showVisibilityFilter)&&(identical(other.defaultFilter, defaultFilter) || other.defaultFilter == defaultFilter)&&(identical(other.defaultSort, defaultSort) || other.defaultSort == defaultSort));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FolderExplorerConfig&&(identical(other.groupByFolders, groupByFolders) || other.groupByFolders == groupByFolders)&&(identical(other.folderId, folderId) || other.folderId == folderId)&&(identical(other.includeDeleted, includeDeleted) || other.includeDeleted == includeDeleted)&&(identical(other.excludeNonDeleted, excludeNonDeleted) || other.excludeNonDeleted == excludeNonDeleted)&&(identical(other.showSearch, showSearch) || other.showSearch == showSearch)&&(identical(other.showSort, showSort) || other.showSort == showSort)&&(identical(other.showFilter, showFilter) || other.showFilter == showFilter)&&(identical(other.showCategoriesFilter, showCategoriesFilter) || other.showCategoriesFilter == showCategoriesFilter)&&(identical(other.showVisibilityFilter, showVisibilityFilter) || other.showVisibilityFilter == showVisibilityFilter)&&(identical(other.convertRating, convertRating) || other.convertRating == convertRating)&&(identical(other.convertRatingToStr, convertRatingToStr) || other.convertRatingToStr == convertRatingToStr)&&(identical(other.convertRatingToDB, convertRatingToDB) || other.convertRatingToDB == convertRatingToDB)&&(identical(other.defaultFilter, defaultFilter) || other.defaultFilter == defaultFilter)&&(identical(other.defaultSort, defaultSort) || other.defaultSort == defaultSort));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,groupByFolders,folderId,includeDeleted,excludeNonDeleted,showSearch,showSort,showFilter,showCategoriesFilter,showVisibilityFilter,defaultFilter,defaultSort);
+int get hashCode => Object.hash(runtimeType,groupByFolders,folderId,includeDeleted,excludeNonDeleted,showSearch,showSort,showFilter,showCategoriesFilter,showVisibilityFilter,convertRating,convertRatingToStr,convertRatingToDB,defaultFilter,defaultSort);
 
 @override
 String toString() {
-  return 'FolderExplorerConfig(groupByFolders: $groupByFolders, folderId: $folderId, includeDeleted: $includeDeleted, excludeNonDeleted: $excludeNonDeleted, showSearch: $showSearch, showSort: $showSort, showFilter: $showFilter, showCategoriesFilter: $showCategoriesFilter, showVisibilityFilter: $showVisibilityFilter, defaultFilter: $defaultFilter, defaultSort: $defaultSort)';
+  return 'FolderExplorerConfig(groupByFolders: $groupByFolders, folderId: $folderId, includeDeleted: $includeDeleted, excludeNonDeleted: $excludeNonDeleted, showSearch: $showSearch, showSort: $showSort, showFilter: $showFilter, showCategoriesFilter: $showCategoriesFilter, showVisibilityFilter: $showVisibilityFilter, convertRating: $convertRating, convertRatingToStr: $convertRatingToStr, convertRatingToDB: $convertRatingToDB, defaultFilter: $defaultFilter, defaultSort: $defaultSort)';
 }
 
 
@@ -261,7 +267,7 @@ abstract mixin class _$FolderExplorerConfigCopyWith<$Res> implements $FolderExpl
   factory _$FolderExplorerConfigCopyWith(_FolderExplorerConfig value, $Res Function(_FolderExplorerConfig) _then) = __$FolderExplorerConfigCopyWithImpl;
 @override @useResult
 $Res call({
- bool groupByFolders, int? folderId, bool includeDeleted, bool excludeNonDeleted, bool showSearch, bool showSort, bool showFilter, bool showCategoriesFilter, bool showVisibilityFilter, ElementsFilter defaultFilter, ElementsSort defaultSort
+ bool groupByFolders, int? folderId, bool includeDeleted, bool excludeNonDeleted, bool showSearch, bool showSort, bool showFilter, bool showCategoriesFilter, bool showVisibilityFilter, RatingConverter convertRating, RatingConverterToStr convertRatingToStr, RatingConverterToDB convertRatingToDB, ElementsFilter defaultFilter, ElementsSort defaultSort
 });
 
 
@@ -278,7 +284,7 @@ class __$FolderExplorerConfigCopyWithImpl<$Res>
 
 /// Create a copy of FolderExplorerConfig
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? groupByFolders = null,Object? folderId = freezed,Object? includeDeleted = null,Object? excludeNonDeleted = null,Object? showSearch = null,Object? showSort = null,Object? showFilter = null,Object? showCategoriesFilter = null,Object? showVisibilityFilter = null,Object? defaultFilter = null,Object? defaultSort = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? groupByFolders = null,Object? folderId = freezed,Object? includeDeleted = null,Object? excludeNonDeleted = null,Object? showSearch = null,Object? showSort = null,Object? showFilter = null,Object? showCategoriesFilter = null,Object? showVisibilityFilter = null,Object? convertRating = null,Object? convertRatingToStr = null,Object? convertRatingToDB = null,Object? defaultFilter = null,Object? defaultSort = null,}) {
   return _then(_FolderExplorerConfig(
 groupByFolders: null == groupByFolders ? _self.groupByFolders : groupByFolders // ignore: cast_nullable_to_non_nullable
 as bool,folderId: freezed == folderId ? _self.folderId : folderId // ignore: cast_nullable_to_non_nullable
@@ -289,7 +295,10 @@ as bool,showSort: null == showSort ? _self.showSort : showSort // ignore: cast_n
 as bool,showFilter: null == showFilter ? _self.showFilter : showFilter // ignore: cast_nullable_to_non_nullable
 as bool,showCategoriesFilter: null == showCategoriesFilter ? _self.showCategoriesFilter : showCategoriesFilter // ignore: cast_nullable_to_non_nullable
 as bool,showVisibilityFilter: null == showVisibilityFilter ? _self.showVisibilityFilter : showVisibilityFilter // ignore: cast_nullable_to_non_nullable
-as bool,defaultFilter: null == defaultFilter ? _self.defaultFilter : defaultFilter // ignore: cast_nullable_to_non_nullable
+as bool,convertRating: null == convertRating ? _self.convertRating : convertRating // ignore: cast_nullable_to_non_nullable
+as RatingConverter,convertRatingToStr: null == convertRatingToStr ? _self.convertRatingToStr : convertRatingToStr // ignore: cast_nullable_to_non_nullable
+as RatingConverterToStr,convertRatingToDB: null == convertRatingToDB ? _self.convertRatingToDB : convertRatingToDB // ignore: cast_nullable_to_non_nullable
+as RatingConverterToDB,defaultFilter: null == defaultFilter ? _self.defaultFilter : defaultFilter // ignore: cast_nullable_to_non_nullable
 as ElementsFilter,defaultSort: null == defaultSort ? _self.defaultSort : defaultSort // ignore: cast_nullable_to_non_nullable
 as ElementsSort,
   ));
@@ -301,7 +310,7 @@ as ElementsSort,
 /// @nodoc
 mixin _$FolderExplorerData {
 
- bool get hasFolders; bool get hasItems; List<FolderDetailedNode> get folders; List<ItemWithLastReview> get items;
+ bool get hasFolders; bool get hasItems; List<FolderDetailed> get folders; List<ItemWithLastReview> get items;
 /// Create a copy of FolderExplorerData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -332,7 +341,7 @@ abstract mixin class $FolderExplorerDataCopyWith<$Res>  {
   factory $FolderExplorerDataCopyWith(FolderExplorerData value, $Res Function(FolderExplorerData) _then) = _$FolderExplorerDataCopyWithImpl;
 @useResult
 $Res call({
- bool hasFolders, bool hasItems, List<FolderDetailedNode> folders, List<ItemWithLastReview> items
+ bool hasFolders, bool hasItems, List<FolderDetailed> folders, List<ItemWithLastReview> items
 });
 
 
@@ -354,7 +363,7 @@ class _$FolderExplorerDataCopyWithImpl<$Res>
 hasFolders: null == hasFolders ? _self.hasFolders : hasFolders // ignore: cast_nullable_to_non_nullable
 as bool,hasItems: null == hasItems ? _self.hasItems : hasItems // ignore: cast_nullable_to_non_nullable
 as bool,folders: null == folders ? _self.folders : folders // ignore: cast_nullable_to_non_nullable
-as List<FolderDetailedNode>,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
+as List<FolderDetailed>,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
 as List<ItemWithLastReview>,
   ));
 }
@@ -440,7 +449,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool hasFolders,  bool hasItems,  List<FolderDetailedNode> folders,  List<ItemWithLastReview> items)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool hasFolders,  bool hasItems,  List<FolderDetailed> folders,  List<ItemWithLastReview> items)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FolderExplorerData() when $default != null:
 return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case _:
@@ -461,7 +470,7 @@ return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case 
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool hasFolders,  bool hasItems,  List<FolderDetailedNode> folders,  List<ItemWithLastReview> items)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool hasFolders,  bool hasItems,  List<FolderDetailed> folders,  List<ItemWithLastReview> items)  $default,) {final _that = this;
 switch (_that) {
 case _FolderExplorerData():
 return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case _:
@@ -481,7 +490,7 @@ return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case 
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool hasFolders,  bool hasItems,  List<FolderDetailedNode> folders,  List<ItemWithLastReview> items)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool hasFolders,  bool hasItems,  List<FolderDetailed> folders,  List<ItemWithLastReview> items)?  $default,) {final _that = this;
 switch (_that) {
 case _FolderExplorerData() when $default != null:
 return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case _:
@@ -496,13 +505,13 @@ return $default(_that.hasFolders,_that.hasItems,_that.folders,_that.items);case 
 
 
 class _FolderExplorerData implements FolderExplorerData {
-  const _FolderExplorerData({this.hasFolders = false, this.hasItems = false, final  List<FolderDetailedNode> folders = const [], final  List<ItemWithLastReview> items = const []}): _folders = folders,_items = items;
+  const _FolderExplorerData({this.hasFolders = false, this.hasItems = false, final  List<FolderDetailed> folders = const [], final  List<ItemWithLastReview> items = const []}): _folders = folders,_items = items;
   
 
 @override@JsonKey() final  bool hasFolders;
 @override@JsonKey() final  bool hasItems;
- final  List<FolderDetailedNode> _folders;
-@override@JsonKey() List<FolderDetailedNode> get folders {
+ final  List<FolderDetailed> _folders;
+@override@JsonKey() List<FolderDetailed> get folders {
   if (_folders is EqualUnmodifiableListView) return _folders;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_folders);
@@ -546,7 +555,7 @@ abstract mixin class _$FolderExplorerDataCopyWith<$Res> implements $FolderExplor
   factory _$FolderExplorerDataCopyWith(_FolderExplorerData value, $Res Function(_FolderExplorerData) _then) = __$FolderExplorerDataCopyWithImpl;
 @override @useResult
 $Res call({
- bool hasFolders, bool hasItems, List<FolderDetailedNode> folders, List<ItemWithLastReview> items
+ bool hasFolders, bool hasItems, List<FolderDetailed> folders, List<ItemWithLastReview> items
 });
 
 
@@ -568,7 +577,7 @@ class __$FolderExplorerDataCopyWithImpl<$Res>
 hasFolders: null == hasFolders ? _self.hasFolders : hasFolders // ignore: cast_nullable_to_non_nullable
 as bool,hasItems: null == hasItems ? _self.hasItems : hasItems // ignore: cast_nullable_to_non_nullable
 as bool,folders: null == folders ? _self._folders : folders // ignore: cast_nullable_to_non_nullable
-as List<FolderDetailedNode>,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
+as List<FolderDetailed>,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
 as List<ItemWithLastReview>,
   ));
 }

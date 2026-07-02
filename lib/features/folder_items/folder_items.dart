@@ -11,12 +11,14 @@ import 'dart:io';
 class FolderItems extends StatelessWidget {
   const FolderItems({
     super.key,
+    required this.config,
     required this.folder,
     required this.folderPath,
   });
 
-  final FolderDetailedNode folder;
-  final List<FolderDetailedNode> folderPath;
+  final FolderExplorerConfig config;
+  final FolderDetailed folder;
+  final List<FolderDetailed> folderPath;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,11 @@ class FolderItems extends StatelessWidget {
       title: 'Ver carpeta',
       actions: _buildMenuActions(folder.folder.id),
       scrollable: false,
-      child: _FolderElementsList(folder: folder, folderPath: folderPath),
+      child: _FolderElementsList(
+        folder: folder,
+        folderPath: folderPath,
+        config: config,
+      ),
     );
   }
 }
@@ -50,10 +56,15 @@ List<MenuAction> _buildMenuActions(int folderId) {
 }
 
 class _FolderElementsList extends StatelessWidget {
-  const _FolderElementsList({required this.folder, required this.folderPath});
+  const _FolderElementsList({
+    required this.folder,
+    required this.folderPath,
+    required this.config,
+  });
 
-  final FolderDetailedNode folder;
-  final List<FolderDetailedNode> folderPath;
+  final FolderDetailed folder;
+  final List<FolderDetailed> folderPath;
+  final FolderExplorerConfig config;
 
   @override
   Widget build(BuildContext context) {
@@ -82,11 +93,7 @@ class _FolderElementsList extends StatelessWidget {
         Expanded(
           child: FolderExplorer(
             folderPath: folderPath,
-            config: FolderExplorerConfig(folderId: folder.folder.id),
-            data: FolderExplorerData(
-              hasFolders: true,
-              folders: folder.children,
-            ),
+            config: config.copyWith(folderId: folder.folder.id),
           ),
         ),
       ],
@@ -95,7 +102,7 @@ class _FolderElementsList extends StatelessWidget {
 }
 
 class _FolderHeader extends StatelessWidget {
-  final FolderDetailedNode folder;
+  final FolderDetailed folder;
 
   const _FolderHeader({required this.folder});
 
@@ -145,7 +152,7 @@ class _FolderHeader extends StatelessWidget {
               ),
             ),
             Text(
-              '${folder.totalItemCount} reseñas',
+              '${folder.itemCount} reseñas',
               style: context.textTheme.bodySmall?.copyWith(
                 color: context.colors.onSurfaceVariant,
               ),
@@ -158,8 +165,8 @@ class _FolderHeader extends StatelessWidget {
 }
 
 class _FolderBreadcrumbs extends StatelessWidget {
-  final List<FolderDetailedNode> folderPath;
-  final FolderDetailedNode folder;
+  final List<FolderDetailed> folderPath;
+  final FolderDetailed folder;
 
   const _FolderBreadcrumbs({required this.folderPath, required this.folder});
 

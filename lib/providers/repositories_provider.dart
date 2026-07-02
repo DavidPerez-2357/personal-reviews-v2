@@ -14,7 +14,7 @@ final categoryRepositoryProvider = Provider<CategoryRepository>((ref) {
 final folderRepositoryProvider = Provider<FolderRepository>((ref) {
   final database = ref.watch(appDatabaseProvider);
 
-  return FolderRepository(database.foldersDao);
+  return FolderRepository(database.foldersDao, database.folderTreesDao);
 });
 
 final reviewRepositoryProvider = Provider<ReviewRepository>((ref) {

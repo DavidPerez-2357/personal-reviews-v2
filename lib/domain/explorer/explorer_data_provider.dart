@@ -54,12 +54,12 @@ class ExplorerNotifier extends StateNotifier<AsyncValue<ExplorerState>> {
         );
       }
 
-      List<FolderDetailedNode> folders = [];
+      List<FolderDetailed> folders = [];
 
       if (filter.visibility != ElementsVisibility.itemsOnly &&
           config.groupByFolders &&
           !data.hasFolders) {
-        folders = await folderRepository.queryDetailedTree(
+        folders = await folderRepository.queryDetailed(
           sort: sort,
           filter: filter,
           searchQuery: searchQuery,
