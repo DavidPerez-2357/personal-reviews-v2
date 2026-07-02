@@ -29,7 +29,7 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
         return OrderingTerm(expression: folders.createdAt, mode: sortOrder);
 
       default:
-        return OrderingTerm(expression: folders.id, mode: OrderingMode.asc);
+        return OrderingTerm(expression: folders.id, mode: sortOrder);
     }
   }
 

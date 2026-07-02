@@ -82,6 +82,11 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final bool showCategoryInfoText =
+        !widget.config.showCategoriesFilter &&
+        widget.config.defaultFilter.categoryIds.isNotEmpty &&
+        _getCategoryById(widget.config.defaultFilter.categoryIds.first) != null;
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -93,28 +98,27 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 12,
+              spacing: 20,
               children: [
                 Text('Filtrar', style: context.textTheme.titleLarge),
 
-                if (!widget.config.groupByFolders)
-                  InfoChip(
-                    label: 'Sin carpetas',
-                    icon: Icons.folder_off_rounded,
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: !widget.config.groupByFolders
+                        ? const InfoText(
+                            label: 'Sin agrupar',
+                            icon: Icons.folder_off_rounded,
+                          )
+                        : (showCategoryInfoText)
+                        ? CategoryInfoText(
+                            category: _getCategoryById(
+                              widget.config.defaultFilter.categoryIds.first,
+                            )!,
+                          )
+                        : const SizedBox.shrink(),
                   ),
-
-                if (!widget.config.showCategoriesFilter &&
-                    widget.config.defaultFilter.categoryIds.isNotEmpty &&
-                    _getCategoryById(
-                          widget.config.defaultFilter.categoryIds.first,
-                        ) !=
-                        null)
-                  // Category chip
-                  CategoryInfoChip(
-                    category: _getCategoryById(
-                      widget.config.defaultFilter.categoryIds.first,
-                    )!,
-                  ),
+                ),
               ],
             ),
 
@@ -134,6 +138,7 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
                   _maxRating = (values.end * 2).round();
                 });
               },
+              config: widget.config,
             ),
 
             // Categories
@@ -250,12 +255,10 @@ class _VisibilityFilter extends StatelessWidget {
           spacing: 8,
           runSpacing: 2,
           children: [
-            _FilterChip(
-              context: context,
-              label: ElementsVisibility.all.label,
-              icon: Icons.category_rounded,
+            ChoiceChip(
               selected: selectedVisibility == ElementsVisibility.all,
               onSelected: (_) => onVisibilitySelected(ElementsVisibility.all),
+              label: const Text('Todo'),
             ),
             _FilterChip(
               context: context,
@@ -286,11 +289,13 @@ class _RatingFilter extends StatelessWidget {
     required this.minRating,
     required this.maxRating,
     required this.onRatingChanged,
+    required this.config,
   });
 
   final int minRating;
   final int maxRating;
   final ValueChanged<RangeValues> onRatingChanged;
+  final FolderExplorerConfig config;
 
   @override
   Widget build(BuildContext context) {
@@ -299,19 +304,22 @@ class _RatingFilter extends StatelessWidget {
       spacing: 4,
       children: [
         Text(
-          'Puntuación  (${minRating / 2} - ${maxRating / 2} ★)',
+          'Puntuación  (${config.convertRatingToStr(minRating)} - ${config.convertRatingToStr(maxRating)} ★)',
           style: context.textTheme.titleSmall,
         ),
 
         RangeSlider(
           values: RangeValues(
-            minRating.toDouble() / 2,
-            maxRating.toDouble() / 2,
+            config.convertRating(minRating),
+            config.convertRating(maxRating),
           ),
           min: 0,
           max: 5,
           divisions: 10,
-          labels: RangeLabels('${(minRating / 2)} ★', '${(maxRating / 2)}  ★'),
+          labels: RangeLabels(
+            config.convertRatingToStr(minRating),
+            config.convertRatingToStr(maxRating),
+          ),
           onChanged: (RangeValues values) {
             onRatingChanged(values);
           },
@@ -415,41 +423,49 @@ class _CategoryFilterChip extends StatelessWidget {
         size: 18,
         color: Colors.white,
       ),
-      label: Text(category.name, style: TextStyle(color: Colors.white)),
+      label: Text(category.name),
       selectedColor: category.color.toColor().withValues(alpha: 0.6),
     );
   }
 }
 
-class InfoChip extends StatelessWidget {
-  const InfoChip({super.key, required this.label, required this.icon});
+class InfoText extends StatelessWidget {
+  const InfoText({super.key, required this.label, required this.icon});
 
   final String label;
   final IconData icon;
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      avatar: Icon(icon, size: 15, color: context.colors.onSurfaceVariant),
-      label: Text(
-        label,
-        style: context.textTheme.bodySmall?.copyWith(
-          color: context.colors.onSurfaceVariant,
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 8,
+      children: [
+        Icon(icon, size: 17, color: context.colors.onSurfaceVariant),
+        Flexible(
+          child: Text(
+            textDirection: TextDirection.rtl,
+            label,
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: context.colors.onSurfaceVariant,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-      ),
-      backgroundColor: Colors.transparent,
+      ],
     );
   }
 }
 
-class CategoryInfoChip extends StatelessWidget {
-  const CategoryInfoChip({super.key, required this.category});
+class CategoryInfoText extends StatelessWidget {
+  const CategoryInfoText({super.key, required this.category});
 
   final CategoryDomain category;
 
   @override
   Widget build(BuildContext context) {
-    return InfoChip(
+    return InfoText(
       label: category.name,
       icon: getCategoryIconData(category.icon),
     );

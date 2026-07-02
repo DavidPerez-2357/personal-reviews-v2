@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/elements_sort.dart';
+import 'package:personal_reviews/core/types/rating.dart';
 import 'package:personal_reviews/domain/models/folder.dart';
 import 'package:personal_reviews/domain/models/item.dart';
 part 'folder_explorer.freezed.dart';
@@ -20,6 +21,10 @@ abstract class FolderExplorerConfig with _$FolderExplorerConfig {
     @Default(true) bool showFilter,
     @Default(true) bool showCategoriesFilter,
     @Default(true) bool showVisibilityFilter,
+
+    @Default(defaultRatingConverter) RatingConverter convertRating,
+    @Default(defaultRatingConverterToStr)
+    RatingConverterToStr convertRatingToStr,
 
     /* Default filter and sort */
     @Default(ElementsFilter()) ElementsFilter defaultFilter,

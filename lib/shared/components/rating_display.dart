@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
+import 'package:personal_reviews/core/types/rating.dart';
 
 class RatingDisplay extends StatelessWidget {
   final int rating;
   final double size;
   final Color? fillColor;
   final Color? emptyColor;
+  final RatingConverter convertRating;
 
   const RatingDisplay({
     super.key,
@@ -13,6 +15,7 @@ class RatingDisplay extends StatelessWidget {
     this.size = 20,
     this.fillColor,
     this.emptyColor,
+    this.convertRating = defaultRatingConverter,
   });
 
   @override
@@ -24,7 +27,7 @@ class RatingDisplay extends StatelessWidget {
     final fill = fillColor ?? context.colors.primary;
     final empty = emptyColor ?? context.colors.surfaceContainerHighest;
 
-    final ratingFinal = clampedRating / 2; // Convert 0-10 scale to 0-5 scale
+    final ratingFinal = convertRating(clampedRating);
     final fullStars = ratingFinal.floor();
     final hasHalfStar = (ratingFinal - fullStars) >= 0.5;
 
