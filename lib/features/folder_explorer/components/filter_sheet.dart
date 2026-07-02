@@ -4,7 +4,6 @@ import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/folder_explorer.dart';
 import 'package:personal_reviews/domain/models/category.dart';
 import 'package:flutter/material.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
 
 class ElementsFilterSheet extends StatefulWidget {
   const ElementsFilterSheet({
@@ -134,8 +133,8 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
               maxRating: _maxRating,
               onRatingChanged: (RangeValues values) {
                 setState(() {
-                  _minRating = (values.start * 2).round();
-                  _maxRating = (values.end * 2).round();
+                  _minRating = widget.config.convertRatingToDB(values.start);
+                  _maxRating = widget.config.convertRatingToDB(values.end);
                 });
               },
               config: widget.config,
@@ -314,7 +313,7 @@ class _RatingFilter extends StatelessWidget {
             config.convertRating(maxRating),
           ),
           min: 0,
-          max: 5,
+          max: config.convertRating(10),
           divisions: 10,
           labels: RangeLabels(
             config.convertRatingToStr(minRating),
@@ -406,12 +405,6 @@ class _CategoryFilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChoiceChip(
-      // Change border
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.red, width: 1.5),
-        borderRadius: AppRadius.mdBorder,
-      ),
-
       selected: selected,
       onSelected: (value) {
         FocusManager.instance.primaryFocus?.unfocus();

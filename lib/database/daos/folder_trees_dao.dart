@@ -90,4 +90,14 @@ class FolderTreesDao extends DatabaseAccessor<AppDatabase>
 
     return true;
   }
+
+  Future<void> updateFolderTree(int folderId, int? newParentId) async {
+    return transaction(() async {
+      // Delete the old relations
+      await deleteFolderTree(folderId);
+
+      // Insert the new relations
+      await insertFolderTree(folderId, newParentId);
+    });
+  }
 }

@@ -162,20 +162,24 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
     bool includeDeleted = false,
     bool excludeNonDeleted = false,
   }) async {
+    final itemCountExpression = items.id.count(distinct: true);
     /* Query */
     final query =
         select(folders).join([
             leftOuterJoin(
               folderTrees,
-              folderTrees.ancestorId.equalsExp(folders.id),
+              folderTrees.ancestorId.equalsExp(folders.id) &
+                  folders.isDeleted.equals(
+                    includeDeleted && !excludeNonDeleted,
+                  ),
             ),
             leftOuterJoin(
               items,
               items.folderId.equalsExp(folderTrees.descendantId) &
-                  items.isDeleted.equals(false),
+                  items.isDeleted.equals(includeDeleted && !excludeNonDeleted),
             ),
           ])
-          ..addColumns([items.id.count(distinct: true)])
+          ..addColumns([itemCountExpression])
           ..where(
             _buildCategoryFilter(filter) &
                 _buildSearchFilter(searchQuery) &
@@ -194,7 +198,7 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
 
       return rows.map((row) {
         final folder = row.readTable(folders);
-        final itemCount = row.read(items.id.count(distinct: true)) ?? 0;
+        final itemCount = row.read(itemCountExpression) ?? 0;
 
         return FolderDetailedRow(
           folder: folder,

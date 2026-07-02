@@ -27,7 +27,7 @@ class RatingDisplay extends StatelessWidget {
     final fill = fillColor ?? context.colors.primary;
     final empty = emptyColor ?? context.colors.surfaceContainerHighest;
 
-    final ratingFinal = convertRating(clampedRating);
+    final ratingFinal = convertRating(clampedRating.toInt());
     final fullStars = ratingFinal.floor();
     final hasHalfStar = (ratingFinal - fullStars) >= 0.5;
 

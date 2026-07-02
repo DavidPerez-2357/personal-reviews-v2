@@ -25,6 +25,7 @@ abstract class FolderExplorerConfig with _$FolderExplorerConfig {
     @Default(defaultRatingConverter) RatingConverter convertRating,
     @Default(defaultRatingConverterToStr)
     RatingConverterToStr convertRatingToStr,
+    @Default(defaultRatingConverterToDB) RatingConverterToDB convertRatingToDB,
 
     /* Default filter and sort */
     @Default(ElementsFilter()) ElementsFilter defaultFilter,

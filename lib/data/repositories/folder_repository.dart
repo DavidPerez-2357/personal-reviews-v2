@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/elements_sort.dart';
 import 'package:personal_reviews/data/mappers/folder_mapper.dart';
@@ -48,12 +47,16 @@ class FolderRepository {
     int? parentId,
     String? imagePath,
   }) {
-    return _foldersDao.updateById(
-      id,
-      name: name,
-      parentId: parentId,
-      imagePath: imagePath,
-    );
+    return _foldersDao.transaction(() async {
+      await _folderTreesDao.updateFolderTree(id, parentId);
+
+      return _foldersDao.updateById(
+        id,
+        name: name,
+        parentId: parentId,
+        imagePath: imagePath,
+      );
+    });
   }
 
   Future<bool> deleteById(int id) {
@@ -72,9 +75,6 @@ class FolderRepository {
     bool includeDeleted = false,
     bool excludeNonDeleted = false,
   }) {
-    debugPrint(
-      'Querying detailed folders with sort: $sort, filter: $filter, searchQuery: "$searchQuery", folderId: $folderId, includeDeleted: $includeDeleted, excludeNonDeleted: $excludeNonDeleted',
-    );
     return _foldersDao
         .queryFolders(
           sort: sort,
