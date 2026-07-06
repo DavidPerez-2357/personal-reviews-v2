@@ -113,6 +113,8 @@ class _CategoryElementsList extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       spacing: AppSpacing.md,
       children: [
+        const SizedBox(height: 0),
+
         _CategoryHeader(category: category),
 
         Divider(

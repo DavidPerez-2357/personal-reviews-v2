@@ -73,24 +73,26 @@ class _FolderElementsList extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: AppSpacing.xs,
+      spacing: AppSpacing.md,
       children: [
-        if (folder.folder.parentId != null)
-          _FolderBreadcrumbs(folderPath: folderPath, folder: folder),
+        const SizedBox(height: 0),
 
-        if (folder.folder.parentId != null) const SizedBox(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: AppSpacing.sm,
+          children: [
+            if (folder.folder.parentId != null)
+              _FolderBreadcrumbs(folderPath: folderPath, folder: folder),
 
-        _FolderHeader(folder: folder),
-
-        const SizedBox(height: AppSpacing.sm),
+            _FolderHeader(folder: folder),
+          ],
+        ),
 
         Divider(
           height: 1,
           thickness: 1,
           color: context.colors.onSurfaceVariant.withValues(alpha: 0.3),
         ),
-
-        const SizedBox(height: AppSpacing.sm),
 
         Expanded(
           child: FolderExplorer(
