@@ -90,35 +90,41 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
 
     return SafeArea(
       child: Padding(
-        padding: AppInsets.allLg,
+        padding: AppInsets.allLg.copyWith(top: AppSpacing.md),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: AppSpacing.lg,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: AppSpacing.lg,
               children: [
-                Text('Filtrar', style: context.textTheme.titleLarge),
-
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: !widget.config.groupByFolders
-                        ? const InfoText(
-                            label: 'Sin agrupar',
-                            icon: Icons.folder_off_rounded,
-                          )
-                        : (showCategoryInfoText)
-                        ? CategoryInfoText(
-                            category: _getCategoryById(
-                              widget.config.defaultFilter.categoryIds.first,
-                            )!,
-                          )
-                        : const SizedBox.shrink(),
+                Text(
+                  'Filtrar',
+                  style: context.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
                   ),
+                ),
+
+                if (!widget.config.groupByFolders)
+                  const InfoText(
+                    label: 'Sin agrupar',
+                    icon: Icons.folder_off_rounded,
+                  )
+                else if (showCategoryInfoText)
+                  CategoryInfoText(
+                    category: _getCategoryById(
+                      widget.config.defaultFilter.categoryIds.first,
+                    )!,
+                  ),
+                // Close button
+                const Spacer(),
+
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close_rounded),
                 ),
               ],
             ),

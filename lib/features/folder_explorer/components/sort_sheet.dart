@@ -62,14 +62,30 @@ class ElementsSortSheetState extends State<ElementsSortSheet> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: AppInsets.allLg,
+        padding: AppInsets.allLg.copyWith(top: AppSpacing.md),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: AppSpacing.lg,
           children: [
             // Title
-            Text('Ordenar', style: context.textTheme.titleLarge),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: AppSpacing.lg,
+              children: [
+                Text(
+                  'Ordenar',
+                  style: context.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close_rounded),
+                ),
+              ],
+            ),
 
             // Sort field
             Column(
