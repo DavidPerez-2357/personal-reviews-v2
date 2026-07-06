@@ -3,7 +3,8 @@ import 'package:personal_reviews/core/types/page_config.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/features/app_shell/components/main_appbar.dart';
 import 'package:personal_reviews/features/home/app_home.dart';
-import 'package:personal_reviews/style/theme/app_spacing.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -32,15 +33,7 @@ class _AppShellState extends State<AppShell> {
     final currentPage = pages[currentPageIndex];
 
     Widget body = SafeArea(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(
-          AppSpacing.pagePadding,
-          AppSpacing.pagePadding,
-          AppSpacing.pagePadding,
-          0,
-        ),
-        child: currentPage.child,
-      ),
+      child: Padding(padding: AppInsets.pageInsets, child: currentPage.child),
     );
 
     if (currentPage.scrollable) {
@@ -64,9 +57,11 @@ class _AppShellState extends State<AppShell> {
           Set<WidgetState> states,
         ) {
           if (states.contains(WidgetState.selected)) {
-            return TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
+            return context.textTheme.bodySmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            );
           }
-          return const TextStyle(fontSize: 12);
+          return context.textTheme.bodySmall;
         }),
 
         // behavior
@@ -78,28 +73,37 @@ class _AppShellState extends State<AppShell> {
         selectedIndex: currentPageIndex,
         destinations: <Widget>[
           NavigationDestination(
-            icon: const Icon(Icons.leaderboard, size: 30),
+            icon: const Icon(
+              Icons.leaderboard,
+              size: AppSizes.mainNavigationIconSize,
+            ),
             selectedIcon: Icon(
               Icons.leaderboard,
-              size: 30,
+              size: AppSizes.mainNavigationIconSize,
               color: context.colors.primary,
             ),
             label: 'Resumen',
           ),
           NavigationDestination(
-            icon: const Icon(Icons.star_rounded, size: 33),
+            icon: const Icon(
+              Icons.star_rounded,
+              size: AppSizes.mainNavigationIconSize,
+            ),
             selectedIcon: Icon(
               Icons.star_rounded,
-              size: 33,
+              size: AppSizes.mainNavigationIconSize,
               color: context.colors.primary,
             ),
             label: 'Reseñas',
           ),
           NavigationDestination(
-            icon: const Icon(Icons.settings, size: 30),
+            icon: const Icon(
+              Icons.settings,
+              size: AppSizes.mainNavigationIconSize,
+            ),
             selectedIcon: Icon(
               Icons.settings,
-              size: 30,
+              size: AppSizes.mainNavigationIconSize,
               color: context.colors.primary,
             ),
             label: 'Ajustes',

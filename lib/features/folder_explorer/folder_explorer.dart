@@ -10,6 +10,7 @@ import 'package:personal_reviews/core/types/elements_sort.dart';
 import 'package:personal_reviews/domain/models/folder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
 
 class FolderExplorer extends ConsumerWidget {
   const FolderExplorer({
@@ -70,7 +71,7 @@ class FolderExplorer extends ConsumerWidget {
         error: (error, stackTrace) => ListView(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 60),
+              padding: const EdgeInsets.only(top: AppSpacing.messageTopSpacing),
               child: AppEmptyState(
                 icon: Icons.error_outline_rounded,
                 title: 'Error al cargar los elementos',
@@ -92,7 +93,9 @@ class FolderExplorer extends ConsumerWidget {
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 60),
+                  padding: const EdgeInsets.only(
+                    top: AppSpacing.messageTopSpacing,
+                  ),
                   child: effectiveEmptyState,
                 ),
               ],
@@ -120,7 +123,9 @@ class FolderExplorer extends ConsumerWidget {
             children: [
               if (state.folders.isEmpty && state.items.isEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(top: 60),
+                  padding: const EdgeInsets.only(
+                    top: AppSpacing.messageTopSpacing,
+                  ),
                   child: buildEmptyStateWithFiltersApplied(
                     config: config,
                     filter: state.filter,
@@ -131,7 +136,7 @@ class FolderExplorer extends ConsumerWidget {
               ...state.folders.map(
                 (folder) => Padding(
                   key: ValueKey('folder-${folder.folder.id}'),
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(bottom: AppSpacing.sm),
                   child: FolderCard(
                     folder: folder,
                     folderPath: folderPath,
@@ -143,7 +148,9 @@ class FolderExplorer extends ConsumerWidget {
               ...state.items.map(
                 (item) => Padding(
                   key: ValueKey('item-${item.item.id}'),
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(
+                    bottom: AppSpacing.sm + AppSpacing.xxs,
+                  ),
                   child: ItemCard(item: item),
                 ),
               ),
@@ -210,10 +217,14 @@ class ExplorerList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        Padding(padding: const EdgeInsets.only(bottom: 15), child: controls),
+        Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.md),
+          child: controls,
+        ),
         ...children,
 
-        if (hasAnyElements) const SizedBox(height: 60),
+        if (hasAnyElements)
+          const SizedBox(height: AppSpacing.listBottomSpacing),
       ],
     );
   }
@@ -248,7 +259,7 @@ class FolderExplorerSkeleton extends StatelessWidget {
         ...List.generate(
           folderCount,
           (_) => const Padding(
-            padding: EdgeInsets.only(bottom: 12),
+            padding: EdgeInsets.only(bottom: AppSpacing.sm),
             child: SkeletonFolderCard(),
           ),
         ),
@@ -256,7 +267,7 @@ class FolderExplorerSkeleton extends StatelessWidget {
         ...List.generate(
           itemCount,
           (_) => const Padding(
-            padding: EdgeInsets.only(bottom: 12),
+            padding: EdgeInsets.only(bottom: AppSpacing.sm),
             child: SkeletonItemCard(),
           ),
         ),

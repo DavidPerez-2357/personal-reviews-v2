@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
 import 'package:personal_reviews/style/theme/app_colors.dart';
 
 class AppEmptyState extends StatelessWidget {
@@ -29,10 +31,10 @@ class AppEmptyState extends StatelessWidget {
     return Center(
       child: Container(
         constraints: BoxConstraints(maxWidth: maxWidth),
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerLow,
-          borderRadius: AppRadius.mdBorder,
+          color: context.colors.surfaceContainerLow,
+          borderRadius: AppRadius.md,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -40,18 +42,18 @@ class AppEmptyState extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Container(
-                width: 64,
-                height: 64,
+                width: AppSizes.infoIconContainerSize,
+                height: AppSizes.infoIconContainerSize,
                 decoration: BoxDecoration(
                   color: backgroundColor,
                   shape: BoxShape.rectangle,
-                  borderRadius: AppRadius.lgBorder,
+                  borderRadius: AppRadius.lg,
                 ),
-                child: Icon(icon, size: 32, color: iconColor),
+                child: Icon(icon, size: AppSizes.xl, color: iconColor),
               ),
             ),
 
-            const SizedBox(height: 15),
+            const SizedBox(height: AppSpacing.md),
             Text(
               title,
               textAlign: TextAlign.center,
@@ -59,7 +61,7 @@ class AppEmptyState extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               message,
               textAlign: TextAlign.center,

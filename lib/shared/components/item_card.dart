@@ -1,9 +1,11 @@
-import 'package:personal_reviews/core/extensions/datetime.dart';
-import 'package:personal_reviews/core/extensions/theme_context.dart';
-import 'package:personal_reviews/domain/models/item.dart';
 import 'package:personal_reviews/shared/components/rating_display.dart';
-import 'package:personal_reviews/style/theme/app_spacing.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
+import 'package:personal_reviews/style/design_system/app_border.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
+import 'package:personal_reviews/core/extensions/theme_context.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
+import 'package:personal_reviews/core/extensions/datetime.dart';
+import 'package:personal_reviews/domain/models/item.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -13,10 +15,10 @@ Widget buildItemImage(ItemWithLastReview item, BuildContext context) {
   // If the image path is empty and the folder doesn't have items with images
   if (imagePath == null || !File(imagePath).existsSync()) {
     return Container(
-      width: 60,
-      height: 60,
+      width: AppSizes.elementImageSize,
+      height: AppSizes.elementImageSize,
       decoration: BoxDecoration(
-        borderRadius: AppRadius.smBorder,
+        borderRadius: AppRadius.sm,
         color: imagePath == null
             ? context.colors.surfaceContainerLow
             : context.colors.errorContainer.withValues(alpha: 0.07),
@@ -29,11 +31,11 @@ Widget buildItemImage(ItemWithLastReview item, BuildContext context) {
   }
 
   return ClipRRect(
-    borderRadius: AppRadius.smBorder,
+    borderRadius: AppRadius.sm,
     child: Image.file(
       File(imagePath),
-      width: 60,
-      height: 60,
+      width: AppSizes.elementImageSize,
+      height: AppSizes.elementImageSize,
       fit: BoxFit.cover,
       errorBuilder: (_, _, _) => const Icon(Icons.broken_image),
     ),
@@ -52,22 +54,23 @@ class ItemCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(AppSpacing.sm),
           decoration: BoxDecoration(
-            borderRadius: AppRadius.mdBorder,
+            borderRadius: AppRadius.md,
             border: Border.all(
               color: context.colors.surfaceContainerHighest,
-              width: 1,
+              width: AppBorderWidth.sm,
             ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 32),
+                padding: const EdgeInsets.only(right: AppSpacing.xl),
                 child: Row(
+                  spacing: AppSpacing.sm,
                   children: [
                     buildItemImage(item, context),
 
-                    const SizedBox(width: 16),
+                    const SizedBox(height: AppSpacing.md),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,10 +81,10 @@ class ItemCard extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: AppSpacing.xs),
                         RatingDisplay(
                           rating: item.lastReview?.rating ?? 0,
-                          size: 18,
+                          size: AppSizes.ratingIconSize,
                           fillColor: context.colors.primary,
                           emptyColor: context.colors.surfaceContainerHighest,
                         ),
@@ -97,7 +100,7 @@ class ItemCard extends StatelessWidget {
         Align(
           alignment: Alignment.topRight,
           child: Padding(
-            padding: const EdgeInsets.all(6),
+            padding: AppInsets.allSm,
             child: Text(
               item.lastReview != null
                   ? item.lastReview!.createdAt.timeAgo(

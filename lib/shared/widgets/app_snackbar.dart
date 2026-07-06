@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
 import 'package:personal_reviews/style/theme/app_colors.dart';
+import 'package:flutter/material.dart';
 
 abstract final class AppSnackbar {
   static const Duration _duration = Duration(seconds: 3);
@@ -38,8 +39,8 @@ abstract final class AppSnackbar {
         content: _AnimatedSnackbarContent(message: message, icon: icon),
         backgroundColor: backgroundColor,
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(16),
-        shape: RoundedRectangleBorder(borderRadius: AppRadius.mdBorder),
+        margin: AppInsets.allMd,
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.md),
         duration: _duration,
         showCloseIcon: true,
         closeIconColor: Colors.white,

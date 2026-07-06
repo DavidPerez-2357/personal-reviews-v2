@@ -1,7 +1,9 @@
 import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/shared/components/rating_display.dart';
-import 'package:personal_reviews/style/theme/app_spacing.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
+import 'package:personal_reviews/style/design_system/app_border.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
 import 'package:flutter/material.dart';
 
 class SkeletonItemCard extends StatelessWidget {
@@ -16,24 +18,24 @@ class SkeletonItemCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(AppSpacing.sm),
           decoration: BoxDecoration(
-            borderRadius: AppRadius.mdBorder,
+            borderRadius: AppRadius.md,
             border: Border.all(
               color: context.colors.surfaceContainerHighest,
-              width: 1,
+              width: AppBorderWidth.sm,
             ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 32),
+                padding: const EdgeInsets.only(right: AppSpacing.xl),
                 child: Row(
                   children: [
                     Container(
-                      width: 60,
-                      height: 60,
+                      width: AppSizes.elementImageSize,
+                      height: AppSizes.elementImageSize,
                       decoration: BoxDecoration(
-                        borderRadius: AppRadius.smBorder,
+                        borderRadius: AppRadius.sm,
                         color: context.colors.surfaceContainerLow,
                       ),
                       child: Icon(
@@ -44,24 +46,24 @@ class SkeletonItemCard extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(width: 16),
+                    const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            height: 16,
+                            height: AppSizes.md,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               color: colors.surfaceContainer,
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: AppSpacing.xs),
                           RatingDisplay(
                             rating: 0,
-                            size: 18,
+                            size: AppSizes.ratingIconSize,
                             fillColor: context.colors.primary,
                             emptyColor: context.colors.surfaceContainerHighest,
                           ),
@@ -78,13 +80,13 @@ class SkeletonItemCard extends StatelessWidget {
         Align(
           alignment: Alignment.topRight,
           child: Padding(
-            padding: const EdgeInsets.all(6),
+            padding: AppInsets.allSm,
             child: Container(
-              height: 16,
-              width: 30,
+              height: AppSizes.md,
+              width: AppSizes.lg,
               decoration: BoxDecoration(
                 color: colors.surfaceContainer,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: AppRadius.sm,
               ),
             ),
           ),
@@ -104,7 +106,7 @@ class SkeletonFolderCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.sm),
       decoration: BoxDecoration(
-        borderRadius: AppRadius.mdBorder,
+        borderRadius: AppRadius.md,
         color: colors.surfaceContainerLow,
         border: Border.all(color: colors.surfaceContainerHighest, width: 1),
       ),
@@ -114,15 +116,15 @@ class SkeletonFolderCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 32),
+                padding: const EdgeInsets.only(right: AppSpacing.xl),
                 child: Row(
                   children: [
                     Container(
-                      width: 60,
-                      height: 60,
+                      width: AppSizes.elementImageSize,
+                      height: AppSizes.elementImageSize,
                       decoration: BoxDecoration(
                         color: colors.onSurfaceVariant.withValues(alpha: 0.1),
-                        borderRadius: AppRadius.smBorder,
+                        borderRadius: AppRadius.sm,
                       ),
                       child: Icon(
                         Icons.folder_outlined,
@@ -130,27 +132,27 @@ class SkeletonFolderCard extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(width: 16),
+                    const SizedBox(width: AppSpacing.md),
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            height: 16,
+                            height: AppSizes.md,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               color: colors.surfaceContainer,
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: AppRadius.sm,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: AppSpacing.xs),
                           Container(
-                            height: 12,
-                            width: 60,
+                            height: AppSizes.sm,
+                            width: AppSizes.skeletonWidthMd,
                             decoration: BoxDecoration(
                               color: colors.surfaceContainer,
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: AppRadius.sm,
                             ),
                           ),
                         ],
@@ -166,7 +168,7 @@ class SkeletonFolderCard extends StatelessWidget {
             alignment: Alignment.topRight,
             child: Icon(
               Icons.folder_outlined,
-              size: 20,
+              size: AppSizes.elementIconSize,
               color: context.colors.onSurfaceVariant.withValues(alpha: 0.5),
             ),
           ),

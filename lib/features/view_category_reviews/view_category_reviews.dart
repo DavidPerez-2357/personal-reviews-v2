@@ -6,7 +6,9 @@ import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/folder_explorer.dart';
 import 'package:personal_reviews/core/types/menu_action.dart';
 import 'package:personal_reviews/domain/models/category.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
 import 'package:flutter/material.dart';
 
 class ViewCategoryReviews extends StatelessWidget {
@@ -57,19 +59,16 @@ class _CategoryHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
-      spacing: 16,
+      spacing: AppSpacing.md,
       children: [
         Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: AppRadius.mdBorder,
-          ),
+          padding: AppInsets.allSm,
+          decoration: BoxDecoration(color: color, borderRadius: AppRadius.md),
           child: Icon(
             presetCategories[category.category.icon]?.icon ??
                 Icons.category_outlined,
             color: Colors.white,
-            size: 24,
+            size: AppSizes.lg,
           ),
         ),
         Column(
@@ -112,7 +111,7 @@ class _CategoryElementsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      spacing: 20,
+      spacing: AppSpacing.md,
       children: [
         _CategoryHeader(category: category),
 

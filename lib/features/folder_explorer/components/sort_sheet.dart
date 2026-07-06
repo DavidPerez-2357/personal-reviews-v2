@@ -2,6 +2,8 @@ import 'package:personal_reviews/core/types/elements_sort.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/core/types/sort.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
 
 class ElementsSortSheet extends StatefulWidget {
   const ElementsSortSheet({
@@ -60,80 +62,90 @@ class ElementsSortSheetState extends State<ElementsSortSheet> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: AppInsets.allLg,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 4,
+          spacing: AppSpacing.lg,
           children: [
             // Title
             Text('Ordenar', style: context.textTheme.titleLarge),
 
-            const SizedBox(height: 14),
-
             // Sort field
-            Text('Campo', style: context.textTheme.titleSmall),
-
-            Wrap(
-              spacing: 8,
-              runSpacing: 2,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: AppSpacing.xs,
               children: [
-                _SortChip(
-                  label: 'Creación',
-                  icon: Icons.flare,
-                  selected: _selectedField == ElementsSortField.creation,
-                  onSelected: (_) =>
-                      _onFieldSelected(ElementsSortField.creation),
-                ),
-                _SortChip(
-                  label: 'Nombre',
-                  icon: Icons.sort_by_alpha_rounded,
-                  selected: _selectedField == ElementsSortField.name,
-                  onSelected: (_) => _onFieldSelected(ElementsSortField.name),
-                ),
-                _SortChip(
-                  label: 'Fecha',
-                  icon: Icons.calendar_today_rounded,
-                  selected: _selectedField == ElementsSortField.date,
-                  onSelected: (_) => _onFieldSelected(ElementsSortField.date),
-                ),
-                _SortChip(
-                  label: 'Puntuación',
-                  icon: Icons.star_rounded,
-                  selected: _selectedField == ElementsSortField.rating,
-                  onSelected: (_) => _onFieldSelected(ElementsSortField.rating),
+                Text('Campo', style: context.textTheme.titleSmall),
+
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.xxs,
+                  children: [
+                    _SortChip(
+                      label: 'Creación',
+                      icon: Icons.flare,
+                      selected: _selectedField == ElementsSortField.creation,
+                      onSelected: (_) =>
+                          _onFieldSelected(ElementsSortField.creation),
+                    ),
+                    _SortChip(
+                      label: 'Nombre',
+                      icon: Icons.sort_by_alpha_rounded,
+                      selected: _selectedField == ElementsSortField.name,
+                      onSelected: (_) =>
+                          _onFieldSelected(ElementsSortField.name),
+                    ),
+                    _SortChip(
+                      label: 'Fecha',
+                      icon: Icons.calendar_today_rounded,
+                      selected: _selectedField == ElementsSortField.date,
+                      onSelected: (_) =>
+                          _onFieldSelected(ElementsSortField.date),
+                    ),
+                    _SortChip(
+                      label: 'Puntuación',
+                      icon: Icons.star_rounded,
+                      selected: _selectedField == ElementsSortField.rating,
+                      onSelected: (_) =>
+                          _onFieldSelected(ElementsSortField.rating),
+                    ),
+                  ],
                 ),
               ],
             ),
-
-            const SizedBox(height: 14),
 
             // Sort direction
-            Text('Dirección', style: context.textTheme.titleSmall),
-
-            Wrap(
-              spacing: 8,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: AppSpacing.xs,
               children: [
-                _SortChip(
-                  label: 'Ascendente',
-                  icon: Icons.arrow_upward_rounded,
-                  selected: _sortType == SortType.ASC,
-                  onSelected: (_) => _onSortTypeSelected(SortType.ASC),
-                ),
-                _SortChip(
-                  label: 'Descendente',
-                  icon: Icons.arrow_downward_rounded,
-                  selected: _sortType == SortType.DESC,
-                  onSelected: (_) => _onSortTypeSelected(SortType.DESC),
+                Text('Dirección', style: context.textTheme.titleSmall),
+
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.xxs,
+                  children: [
+                    _SortChip(
+                      label: 'Ascendente',
+                      icon: Icons.arrow_upward_rounded,
+                      selected: _sortType == SortType.ASC,
+                      onSelected: (_) => _onSortTypeSelected(SortType.ASC),
+                    ),
+                    _SortChip(
+                      label: 'Descendente',
+                      icon: Icons.arrow_downward_rounded,
+                      selected: _sortType == SortType.DESC,
+                      onSelected: (_) => _onSortTypeSelected(SortType.DESC),
+                    ),
+                  ],
                 ),
               ],
             ),
-
-            const SizedBox(height: 20),
 
             // Action buttons
             Row(
-              spacing: 12,
+              spacing: AppSpacing.sm,
               children: [
                 Expanded(
                   child: OutlinedButton.icon(
@@ -179,7 +191,7 @@ class _SortChip extends StatelessWidget {
     return ChoiceChip(
       selected: selected,
       onSelected: onSelected,
-      avatar: Icon(icon, size: 18, color: Colors.white),
+      avatar: Icon(icon, size: AppSizes.chipIconSize, color: Colors.white),
       label: Text(label),
     );
   }
