@@ -4,6 +4,8 @@ import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/folder_explorer.dart';
 import 'package:personal_reviews/domain/models/category.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
 
 class ElementsFilterSheet extends StatefulWidget {
   const ElementsFilterSheet({
@@ -88,57 +90,55 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: AppInsets.allLg.copyWith(top: AppSpacing.md),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 18,
+          spacing: AppSpacing.nm,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 20,
+              spacing: AppSpacing.lg,
               children: [
-                Text('Filtrar', style: context.textTheme.titleLarge),
-
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: !widget.config.groupByFolders
-                        ? const InfoText(
-                            label: 'Sin agrupar',
-                            icon: Icons.folder_off_rounded,
-                          )
-                        : (showCategoryInfoText)
-                        ? CategoryInfoText(
-                            category: _getCategoryById(
-                              widget.config.defaultFilter.categoryIds.first,
-                            )!,
-                          )
-                        : const SizedBox.shrink(),
+                Text(
+                  'Filtrar',
+                  style: context.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
                   ),
+                ),
+
+                if (!widget.config.groupByFolders)
+                  const InfoText(
+                    label: 'Sin agrupar',
+                    icon: Icons.folder_off_rounded,
+                  )
+                else if (showCategoryInfoText)
+                  CategoryInfoText(
+                    category: _getCategoryById(
+                      widget.config.defaultFilter.categoryIds.first,
+                    )!,
+                  ),
+                // Close button
+                const Spacer(),
+
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close_rounded),
                 ),
               ],
             ),
 
+            // Visibility
             if (widget.config.showVisibilityFilter &&
-                widget.config.groupByFolders)
+                widget.config.groupByFolders) ...[
               _VisibilityFilter(
                 selectedVisibility: _selectedVisibility,
                 onVisibilitySelected: _onVisibilitySelected,
               ),
 
-            _RatingFilter(
-              minRating: _minRating,
-              maxRating: _maxRating,
-              onRatingChanged: (RangeValues values) {
-                setState(() {
-                  _minRating = widget.config.convertRatingToDB(values.start);
-                  _maxRating = widget.config.convertRatingToDB(values.end);
-                });
-              },
-              config: widget.config,
-            ),
+              const SizedBox(height: 0),
+            ],
 
             // Categories
             if (widget.config.showCategoriesFilter) ...[
@@ -164,12 +164,26 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
                   });
                 },
               ),
+              const SizedBox(height: 0),
             ],
 
-            const SizedBox(height: 6),
+            // Rating
+            _RatingFilter(
+              minRating: _minRating,
+              maxRating: _maxRating,
+              onRatingChanged: (RangeValues values) {
+                setState(() {
+                  _minRating = widget.config.convertRatingToDB(values.start);
+                  _maxRating = widget.config.convertRatingToDB(values.end);
+                });
+              },
+              config: widget.config,
+            ),
+
+            const SizedBox(height: 0),
 
             Row(
-              spacing: 12,
+              spacing: AppSpacing.sm,
               children: [
                 Expanded(
                   child: OutlinedButton.icon(
@@ -224,7 +238,7 @@ class _FilterChip extends StatelessWidget {
       },
       avatar: Icon(
         icon,
-        size: 18,
+        size: AppSizes.chipIconSize,
         color: selected ? context.colors.onSecondary : context.colors.onSurface,
       ),
       label: Text(label),
@@ -246,13 +260,13 @@ class _VisibilityFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 4,
+      spacing: AppSpacing.xs,
       children: [
         Text('Visibilidad', style: context.textTheme.titleSmall),
 
         Wrap(
-          spacing: 8,
-          runSpacing: 2,
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.xxs,
           children: [
             ChoiceChip(
               selected: selectedVisibility == ElementsVisibility.all,
@@ -300,7 +314,7 @@ class _RatingFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 4,
+      spacing: AppSpacing.xs,
       children: [
         Text(
           'Puntuación  (${config.convertRatingToStr(minRating)} - ${config.convertRatingToStr(maxRating)} ★)',
@@ -348,7 +362,7 @@ class _CategoryFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 4,
+      spacing: AppSpacing.xs,
       children: [
         Text(
           'Categorías ${selectedCategoryIds.isNotEmpty ? "(${selectedCategoryIds.length})" : ""}',
@@ -362,7 +376,7 @@ class _CategoryFilter extends StatelessWidget {
               child: ConstrainedBox(
                 constraints: BoxConstraints(minWidth: constraints.maxWidth),
                 child: Row(
-                  spacing: 8,
+                  spacing: AppSpacing.sm,
                   children: [
                     ChoiceChip(
                       label: const Text('Todas'),
@@ -413,7 +427,7 @@ class _CategoryFilterChip extends StatelessWidget {
       },
       avatar: Icon(
         getCategoryIconData(category.icon),
-        size: 18,
+        size: AppSizes.chipIconSize,
         color: Colors.white,
       ),
       label: Text(category.name),
@@ -432,9 +446,13 @@ class InfoText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      spacing: 8,
+      spacing: AppSpacing.sm,
       children: [
-        Icon(icon, size: 17, color: context.colors.onSurfaceVariant),
+        Icon(
+          icon,
+          size: AppSizes.chipIconSize,
+          color: context.colors.onSurfaceVariant,
+        ),
         Flexible(
           child: Text(
             textDirection: TextDirection.rtl,

@@ -1,8 +1,10 @@
 import 'package:personal_reviews/core/constants/category_icons.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/domain/models/category.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
 
 class CategoryCard extends StatelessWidget {
   final CategoryWithStats category;
@@ -14,7 +16,7 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Color color = category.category.color.toColor();
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: AppRadius.mdBorder),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.md),
       elevation: 0,
       color: color.withValues(alpha: 0.1),
       clipBehavior: Clip.antiAlias,
@@ -23,23 +25,28 @@ class CategoryCard extends StatelessWidget {
         onTap: onTap,
         behavior: HitTestBehavior.opaque,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.fromLTRB(
+            AppSpacing.nm,
+            AppSpacing.nm,
+            AppSpacing.nm,
+            AppSpacing.nm,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               /* Icon with colored background */
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: AppInsets.allSm,
                 decoration: BoxDecoration(
                   color: color,
-                  borderRadius: AppRadius.mdBorder,
+                  borderRadius: AppRadius.md,
                 ),
                 child: Icon(
                   presetCategories[category.category.icon]?.icon ??
                       Icons.category_outlined,
                   color: Colors.white,
-                  size: 22,
+                  size: AppSizes.lg,
                 ),
               ),
 
@@ -58,7 +65,7 @@ class CategoryCard extends StatelessWidget {
                     maxLines: 2,
                   ),
 
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSpacing.xs),
 
                   Text(
                     '${category.itemCount} reseñas',

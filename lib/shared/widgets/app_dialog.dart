@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
 
 abstract final class AppDialogTransition {
   static const Duration duration = Duration(milliseconds: 320);
@@ -43,7 +43,7 @@ class AppDialogSurface extends StatelessWidget {
     required this.child,
     this.maxWidth = 400,
     this.backgroundColor,
-    this.borderRadius = AppRadius.lgBorder,
+    this.borderRadius = AppRadius.lg,
     this.elevation = 0,
   });
 

@@ -1,12 +1,14 @@
 import 'package:personal_reviews/features/folder_explorer/providers/categories_provider.dart';
 import 'package:personal_reviews/features/folder_explorer/components/filter_sheet.dart';
 import 'package:personal_reviews/features/folder_explorer/components/sort_sheet.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
 import 'package:personal_reviews/core/types/folder_explorer.dart';
 import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/elements_sort.dart';
 import 'package:personal_reviews/domain/models/category.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:personal_reviews/core/types/sort.dart';
 import 'package:flutter/material.dart';
@@ -103,14 +105,14 @@ class _ElementsControlsState extends ConsumerState<ElementsControls> {
     return IgnorePointer(
       ignoring: !widget.isEnabled,
       child: Column(
-        spacing: 5,
+        spacing: AppSpacing.xs,
         children: [
           SizedBox(
             height: 50,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 10,
+              spacing: AppSpacing.sm,
               children: [
                 // Search bar
                 if (widget.config.showSearch)
@@ -186,7 +188,7 @@ class _SortButton extends StatelessWidget {
     return IconButton(
       onPressed: onPressed,
       icon: Icon(
-        size: 23,
+        size: AppSizes.lg,
         !isActive
             ? Icons.sort_rounded
             : (sort.type == SortType.ASC
@@ -207,7 +209,7 @@ class _SortButton extends StatelessWidget {
               : context.colors.onSurfaceVariant,
         ),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: AppRadius.mdBorder),
+          RoundedRectangleBorder(borderRadius: AppRadius.md),
         ),
       ),
     );
@@ -231,7 +233,7 @@ class _FilterButton extends StatelessWidget {
       onPressed: onPressed,
       icon: Icon(
         isActive ? Icons.filter_alt_rounded : Icons.filter_alt_outlined,
-        size: 23,
+        size: AppSizes.lg,
       ),
 
       style: ButtonStyle(
@@ -247,7 +249,7 @@ class _FilterButton extends StatelessWidget {
               : context.colors.onSurfaceVariant,
         ),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: AppRadius.mdBorder),
+          RoundedRectangleBorder(borderRadius: AppRadius.md),
         ),
       ),
     );
@@ -280,11 +282,11 @@ class _ActiveFiltersList extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(minWidth: constraints.maxWidth),
             child: Row(
-              spacing: 8,
+              spacing: AppSpacing.sm,
               children: [
                 IconButton(
                   onPressed: onResetFiltersPressed,
-                  icon: Icon(Icons.close_rounded, size: 18),
+                  icon: Icon(Icons.close_rounded, size: AppSizes.md),
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(
                       context.colors.surfaceContainerLow,
@@ -335,7 +337,7 @@ class _FilterChip extends StatelessWidget {
       backgroundColor: context.colors.tertiaryContainer,
       labelStyle: TextStyle(color: context.colors.onTertiary),
       shape: RoundedRectangleBorder(
-        borderRadius: AppRadius.mdBorder,
+        borderRadius: AppRadius.md,
         side: BorderSide(width: 0),
       ),
     );

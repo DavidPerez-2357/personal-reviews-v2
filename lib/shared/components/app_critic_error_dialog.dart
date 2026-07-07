@@ -1,7 +1,8 @@
+import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/shared/errors/error_ui_model.dart';
 import 'package:personal_reviews/shared/widgets/app_dialog.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
-import 'package:personal_reviews/style/theme/app_colors.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
 import 'package:flutter/material.dart';
 
 abstract final class AppCriticErrorDialog {
@@ -21,7 +22,7 @@ abstract final class AppCriticErrorDialog {
         return SafeArea(
           child: Center(
             child: AppDialogSurface(
-              backgroundColor: AppColors.surfaceContainer,
+              backgroundColor: context.colors.surfaceContainer,
               child: _CriticErrorDialogContent(
                 type: type,
                 message: message,
@@ -60,12 +61,12 @@ class _CriticErrorDialogContent extends StatelessWidget {
           child: Icon(
             type.icon,
             size: 220,
-            color: AppColors.error.withValues(alpha: 0.3),
+            color: context.colors.error.withValues(alpha: 0.3),
           ),
         ),
 
         Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+          padding: AppInsets.dialogContent,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -74,26 +75,23 @@ class _CriticErrorDialogContent extends StatelessWidget {
               Text(
                 type.title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: AppColors.onSurface,
-                  fontSize: 19,
-                  fontWeight: FontWeight.w700,
+                style: context.textTheme.titleMedium?.copyWith(
+                  color: context.colors.onSurface,
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.md),
 
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColors.onSurface.withValues(alpha: 0.9),
-                  fontSize: 15,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colors.onSurface.withValues(alpha: 0.9),
                   height: 1.45,
                 ),
               ),
 
-              const SizedBox(height: 25),
+              const SizedBox(height: AppSpacing.lg),
 
               /* Retry button (if retryable) */
               if (type.retryable && onRetry != null) ...[
@@ -103,16 +101,14 @@ class _CriticErrorDialogContent extends StatelessWidget {
                     await onRetry!.call();
                   },
                   style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.onSurface,
-                    foregroundColor: AppColors.surface,
+                    backgroundColor: context.colors.onSurface,
+                    foregroundColor: context.colors.surface,
                     elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: AppRadius.mdBorder,
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: AppRadius.md),
                   ),
                   child: const Text('Volver a intentar'),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: AppSpacing.xxs),
               ],
 
               /* Close button */
@@ -121,11 +117,9 @@ class _CriticErrorDialogContent extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.onSurface,
-                  side: const BorderSide(color: AppColors.onSurfaceVariant),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: AppRadius.mdBorder,
-                  ),
+                  foregroundColor: context.colors.onSurface,
+                  side: BorderSide(color: context.colors.onSurfaceVariant),
+                  shape: RoundedRectangleBorder(borderRadius: AppRadius.md),
                 ),
                 child: const Text('Entendido'),
               ),

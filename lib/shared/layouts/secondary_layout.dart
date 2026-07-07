@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:personal_reviews/core/types/menu_action.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/shared/widgets/menu_anchor/menu_anchor.dart';
-import 'package:personal_reviews/style/theme/app_spacing.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
 
 class SecondaryLayout extends StatelessWidget {
   final Widget child;
@@ -21,16 +21,7 @@ class SecondaryLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color onSurfaceColor = context.colors.onSurface;
     final SafeArea body = SafeArea(
-      child: Padding(
-        // Padding all except bottom
-        padding: EdgeInsets.fromLTRB(
-          AppSpacing.pagePadding,
-          AppSpacing.pagePadding,
-          AppSpacing.pagePadding,
-          0,
-        ),
-        child: child,
-      ),
+      child: Padding(padding: AppInsets.pageInsets, child: child),
     );
 
     return Scaffold(

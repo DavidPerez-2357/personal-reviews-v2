@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:personal_reviews/core/types/page_config.dart';
-import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/features/app_shell/components/main_appbar.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
+import 'package:personal_reviews/core/extensions/theme_context.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
+import 'package:personal_reviews/core/types/page_config.dart';
 import 'package:personal_reviews/features/home/app_home.dart';
-import 'package:personal_reviews/style/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -32,19 +34,26 @@ class _AppShellState extends State<AppShell> {
     final currentPage = pages[currentPageIndex];
 
     Widget body = SafeArea(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(
-          AppSpacing.pagePadding,
-          AppSpacing.pagePadding,
-          AppSpacing.pagePadding,
-          0,
-        ),
-        child: currentPage.child,
-      ),
+      child: Padding(padding: AppInsets.pageInsets, child: currentPage.child),
     );
 
     if (currentPage.scrollable) {
       body = SingleChildScrollView(child: body);
+    }
+
+    NavigationDestination buildNavigationDestination({
+      required IconData icon,
+      required String label,
+    }) {
+      return NavigationDestination(
+        icon: Icon(icon, size: AppSizes.mainNavigationIconSize),
+        selectedIcon: Icon(
+          icon,
+          size: AppSizes.mainNavigationIconSize,
+          color: context.colors.primary,
+        ),
+        label: label,
+      );
     }
 
     return Scaffold(
@@ -56,17 +65,17 @@ class _AppShellState extends State<AppShell> {
       bottomNavigationBar: NavigationBar(
         // style
         indicatorColor: context.colors.primary.withValues(alpha: 0.24),
-        indicatorShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.0),
-        ),
+        indicatorShape: RoundedRectangleBorder(borderRadius: AppRadius.md),
         maintainBottomViewPadding: false,
         labelTextStyle: WidgetStateProperty.resolveWith((
           Set<WidgetState> states,
         ) {
           if (states.contains(WidgetState.selected)) {
-            return TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
+            return context.textTheme.bodySmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            );
           }
-          return const TextStyle(fontSize: 12);
+          return context.textTheme.bodySmall;
         }),
 
         // behavior
@@ -77,33 +86,12 @@ class _AppShellState extends State<AppShell> {
         },
         selectedIndex: currentPageIndex,
         destinations: <Widget>[
-          NavigationDestination(
-            icon: const Icon(Icons.leaderboard, size: 30),
-            selectedIcon: Icon(
-              Icons.leaderboard,
-              size: 30,
-              color: context.colors.primary,
-            ),
-            label: 'Resumen',
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.star_rounded, size: 33),
-            selectedIcon: Icon(
-              Icons.star_rounded,
-              size: 33,
-              color: context.colors.primary,
-            ),
+          buildNavigationDestination(icon: Icons.leaderboard, label: 'Resumen'),
+          buildNavigationDestination(
+            icon: Icons.star_rounded,
             label: 'Reseñas',
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.settings, size: 30),
-            selectedIcon: Icon(
-              Icons.settings,
-              size: 30,
-              color: context.colors.primary,
-            ),
-            label: 'Ajustes',
-          ),
+          buildNavigationDestination(icon: Icons.settings, label: 'Ajustes'),
         ],
       ),
       body: body,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:personal_reviews/core/types/menu_action.dart';
 import 'package:personal_reviews/shared/widgets/menu_anchor/menu_action_mapper.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
 
 class AppMenuAnchor extends StatelessWidget {
   final List<MenuAction> actions;
@@ -20,7 +21,7 @@ class AppMenuAnchor extends StatelessWidget {
       animated: true,
       style: const MenuStyle(
         padding: WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          EdgeInsets.symmetric(horizontal: AppSizes.xs, vertical: AppSizes.xxs),
         ),
         visualDensity: VisualDensity.compact,
       ),

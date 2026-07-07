@@ -1,9 +1,11 @@
 import 'package:personal_reviews/features/folder_explorer/folder_explorer.dart';
 import 'package:personal_reviews/shared/layouts/secondary_layout.dart';
+import 'package:personal_reviews/style/design_system/app_spacing.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
 import 'package:personal_reviews/core/types/folder_explorer.dart';
 import 'package:personal_reviews/core/types/menu_action.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
 import 'package:personal_reviews/domain/models/folder.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -71,24 +73,26 @@ class _FolderElementsList extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 4,
+      spacing: AppSpacing.md,
       children: [
-        if (folder.folder.parentId != null)
-          _FolderBreadcrumbs(folderPath: folderPath, folder: folder),
+        const SizedBox(height: 0),
 
-        if (folder.folder.parentId != null) const SizedBox(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: AppSpacing.sm,
+          children: [
+            if (folder.folder.parentId != null)
+              _FolderBreadcrumbs(folderPath: folderPath, folder: folder),
 
-        _FolderHeader(folder: folder),
-
-        const SizedBox(height: 8),
+            _FolderHeader(folder: folder),
+          ],
+        ),
 
         Divider(
           height: 1,
           thickness: 1,
           color: context.colors.onSurfaceVariant.withValues(alpha: 0.3),
         ),
-
-        const SizedBox(height: 8),
 
         Expanded(
           child: FolderExplorer(
@@ -114,20 +118,20 @@ class _FolderHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
 
-      spacing: 16,
+      spacing: AppSpacing.md,
       children: [
         imagePath == null || !File(imagePath).existsSync()
             ? Icon(
                 Icons.folder_rounded,
                 color: context.colors.onSurfaceVariant.withValues(alpha: 0.5),
-                size: 55,
+                size: 50,
               )
             : ClipRRect(
-                borderRadius: AppRadius.smBorder,
+                borderRadius: AppRadius.sm,
                 child: Image.file(
                   File(imagePath),
-                  width: 55,
-                  height: 55,
+                  width: 50,
+                  height: 50,
                   fit: BoxFit.cover,
                   errorBuilder: (_, _, _) => const Icon(Icons.broken_image),
                 ),
@@ -173,8 +177,8 @@ class _FolderBreadcrumbs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 4,
-      runSpacing: 4,
+      spacing: AppSpacing.xs,
+      runSpacing: AppSpacing.xs,
       crossAxisAlignment: WrapCrossAlignment.start,
       alignment: WrapAlignment.start,
       children: [
@@ -194,8 +198,8 @@ class _FolderBreadcrumbs extends StatelessWidget {
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 4,
+                      horizontal: AppSpacing.md,
+                      vertical: AppSpacing.xs,
                     ),
                     child: Text(
                       ancestor.folder.name,
@@ -207,7 +211,7 @@ class _FolderBreadcrumbs extends StatelessWidget {
                 ),
                 Icon(
                   Icons.chevron_right_rounded,
-                  size: 16,
+                  size: AppSizes.md,
                   color: context.colors.onSurfaceVariant,
                 ),
               ],

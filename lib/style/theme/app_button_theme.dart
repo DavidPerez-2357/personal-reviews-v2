@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:personal_reviews/style/theme/app_border.dart';
+import 'package:personal_reviews/style/design_system/app_radius.dart';
 
 class AppButtonStyles {
   static final WidgetStateProperty<OutlinedBorder> shape =
       WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: AppRadius.mdBorder),
+        RoundedRectangleBorder(borderRadius: AppRadius.md),
       );
 
   static const WidgetStateProperty<Size> minimumSize = WidgetStatePropertyAll(
