@@ -94,7 +94,7 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: AppSpacing.lg,
+          spacing: AppSpacing.nm,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -131,14 +131,17 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
 
             // Visibility
             if (widget.config.showVisibilityFilter &&
-                widget.config.groupByFolders)
+                widget.config.groupByFolders) ...[
               _VisibilityFilter(
                 selectedVisibility: _selectedVisibility,
                 onVisibilitySelected: _onVisibilitySelected,
               ),
 
+              const SizedBox(height: 0),
+            ],
+
             // Categories
-            if (widget.config.showCategoriesFilter)
+            if (widget.config.showCategoriesFilter) ...[
               _CategoryFilter(
                 allCategories: widget.allCategories,
                 selectedCategoryIds: _selectedCategoryIds,
@@ -161,6 +164,8 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
                   });
                 },
               ),
+              const SizedBox(height: 0),
+            ],
 
             // Rating
             _RatingFilter(
@@ -174,6 +179,8 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
               },
               config: widget.config,
             ),
+
+            const SizedBox(height: 0),
 
             Row(
               spacing: AppSpacing.sm,

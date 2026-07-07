@@ -148,9 +148,7 @@ class FolderExplorer extends ConsumerWidget {
               ...state.items.map(
                 (item) => Padding(
                   key: ValueKey('item-${item.item.id}'),
-                  padding: const EdgeInsets.only(
-                    bottom: AppSpacing.sm + AppSpacing.xxs,
-                  ),
+                  padding: const EdgeInsets.only(bottom: AppSpacing.sm),
                   child: ItemCard(item: item),
                 ),
               ),

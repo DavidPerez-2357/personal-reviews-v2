@@ -3,6 +3,7 @@ import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/domain/models/category.dart';
 import 'package:personal_reviews/style/design_system/app_radius.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_reviews/style/design_system/app_size.dart';
 import 'package:personal_reviews/style/design_system/app_spacing.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -24,7 +25,12 @@ class CategoryCard extends StatelessWidget {
         onTap: onTap,
         behavior: HitTestBehavior.opaque,
         child: Padding(
-          padding: AppInsets.allMd,
+          padding: EdgeInsets.fromLTRB(
+            AppSpacing.nm,
+            AppSpacing.nm,
+            AppSpacing.nm,
+            AppSpacing.nm,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,7 +46,7 @@ class CategoryCard extends StatelessWidget {
                   presetCategories[category.category.icon]?.icon ??
                       Icons.category_outlined,
                   color: Colors.white,
-                  size: 22,
+                  size: AppSizes.lg,
                 ),
               ),
 

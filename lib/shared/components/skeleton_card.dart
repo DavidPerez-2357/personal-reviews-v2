@@ -57,7 +57,7 @@ class SkeletonItemCard extends StatelessWidget {
                             width: double.infinity,
                             decoration: BoxDecoration(
                               color: colors.surfaceContainer,
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: AppRadius.sm,
                             ),
                           ),
                           const SizedBox(height: AppSpacing.xs),

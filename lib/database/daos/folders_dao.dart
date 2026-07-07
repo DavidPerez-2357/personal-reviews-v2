@@ -28,8 +28,12 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
       case ElementsSortField.date:
         return OrderingTerm(expression: folders.createdAt, mode: sortOrder);
 
-      default:
-        return OrderingTerm(expression: folders.id, mode: sortOrder);
+      case ElementsSortField.rating:
+        // Sort by item count
+        return OrderingTerm(
+          expression: items.id.count(distinct: true),
+          mode: sortOrder,
+        );
     }
   }
 
@@ -207,14 +211,6 @@ class FoldersDao extends DatabaseAccessor<AppDatabase> with _$FoldersDaoMixin {
         );
       }).toList();
     });
-
-    // If sort by rating, sort by item count
-    if (sort.field == ElementsSortField.rating) {
-      result.sort((a, b) {
-        final sortOrder = sort.type == SortType.ASC ? 1 : -1;
-        return sortOrder * a.itemCount.compareTo(b.itemCount);
-      });
-    }
 
     return result;
   }

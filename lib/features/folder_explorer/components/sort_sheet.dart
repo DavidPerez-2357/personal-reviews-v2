@@ -66,7 +66,7 @@ class ElementsSortSheetState extends State<ElementsSortSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: AppSpacing.lg,
+          spacing: AppSpacing.nm,
           children: [
             // Title
             Row(
@@ -131,6 +131,8 @@ class ElementsSortSheetState extends State<ElementsSortSheet> {
               ],
             ),
 
+            const SizedBox(height: 0),
+
             // Sort direction
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,6 +160,8 @@ class ElementsSortSheetState extends State<ElementsSortSheet> {
                 ),
               ],
             ),
+
+            const SizedBox(height: 0),
 
             // Action buttons
             Row(

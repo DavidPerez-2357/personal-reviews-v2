@@ -66,11 +66,10 @@ class ItemCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: AppSpacing.xl),
                 child: Row(
-                  spacing: AppSpacing.sm,
                   children: [
                     buildItemImage(item, context),
 
-                    const SizedBox(height: AppSpacing.md),
+                    const SizedBox(width: AppSpacing.md),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
