@@ -24,7 +24,9 @@ Widget buildFolderImage(FolderDetailed folder, BuildContext context) {
         borderRadius: AppRadius.sm,
       ),
       child: Icon(
-        imagePath == null ? Icons.folder_outlined : Icons.broken_image,
+        imagePath == null
+            ? (folder.itemCount == 0 ? Icons.folder_outlined : Icons.folder)
+            : Icons.broken_image,
         color: context.colors.onSurfaceVariant.withValues(alpha: 0.5),
       ),
     );
