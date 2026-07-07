@@ -24,7 +24,11 @@ Widget buildItemImage(ItemWithLastReview item, BuildContext context) {
             : context.colors.errorContainer.withValues(alpha: 0.07),
       ),
       child: Icon(
-        imagePath == null ? Icons.star_rounded : Icons.broken_image,
+        imagePath == null
+            ? (item.lastReview == null
+                  ? Icons.star_border_rounded
+                  : Icons.star_rounded)
+            : Icons.broken_image,
         color: context.colors.onSurfaceVariant.withValues(alpha: 0.5),
       ),
     );
