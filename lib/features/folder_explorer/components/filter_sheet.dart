@@ -2,6 +2,7 @@ import 'package:personal_reviews/core/constants/category_icons.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
 import 'package:personal_reviews/core/types/elements_filter.dart';
 import 'package:personal_reviews/core/types/folder_explorer.dart';
+import 'package:personal_reviews/core/utils/rating.dart';
 import 'package:personal_reviews/domain/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_reviews/style/design_system/app_size.dart';
@@ -173,8 +174,8 @@ class ElementsFilterSheetState extends State<ElementsFilterSheet> {
               maxRating: _maxRating,
               onRatingChanged: (RangeValues values) {
                 setState(() {
-                  _minRating = widget.config.convertRatingToDB(values.start);
-                  _maxRating = widget.config.convertRatingToDB(values.end);
+                  _minRating = convertRatingToDB(values.start);
+                  _maxRating = convertRatingToDB(values.end);
                 });
               },
               config: widget.config,
@@ -317,21 +318,21 @@ class _RatingFilter extends StatelessWidget {
       spacing: AppSpacing.xs,
       children: [
         Text(
-          'Puntuación  (${config.convertRatingToStr(minRating)} - ${config.convertRatingToStr(maxRating)} ★)',
+          'Puntuación  (${convertDBRatingToStarsStr(minRating)} - ${convertDBRatingToStarsStr(maxRating)} ★)',
           style: context.textTheme.titleSmall,
         ),
 
         RangeSlider(
           values: RangeValues(
-            config.convertRating(minRating),
-            config.convertRating(maxRating),
+            convertRatingToStars(minRating),
+            convertRatingToStars(maxRating),
           ),
           min: 0,
-          max: config.convertRating(10),
+          max: convertRatingToStars(10),
           divisions: 10,
           labels: RangeLabels(
-            config.convertRatingToStr(minRating),
-            config.convertRatingToStr(maxRating),
+            convertDBRatingToStarsStr(minRating),
+            convertDBRatingToStarsStr(maxRating),
           ),
           onChanged: (RangeValues values) {
             onRatingChanged(values);
