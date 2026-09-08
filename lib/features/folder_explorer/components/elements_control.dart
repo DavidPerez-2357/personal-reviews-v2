@@ -1,4 +1,3 @@
-import 'package:personal_reviews/core/utils/rating.dart';
 import 'package:personal_reviews/features/folder_explorer/providers/categories_provider.dart';
 import 'package:personal_reviews/features/folder_explorer/components/filter_sheet.dart';
 import 'package:personal_reviews/features/folder_explorer/components/sort_sheet.dart';
@@ -303,8 +302,7 @@ class _ActiveFiltersList extends StatelessWidget {
 
                 if (filter.isRatingActive())
                   _FilterChip(
-                    label:
-                        '${convertDBRatingToStarsStr(filter.minRating)} - ${convertDBRatingToStarsStr(filter.maxRating)} ★',
+                    label: '${filter.minRating} - ${filter.maxRating} ★',
                     onTap: onFilterPressed,
                   ),
 
