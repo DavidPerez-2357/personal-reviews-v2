@@ -19,6 +19,15 @@ abstract final class AppSnackbar {
     );
   }
 
+  static void showWarning(BuildContext context, String message) {
+    _show(
+      context,
+      message,
+      backgroundColor: AppColors.warningContainer,
+      icon: Icons.warning_amber,
+    );
+  }
+
   static void showSuccess(BuildContext context, String message) {
     _show(
       context,

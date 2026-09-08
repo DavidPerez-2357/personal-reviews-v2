@@ -53,6 +53,7 @@ final appTheme = ThemeData(
   inputDecorationTheme: appInputDecorationTheme,
 
   searchBarTheme: appSearchBarTheme,
+  dropdownMenuTheme: appDropdownMenuTheme,
 
   /* Chips */
   chipTheme: ChipThemeData(
