@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_reviews/core/extensions/theme_context.dart';
+import 'package:personal_reviews/features/manage_review/manage_review.dart';
 import 'package:personal_reviews/style/design_system/app_size.dart';
 import 'package:personal_reviews/style/design_system/app_spacing.dart';
 import 'package:personal_reviews/domain/models/category.dart';
@@ -41,7 +42,7 @@ class AppMainFloatingButtons extends StatelessWidget {
             foregroundColor: context.colors.onSurfaceVariant,
 
             onPressed: () {
-              // Acción secundaria
+              // TODO: Implement create folder functionality
             },
             child: const Icon(Icons.create_new_folder, size: AppSizes.alg),
           ),
@@ -50,8 +51,14 @@ class AppMainFloatingButtons extends StatelessWidget {
         FloatingActionButton(
           heroTag: 'createReviewFab',
           onPressed: () {
-            debugPrint(
-              'Lllamdno boton para crear review en categoria ${category?.id}, carpeta ${folderPath.isNotEmpty ? folderPath.last.folder.id : 'N/A'}',
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ManageReview(
+                  folderPath: folderPath,
+                  category: category,
+                  reviewToEdit: null,
+                ),
+              ),
             );
           },
           child: const Icon(Icons.star_rounded, size: AppSizes.axl),
