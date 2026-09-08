@@ -30,7 +30,7 @@ class FolderItems extends StatelessWidget {
       actions: _buildMenuActions(folder.folder.id),
       scrollable: false,
       floatingActionButton: AppMainFloatingButtons(
-        folderPath: [...folderPath, folder],
+        folderPath: folderPath,
         bottomPadding: true,
       ),
       child: _FolderElementsList(
